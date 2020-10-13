@@ -158,22 +158,9 @@ public class AdminUi extends Ui {
 
         String courseName = getCourseName();
         String courseCode = getCourseCode();
-
-        int totalSize;
-        while (true) {
-          try {
-              print("Enter total size:");
-              totalSize = sc.nextInt();
-              break;
-          } catch (InputMismatchException e) {
-              printErrorMessage(ErrorMessage.INVALID_TOTAL_SIZE);
-              continue;
-          }
-        }
-
         School school = getSchool();
 
-        Course course = new Course(courseName, courseCode, totalSize, school);
+        Course course = new Course(courseName, courseCode, school);
         course.setIndexNumbers(getIndexNumbers());
 
         return course;
@@ -196,11 +183,10 @@ public class AdminUi extends Ui {
         messages[0] = "Index numbers for: " + course.toString();
         for (int i = 1; i < messages.length; i++) {
             messages[i] = (i) + ". Index number: " + course.getIndexNumbers().get(i-1).getIndexNumber()
-                    + "(Current Max Vacancy: "
+                    + " (Current Max Vacancy: "
                     + course.getIndexNumbers().get(i-1).getMaxVacancy()
                     + ")";
         }
-        printMessageWithDivider(messages);
 
         int index;
         while (true) {

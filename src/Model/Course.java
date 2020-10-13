@@ -9,15 +9,12 @@ public class Course implements Serializable, Cloneable {
     private String courseName;
     private String courseCode;
     private ArrayList<IndexNumber> indexNumbers;
-    private int totalSize;
     private School school;
-    private ArrayList<String> studentMatricNumbers;
     private Storage storage;
 
-    public Course(String courseName, String courseCode, int totalSize, School school) {
+    public Course(String courseName, String courseCode, School school) {
         this.courseName = courseName;
         this.courseCode = courseCode;
-        this.totalSize = totalSize;
         this.school = school;
     }
 
@@ -55,18 +52,6 @@ public class Course implements Serializable, Cloneable {
 
     public void setSchool(School school) {
         this.school = school;
-    }
-
-    public int getTotalSize() {
-        return totalSize;
-    }
-
-    public ArrayList<String> getStudentMatricNumbers() {
-        return studentMatricNumbers;
-    }
-
-    public void setStudentMatricNumbers(ArrayList<String> studentMatricNumbers) {
-        this.studentMatricNumbers = studentMatricNumbers;
     }
 
     @Override

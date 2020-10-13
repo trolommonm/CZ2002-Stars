@@ -21,8 +21,10 @@ public class StorageManager {
 
     public ArrayList<Student> getStudentsInCourse(Course course) {
         ArrayList<Student> students = new ArrayList<>();
-        for (String matricNumber: course.getStudentMatricNumbers()) {
-            students.add(storage.getStudent(matricNumber));
+        for (IndexNumber indexNumber: course.getIndexNumbers()) {
+            for (String matricNumber: indexNumber.getStudentMatricNumbers()) {
+                students.add(storage.getStudent(matricNumber));
+            }
         }
 
         return students;
@@ -48,9 +50,7 @@ public class StorageManager {
 
     public void setNewCourseCode(String newCourseCode, String forCourseCode) {
         Course oldCourse = getCourse(forCourseCode);
-        Course updatedCourse = new Course(oldCourse.getCourseName(), newCourseCode,
-                oldCourse.getTotalSize(), oldCourse.getSchool());
-        updatedCourse.setStudentMatricNumbers(oldCourse.getStudentMatricNumbers());
+        Course updatedCourse = new Course(oldCourse.getCourseName(), newCourseCode, oldCourse.getSchool());
         updatedCourse.setIndexNumbers(oldCourse.getIndexNumbers());
 
         storage.removeCourse(oldCourse);
@@ -167,9 +167,8 @@ public class StorageManager {
         String[] lineSplit = line.split("\\|");
         String courseName = lineSplit[0];
         String courseCode = lineSplit[1];
-        int totalSize = Integer.parseInt(lineSplit[2]);
         School school;
-        switch (lineSplit[3]) {
+        switch (lineSplit[2]) {
         case "SCSE":
             school = School.SCSE;
             break;
@@ -177,10 +176,10 @@ public class StorageManager {
             school = School.SSS;
             break;
         default:
-            throw new IllegalStateException("Unexpected value: " + lineSplit[3]);
+            throw new IllegalStateException("Unexpected value: " + lineSplit[2]);
         }
 
-        return new Course(courseName, courseCode, totalSize, school);
+        return new Course(courseName, courseCode, school);
     }
 
     private Student parseStudentFromTxt(String line) {

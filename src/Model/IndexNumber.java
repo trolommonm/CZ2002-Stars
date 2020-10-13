@@ -8,13 +8,14 @@ import java.util.ArrayList;
 public class IndexNumber implements Serializable {
     private int indexNumber;
     private int maxVacancy;
-    private int numberOfRegisteredStudents;
     private ArrayList<Lesson> lessons;
+    private ArrayList<String> studentMatricNumbers;
 
     public IndexNumber(int indexNumber, ArrayList<Lesson> lessons, int maxVacancy) {
         this.indexNumber = indexNumber;
         this.lessons = lessons;
         this.maxVacancy = maxVacancy;
+        studentMatricNumbers = new ArrayList<>();
     }
 
     public int getIndexNumber() {
@@ -25,14 +26,22 @@ public class IndexNumber implements Serializable {
         return maxVacancy;
     }
 
+    public int getNumberOfRegisteredStudents() {
+        return studentMatricNumbers.size();
+    }
+
+    public ArrayList<String> getStudentMatricNumbers() {
+        return studentMatricNumbers;
+    }
+
     public void setMaxVacancy(int maxVacancy) throws Exception {
-        if (maxVacancy < numberOfRegisteredStudents) {
+        if (maxVacancy < getNumberOfRegisteredStudents()) {
             throw new Exception(ErrorMessage.INVALID_MAX_VACANCY);
         }
         this.maxVacancy = maxVacancy;
     }
 
     public int getAvailableVacancy() {
-        return maxVacancy - numberOfRegisteredStudents;
+        return maxVacancy - getNumberOfRegisteredStudents();
     }
 }

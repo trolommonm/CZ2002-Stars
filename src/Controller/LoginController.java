@@ -44,13 +44,13 @@ public class LoginController {
                 }
             }
 
-            loginUi.printMessageWithDivider(ErrorMessage.WRONG_LOGIN_INFO);
+            loginUi.printErrorMessage(ErrorMessage.WRONG_LOGIN_INFO);
             return false;
         } catch (FileNotFoundException e) {
             if (accountType == AccountType.ADMIN) {
-                loginUi.printMessageWithDivider(ErrorMessage.MISSING_ADMIN_LOGIN_INFO);
+                loginUi.printErrorMessage(ErrorMessage.MISSING_ADMIN_LOGIN_INFO);
             } else if (accountType == AccountType.STUDENT) {
-                loginUi.printMessageWithDivider(ErrorMessage.MISSING_STUDENT_LOGIN_INFO);
+                loginUi.printErrorMessage(ErrorMessage.MISSING_STUDENT_LOGIN_INFO);
             }
             return false;
         }
