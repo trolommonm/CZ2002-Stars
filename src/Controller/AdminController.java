@@ -29,6 +29,7 @@ public class AdminController {
                 addCourse();
                 break;
             case 4:
+                editCourse();
                 break;
             case 5:
                 break;
@@ -44,11 +45,43 @@ public class AdminController {
         } while (choice != 8);
     }
 
-    public void addCourse() {
+    private void addCourse() {
         Course course = adminUi.getCourseToAdd();
         storageManager.addCourse(course);
 
         adminUi.printCourses(storageManager.getAllCourses(), "Added " + course.toString() + "!");
+    }
+
+    private void editCourse() {
+        String courseCode = adminUi.getCourseToEdit(storageManager.getAllCourses());
+        Course course = storageManager.getCourse(courseCode);
+        int choice = adminUi.getEditCourseChoice(course);
+
+        switch (choice) {
+        case 1:
+            storageManager.setNewCourseCode(adminUi.getNewCourseCode(course), course.getCourseCode());
+            break;
+        case 2:
+            storageManager.setNewCourseName(adminUi.getNewCourseName(course), course.getCourseCode());
+            break;
+        case 3:
+            storageManager.setNewSchool(adminUi.getNewSchool(course), course.getCourseCode());
+            break;
+        case 4:
+            storageManager.addIndexNumber(adminUi.getIndexNumber(true), courseCode);
+            break;
+        case 5:
+            int index = adminUi.getIndexOfIndexNumber(course);
+            int newMaxVacancy = adminUi.getNewMaxVacancy(course, index);
+            try {
+                storageManager.setNewMaxVacancy(course.getCourseCode(), index, newMaxVacancy);
+            } catch (Exception e) {
+                adminUi.printMessageWithDivider(e.getMessage());
+            }
+            break;
+        default:
+            adminUi.print(ErrorMessage.ERROR_INPUT_CHOICE);
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import Model.LoginInfo;
 
 import Enum.AccountType;
 
+import java.io.Console;
 import java.util.Scanner;
 
 public class LoginUi extends Ui {
@@ -53,7 +54,10 @@ public class LoginUi extends Ui {
 
     public LoginInfo getLoginInfo() {
         Scanner sc = new Scanner(System.in);
+        Console con = System.console();
         String userId;
+        //char[] passwordCharArray;
+        //String passwordString;
         String password;
 
         print("Enter user id:");
@@ -61,6 +65,8 @@ public class LoginUi extends Ui {
 
         print("Enter password:");
         password = sc.next();
+        //passwordCharArray = con.readPassword();
+        //passwordString = String.valueOf(passwordCharArray);
 
         return new LoginInfo(userId, password);
     }

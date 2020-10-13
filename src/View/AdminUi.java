@@ -35,12 +35,13 @@ public class AdminUi extends Ui {
     }
 
     public void printCourses(ArrayList<Course> courses, String message) {
-        String[] coursesStringList = new String[courses.size()];
+        String[] coursesStringList = new String[courses.size() + 1];
+        coursesStringList[0] = message;
         for (int i = 0; i < courses.size(); i++) {
-            coursesStringList[i] = (i+1) + ". " + courses.get(i).toString();
+            coursesStringList[i+1] = (i+1) + ". " + courses.get(i).toString();
         }
 
-        printMessageWithDivider(message + coursesStringList);
+        printMessageWithDivider(coursesStringList);
     }
 
     public void printCourses(ArrayList<Course> courses) {
@@ -48,37 +49,109 @@ public class AdminUi extends Ui {
     }
 
     public int getUserChoice() {
+        return getUserChoice("Enter your choice:");
+    }
+
+    public int getUserChoice(String message) {
         Scanner sc = new Scanner(System.in);
 
-        print("Enter your choice:");
+        print(message);
         int choice = sc.nextInt();
 
         return choice;
     }
 
-    public Course getCourseToAdd() {
+    public String getCourseToEdit(ArrayList<Course> courses) {
         Scanner sc = new Scanner(System.in);
 
-        print("Enter course name:");
-        String courseName = sc.nextLine();
-        print("Enter course code:");
+        while (true) {
+            try {
+                printCourses(courses);
+
+                print("Which course do you want to edit?");
+                int index = sc.nextInt();
+
+                return courses.get(index - 1).getCourseCode();
+            } catch (InputMismatchException e) {
+                print(ErrorMessage.ERROR_INPUT_CHOICE);
+            } catch (IndexOutOfBoundsException e) {
+                print(ErrorMessage.ERROR_INPUT_CHOICE);
+            }
+        }
+    }
+
+    public int getEditCourseChoice(Course course) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            try {
+                printMessageWithDivider(
+                        "Editing " + course.toString(),
+                        "1. Edit course code.",
+                        "2. Edit course name.",
+                        "3. Edit school.",
+                        "4. Add index number.",
+                        "5. Edit index number vacancy."
+                );
+
+                int choice = sc.nextInt();
+                if (choice < 1 || choice > 5) {
+                    print(ErrorMessage.ERROR_INPUT_CHOICE);
+                    continue;
+                }
+
+                return choice;
+            } catch (NumberFormatException e) {
+                print(ErrorMessage.ERROR_INPUT_CHOICE);
+            }
+        }
+    }
+
+    public String getCourseCode() {
+        return getCourseCode("Enter course code:");
+    }
+
+    public String getNewCourseCode(Course course) {
+        return getCourseCode("Enter the new course code (currently: " + course.getCourseCode() + "):");
+    }
+
+    public String getCourseCode(String message) {
+        Scanner sc = new Scanner(System.in);
+        print(message);
         String courseCode = sc.next();
 
-        int totalSize;
-        while (true) {
-          try {
-              print("Enter total size:");
-              totalSize = sc.nextInt();
-              break;
-          } catch (InputMismatchException e) {
-              print(ErrorMessage.INVALID_TOTAL_SIZE);
-              continue;
-          }
-        }
+        return courseCode;
+    }
 
+    public String getCourseName() {
+        return getCourseName("Enter course name:");
+    }
+
+    public String getNewCourseName(Course course) {
+        return getCourseName("Enter the new course name (currently: " + course.getCourseName() + "):");
+    }
+
+    public String getCourseName(String message) {
+        Scanner sc = new Scanner(System.in);
+        print(message);
+        String courseName = sc.nextLine();
+
+        return courseName;
+    }
+
+    public School getSchool() {
+        return getSchool("Enter the school offering the course (SCSE, SSS):");
+    }
+
+    public School getNewSchool(Course course) {
+        return getSchool("Enter the school offering the course (SCSE, SSS) (Currently: " + course.getSchool().toString() + ":");
+    }
+
+    public School getSchool(String message) {
+        Scanner sc = new Scanner(System.in);
         School school;
         getSchoolLoop: while(true) {
-            print("Enter the school offering the course (SCSE, SSS):");
+            print(message);
             String schoolString = sc.next();
             switch (schoolString) {
             case "SCSE":
@@ -93,6 +166,29 @@ public class AdminUi extends Ui {
             }
         }
 
+        return school;
+    }
+
+    public Course getCourseToAdd() {
+        Scanner sc = new Scanner(System.in);
+
+        String courseName = getCourseName();
+        String courseCode = getCourseCode();
+
+        int totalSize;
+        while (true) {
+          try {
+              print("Enter total size:");
+              totalSize = sc.nextInt();
+              break;
+          } catch (InputMismatchException e) {
+              print(ErrorMessage.INVALID_TOTAL_SIZE);
+              continue;
+          }
+        }
+
+        School school = getSchool();
+
         Course course = new Course(courseName, courseCode, totalSize, school);
         course.setIndexNumbers(getIndexNumbers());
 
@@ -100,14 +196,86 @@ public class AdminUi extends Ui {
     }
 
     private String ordinal(int i) {
-        String[] sufixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
+        String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
         switch (i % 100) {
         case 11:
         case 12:
         case 13:
             return i + "th";
         default:
-            return i + sufixes[i % 10];
+            return i + suffixes[i % 10];
+        }
+    }
+
+    public int getIndexOfIndexNumber(Course course) {
+        String[] messages = new String[course.getIndexNumbers().size() + 1];
+        messages[0] = "Index numbers for: " + course.toString();
+        for (int i = 1; i < messages.length; i++) {
+            messages[i] = (i) + ". Index number: " + course.getIndexNumbers().get(i-1).getIndexNumber()
+                    + "(Current Max Vacancy: "
+                    + course.getIndexNumbers().get(i-1).getMaxVacancy()
+                    + ")";
+        }
+        printMessageWithDivider(messages);
+
+        int index;
+        while (true) {
+            index = getUserChoice("Which one would you like to change?");
+            if (index < 1 || index > course.getIndexNumbers().size()) {
+                print(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+
+            break;
+        }
+
+        return index - 1;
+    }
+
+    public int getNewMaxVacancy(Course course, int index) {
+        return getMaxVacancy("Enter the new maximum vacancy for index "
+                + course.getIndexNumbers().get(index).getIndexNumber()
+                + " (Currently: "
+                + course.getIndexNumbers().get(index).getMaxVacancy() + "):");
+    }
+
+    private int getMaxVacancy(String message) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            try {
+                print(message);
+                int maxVacancy = sc.nextInt();
+                return maxVacancy;
+            } catch (NumberFormatException e) {
+                print(ErrorMessage.INVALID_MAX_VACANCY);
+            }
+        }
+    }
+
+    public IndexNumber getIndexNumber(boolean isAdd) {
+        Scanner sc = new Scanner(System.in);
+        String input = "";
+        int counter = 1;
+
+        while (true) {
+            try {
+                if (isAdd) {
+                    print("Enter the new index number to add:");
+                }
+                input = sc.next();
+                if (input.equals("Q")) {
+                    return null;
+                }
+                int indexNumberInt = Integer.parseInt(input);
+
+                int maxVacancy = getMaxVacancy("Enter the maximum vacancy of this index:");
+
+                ArrayList<Lesson> lessons = getLessons(indexNumberInt);
+
+                return new IndexNumber(indexNumberInt, lessons, maxVacancy);
+            } catch (NumberFormatException e) {
+                print(ErrorMessage.INVALID_INDEX_NUMBER);
+            }
         }
     }
 
@@ -120,13 +288,13 @@ public class AdminUi extends Ui {
         while (true) {
             try {
                 print("Enter the " + ordinal(counter) + " index number (Enter Q if you are done):");
-                input = sc.next();
-                if (input.equals("Q")) {
+
+                IndexNumber indexNumber = getIndexNumber(false);
+                if (indexNumber == null) {
                     break;
                 }
-                int indexNumber = Integer.parseInt(input);
 
-                getLessons(indexNumber);
+                indexNumbers.add(indexNumber);
 
                 counter++;
             } catch (NumberFormatException e) {

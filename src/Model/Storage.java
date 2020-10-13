@@ -33,6 +33,10 @@ public class Storage implements Serializable {
         courses.remove(course.getCourseCode(), course);
     }
 
+    public void addIndexNumber(IndexNumber indexNumber, String courseCode) {
+        getCourse(courseCode).addIndexNumber(indexNumber);
+    }
+
     public Course getCourse(String courseCode) {
         return courses.get(courseCode);
     }

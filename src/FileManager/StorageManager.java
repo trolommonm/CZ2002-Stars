@@ -46,12 +46,45 @@ public class StorageManager {
         return storage.getCourse(courseCode);
     }
 
+    public void setNewCourseCode(String newCourseCode, String forCourseCode) {
+        Course oldCourse = getCourse(forCourseCode);
+        Course updatedCourse = new Course(oldCourse.getCourseName(), newCourseCode,
+                oldCourse.getTotalSize(), oldCourse.getSchool());
+        updatedCourse.setStudentMatricNumbers(oldCourse.getStudentMatricNumbers());
+        updatedCourse.setIndexNumbers(oldCourse.getIndexNumbers());
+
+        storage.removeCourse(oldCourse);
+        storage.addCourse(updatedCourse);
+
+        save();
+    }
+
+    public void setNewCourseName(String newCourseName, String forCourseCode) {
+        getCourse(forCourseCode).setCourseName(newCourseName);
+        save();
+    }
+
+    public void setNewSchool(School newSchool, String forCourseCode) {
+        getCourse(forCourseCode).setSchool(newSchool);
+        save();
+    }
+
+    public void setNewMaxVacancy(String courseCode, int index, int newMaxVacancy) throws Exception {
+        getCourse(courseCode).getIndexNumbers().get(index).setMaxVacancy(newMaxVacancy);
+        save();
+    }
+
     public ArrayList<Course> getAllCourses() {
         return storage.getAllCourses();
     }
 
     public void addStudent(Student student) {
         storage.addStudent(student);
+        save();
+    }
+
+    public void addIndexNumber(IndexNumber indexNumber, String courseCode) {
+        storage.addIndexNumber(indexNumber, courseCode);
         save();
     }
 
@@ -98,8 +131,9 @@ public class StorageManager {
     private IndexNumber parseIndexNumberFromTxt(String line) {
         String[] lineSplit = line.split("\\|");
         int indexNumber = Integer.parseInt(lineSplit[0]);
+        int maxVacancy = Integer.parseInt(lineSplit[1]);
         ArrayList<Lesson> lessons = new ArrayList<>();
-        for (int i = 1; i < lineSplit.length; i++) {
+        for (int i = 2; i < lineSplit.length; i++) {
             String[] lessonSplit = lineSplit[i].split("-");
             LessonType lessonType;
             switch (lessonSplit[0]) {
@@ -126,7 +160,7 @@ public class StorageManager {
             lessons.add(new Lesson(lessonType, dayOfWeek, startTime, endTime));
         }
 
-        return new IndexNumber(indexNumber, lessons);
+        return new IndexNumber(indexNumber, lessons, maxVacancy);
     }
 
     private Course parseCourseFromTxt(String line) {
