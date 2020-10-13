@@ -16,6 +16,10 @@ public class LoginUi extends Ui {
             "/_______  /  |____|\\____|__  /____|_  /_______  /\n" +
             "        \\/                 \\/       \\/        \\/ \n";
     private final String WELCOME_MESSAGE = "Welcome to NTU Stars Planner. Please login.";
+    private final String[] loginOptions = {
+            "1. Student Login",
+            "2. Admin Login"
+    };
 
     public void printWelcomeMessage() {
         print(STARS_LOGO);
@@ -30,23 +34,21 @@ public class LoginUi extends Ui {
     }
 
     public AccountType getAccountType() {
-        Scanner sc = new Scanner(System.in);
         int choice;
         AccountType accountType;
 
+        printWelcomeMessage();
         while (true) {
-            print("Enter your choice:");
-            choice = sc.nextInt();
-
+            choice = getInputChoice("Enter your choice:", loginOptions);
             if (choice == 1) {
                 accountType = AccountType.STUDENT;
                 break;
             } else if (choice == 2) {
                 accountType = AccountType.ADMIN;
                 break;
+            } else {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
             }
-
-            printMessageWithDivider(ErrorMessage.ERROR_INPUT_CHOICE);
         }
 
         return accountType;

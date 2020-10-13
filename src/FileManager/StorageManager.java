@@ -212,9 +212,11 @@ public class StorageManager {
             fis.close();
         } catch(FileNotFoundException e) {
             preload();
-        } catch (IOException e) {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch(ClassNotFoundException e) {
+        } catch(InvalidClassException e) {
+            preload();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -17,8 +17,7 @@ public class AdminController {
     public void getUserChoice() {
         int choice;
         do {
-            adminUi.printMenu();
-            choice = adminUi.getUserChoice();
+            choice = adminUi.getMenuInputChoice();
 
             switch (choice) {
             case 1:
@@ -40,7 +39,7 @@ public class AdminController {
             case 8:
                 break;
             default:
-                adminUi.printMessageWithDivider(ErrorMessage.ERROR_INPUT_CHOICE);
+                adminUi.printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
             }
         } while (choice != 8);
     }
@@ -71,7 +70,7 @@ public class AdminController {
             storageManager.addIndexNumber(adminUi.getIndexNumber(true), courseCode);
             break;
         case 5:
-            int index = adminUi.getIndexOfIndexNumber(course);
+            int index = adminUi.getIndexOfIndexNumberToEdit(course);
             int newMaxVacancy = adminUi.getNewMaxVacancy(course, index);
             try {
                 storageManager.setNewMaxVacancy(course.getCourseCode(), index, newMaxVacancy);

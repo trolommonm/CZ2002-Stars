@@ -31,4 +31,8 @@ public class IndexNumber implements Serializable {
         }
         this.maxVacancy = maxVacancy;
     }
+
+    public int getAvailableVacancy() {
+        return maxVacancy - numberOfRegisteredStudents;
+    }
 }

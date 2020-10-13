@@ -13,24 +13,32 @@ import java.time.LocalTime;
 import java.util.*;
 
 public class AdminUi extends Ui {
+    private final String[] adminMenuOptions = {
+            "Welcome to the Admin panel!",
+            "1. Edit student access period.",
+            "2. Add a student.",
+            "3. Add a course.",
+            "4. Edit a course.",
+            "5. Check available slot for an index number.",
+            "6. Print student list by index number.",
+            "7. Print student list by course.",
+            "8. Quit."
+    };
+
+    private String[] getEditCourseOptions(Course course) {
+        return new String[] {
+                "Editing " + course.toString(),
+                "1. Edit course code.",
+                "2. Edit course name.",
+                "3. Edit school.",
+                "4. Add index number.",
+                "5. Edit index number vacancy."
+        };
+    }
 
     public void printWelcomeMessage(String adminName) {
         printMessageWithDivider(
                 "Welcome, " + adminName + "!"
-        );
-    }
-
-    public void printMenu() {
-        printMessageWithDivider(
-                "Welcome to the Admin panel!",
-                "1. Edit student access period.",
-                "2. Add a student.",
-                "3. Add a course.",
-                "4. Edit a course.",
-                "5. Check available slot for an index number.",
-                "6. Print student list by index number.",
-                "7. Print student list by course.",
-                "8. Quit."
         );
     }
 
@@ -48,62 +56,37 @@ public class AdminUi extends Ui {
         printCourses(courses, "Here are your list of courses:");
     }
 
-    public int getUserChoice() {
-        return getUserChoice("Enter your choice:");
-    }
-
-    public int getUserChoice(String message) {
-        Scanner sc = new Scanner(System.in);
-
-        print(message);
-        int choice = sc.nextInt();
-
-        return choice;
+    public int getMenuInputChoice() {
+        return getInputChoice("Enter your choice:", adminMenuOptions);
     }
 
     public String getCourseToEdit(ArrayList<Course> courses) {
-        Scanner sc = new Scanner(System.in);
-
         while (true) {
             try {
                 printCourses(courses);
 
-                print("Which course do you want to edit?");
-                int index = sc.nextInt();
+                int index = getInputChoice("Which course do you want to edit?");
+                if (index < 1 || index > courses.size()) {
+                    printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                    continue;
+                }
 
                 return courses.get(index - 1).getCourseCode();
-            } catch (InputMismatchException e) {
-                print(ErrorMessage.ERROR_INPUT_CHOICE);
-            } catch (IndexOutOfBoundsException e) {
-                print(ErrorMessage.ERROR_INPUT_CHOICE);
+            }  catch (IndexOutOfBoundsException e) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
             }
         }
     }
 
     public int getEditCourseChoice(Course course) {
-        Scanner sc = new Scanner(System.in);
-
         while (true) {
-            try {
-                printMessageWithDivider(
-                        "Editing " + course.toString(),
-                        "1. Edit course code.",
-                        "2. Edit course name.",
-                        "3. Edit school.",
-                        "4. Add index number.",
-                        "5. Edit index number vacancy."
-                );
-
-                int choice = sc.nextInt();
-                if (choice < 1 || choice > 5) {
-                    print(ErrorMessage.ERROR_INPUT_CHOICE);
-                    continue;
-                }
-
-                return choice;
-            } catch (NumberFormatException e) {
-                print(ErrorMessage.ERROR_INPUT_CHOICE);
+            int choice = getInputChoice("Enter your choice:", getEditCourseOptions(course));
+            if (choice < 1 || choice > 5) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
             }
+
+            return choice;
         }
     }
 
@@ -144,7 +127,8 @@ public class AdminUi extends Ui {
     }
 
     public School getNewSchool(Course course) {
-        return getSchool("Enter the school offering the course (SCSE, SSS) (Currently: " + course.getSchool().toString() + ":");
+        return getSchool("Enter the school offering the course (SCSE, SSS) (Currently: "
+                + course.getSchool().toString() + "):");
     }
 
     public School getSchool(String message) {
@@ -161,7 +145,7 @@ public class AdminUi extends Ui {
                 school = School.SSS;
                 break getSchoolLoop;
             default:
-                print(ErrorMessage.INVALID_SCHOOL);
+                printErrorMessage(ErrorMessage.INVALID_SCHOOL);
                 break;
             }
         }
@@ -182,7 +166,7 @@ public class AdminUi extends Ui {
               totalSize = sc.nextInt();
               break;
           } catch (InputMismatchException e) {
-              print(ErrorMessage.INVALID_TOTAL_SIZE);
+              printErrorMessage(ErrorMessage.INVALID_TOTAL_SIZE);
               continue;
           }
         }
@@ -207,7 +191,7 @@ public class AdminUi extends Ui {
         }
     }
 
-    public int getIndexOfIndexNumber(Course course) {
+    public int getIndexOfIndexNumberToEdit(Course course) {
         String[] messages = new String[course.getIndexNumbers().size() + 1];
         messages[0] = "Index numbers for: " + course.toString();
         for (int i = 1; i < messages.length; i++) {
@@ -220,9 +204,9 @@ public class AdminUi extends Ui {
 
         int index;
         while (true) {
-            index = getUserChoice("Which one would you like to change?");
+            index = getInputChoice("Which one would you like to change?", messages);
             if (index < 1 || index > course.getIndexNumbers().size()) {
-                print(ErrorMessage.ERROR_INPUT_CHOICE);
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
                 continue;
             }
 
@@ -247,7 +231,7 @@ public class AdminUi extends Ui {
                 int maxVacancy = sc.nextInt();
                 return maxVacancy;
             } catch (NumberFormatException e) {
-                print(ErrorMessage.INVALID_MAX_VACANCY);
+                printErrorMessage(ErrorMessage.INVALID_MAX_VACANCY);
             }
         }
     }
@@ -274,7 +258,7 @@ public class AdminUi extends Ui {
 
                 return new IndexNumber(indexNumberInt, lessons, maxVacancy);
             } catch (NumberFormatException e) {
-                print(ErrorMessage.INVALID_INDEX_NUMBER);
+                printErrorMessage(ErrorMessage.INVALID_INDEX_NUMBER);
             }
         }
     }
@@ -298,7 +282,7 @@ public class AdminUi extends Ui {
 
                 counter++;
             } catch (NumberFormatException e) {
-                print(ErrorMessage.INVALID_INDEX_NUMBER);
+                printErrorMessage(ErrorMessage.INVALID_INDEX_NUMBER);
             }
         }
 
@@ -329,7 +313,7 @@ public class AdminUi extends Ui {
                 case "Q":
                     break getLessonLoop;
                 default:
-                    print(ErrorMessage.INVALID_LESSON_TYPE);
+                    printErrorMessage(ErrorMessage.INVALID_LESSON_TYPE);
                     break;
                 }
             }
@@ -344,14 +328,14 @@ public class AdminUi extends Ui {
                 try {
                     int day = sc.nextInt();
                     if (day < 1 || day > 7) {
-                        print(ErrorMessage.INVALID_DAY_OF_WEEK);
+                        printErrorMessage(ErrorMessage.INVALID_DAY_OF_WEEK);
                         continue;
                     }
 
                     dayOfWeek = DayOfWeek.of(day);
                     break;
                 } catch (InputMismatchException e) {
-                    print(ErrorMessage.INVALID_DAY_OF_WEEK);
+                    printErrorMessage(ErrorMessage.INVALID_DAY_OF_WEEK);
                 }
             }
 
@@ -364,9 +348,9 @@ public class AdminUi extends Ui {
                             Integer.parseInt(startTimeString.substring(2)));
                     break;
                 } catch (NumberFormatException e) {
-                    print(ErrorMessage.INVALID_TIME);
+                    printErrorMessage(ErrorMessage.INVALID_TIME);
                 } catch (DateTimeException e) {
-                    print(ErrorMessage.INVALID_TIME);
+                    printErrorMessage(ErrorMessage.INVALID_TIME);
                 }
             }
 
@@ -379,9 +363,9 @@ public class AdminUi extends Ui {
                             Integer.parseInt(endTimeString.substring(2)));
                     break;
                 } catch (NumberFormatException e) {
-                    print(ErrorMessage.INVALID_TIME);
+                    printErrorMessage(ErrorMessage.INVALID_TIME);
                 } catch (DateTimeException e) {
-                    print(ErrorMessage.INVALID_TIME);
+                    printErrorMessage(ErrorMessage.INVALID_TIME);
                 }
             }
 

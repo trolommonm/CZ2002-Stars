@@ -26,8 +26,6 @@ public class LoginController {
 
     public AccountType login() {
         do {
-            loginUi.printWelcomeMessage();
-            loginUi.printLoginMessage();
             accountType = loginUi.getAccountType();
             providedLoginInfo = loginUi.getLoginInfo();
         } while(!verifyLoginInfo());
