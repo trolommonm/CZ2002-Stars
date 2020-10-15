@@ -1,8 +1,11 @@
 package View;
 
 import ErrorMessage.ErrorMessage;
+import Model.Course;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Ui {
@@ -59,6 +62,31 @@ public class Ui {
 
     public int getInputChoice(String message) {
         return getInputChoice(message, new String[0]);
+    }
+
+    public String[] getCoursesDescription(ArrayList<Course> courses, String message) {
+        ArrayList<String> coursesDescriptionList = new ArrayList<>();
+        if (message != null) {
+            coursesDescriptionList.add(message);
+        }
+        int index = 1;
+        for (Course course: courses) {
+            coursesDescriptionList.add((index++) + ". " + course.toString());
+        }
+
+        return coursesDescriptionList.toArray(String[]::new);
+    }
+
+    public String ordinal(int i) {
+        String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
+        switch (i % 100) {
+        case 11:
+        case 12:
+        case 13:
+            return i + "th";
+        default:
+            return i + suffixes[i % 10];
+        }
     }
 
 }

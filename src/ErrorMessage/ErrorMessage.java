@@ -12,7 +12,6 @@ public class ErrorMessage {
     public static final String WRONG_ACCESS_PERIOD = "You are not authorised to access STARS! Your access period is:";
 
     // Admin
-    public static final String INVALID_TOTAL_SIZE = "Invalid total size! Please try again.";
     public static final String INVALID_SCHOOL = "Invalid school! Please try again.";
     public static final String INVALID_INDEX_NUMBER = "Invalid index number! Please try again.";
     public static final String INVALID_LESSON_TYPE = "Invalid lesson type! Please try again.";

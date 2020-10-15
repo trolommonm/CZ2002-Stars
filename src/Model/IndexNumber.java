@@ -36,12 +36,18 @@ public class IndexNumber implements Serializable {
 
     public void setMaxVacancy(int maxVacancy) throws Exception {
         if (maxVacancy < getNumberOfRegisteredStudents()) {
-            throw new Exception(ErrorMessage.INVALID_MAX_VACANCY);
+            throw new Exception(ErrorMessage.INVALID_NEW_MAX_VACANCY);
         }
         this.maxVacancy = maxVacancy;
     }
 
     public int getAvailableVacancy() {
         return maxVacancy - getNumberOfRegisteredStudents();
+    }
+
+    @Override
+    public String toString() {
+        return "Index Number: " + indexNumber + ", "
+                + "Vacancy: " + getAvailableVacancy() + " / " + maxVacancy ;
     }
 }

@@ -31,6 +31,7 @@ public class AdminController {
                 editCourse();
                 break;
             case 5:
+                checkAvailableSlot();
                 break;
             case 6:
                 break;
@@ -81,6 +82,10 @@ public class AdminController {
         default:
             adminUi.print(ErrorMessage.ERROR_INPUT_CHOICE);
         }
+    }
+
+    private void checkAvailableSlot() {
+        adminUi.checkVacancyOfIndexNumber(storageManager.getAllCourses());
     }
 
 }

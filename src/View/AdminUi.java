@@ -11,6 +11,7 @@ import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AdminUi extends Ui {
     private final String[] adminMenuOptions = {
@@ -42,14 +43,31 @@ public class AdminUi extends Ui {
         );
     }
 
-    public void printCourses(ArrayList<Course> courses, String message) {
-        String[] coursesStringList = new String[courses.size() + 1];
-        coursesStringList[0] = message;
-        for (int i = 0; i < courses.size(); i++) {
-            coursesStringList[i+1] = (i+1) + ". " + courses.get(i).toString();
+    public void checkVacancyOfIndexNumber(ArrayList<Course> courses) {
+        int choice;
+        while (true) {
+            choice = getInputChoice("Which course do you want to check?",
+                    getCoursesDescription(courses, "Here are your list of courses:"));
+            if (choice < 1 || choice > courses.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            break;
         }
+        printIndexNumberVacancies(courses.get(choice-1).getIndexNumbers(), courses.get(choice-1));
+    }
 
-        printMessageWithDivider(coursesStringList);
+    public void printIndexNumberVacancies(ArrayList<IndexNumber> indexNumbers, Course course) {
+        List<String> indexNumbersString = indexNumbers
+                                            .stream()
+                                            .map((i) -> i.toString())
+                                            .collect(Collectors.toList());
+        indexNumbersString.add(0, "Here are the vacancies for " + course.toString());
+        printMessageWithDivider(indexNumbersString.toArray(String[]::new));
+    }
+
+    public void printCourses(ArrayList<Course> courses, String message) {
+        printMessageWithDivider(getCoursesDescription(courses, message));
     }
 
     public void printCourses(ArrayList<Course> courses) {
@@ -164,18 +182,6 @@ public class AdminUi extends Ui {
         course.setIndexNumbers(getIndexNumbers());
 
         return course;
-    }
-
-    private String ordinal(int i) {
-        String[] suffixes = new String[] { "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th" };
-        switch (i % 100) {
-        case 11:
-        case 12:
-        case 13:
-            return i + "th";
-        default:
-            return i + suffixes[i % 10];
-        }
     }
 
     public int getIndexOfIndexNumberToEdit(Course course) {

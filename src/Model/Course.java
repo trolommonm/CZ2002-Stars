@@ -10,7 +10,6 @@ public class Course implements Serializable, Cloneable {
     private String courseCode;
     private ArrayList<IndexNumber> indexNumbers;
     private School school;
-    private Storage storage;
 
     public Course(String courseName, String courseCode, School school) {
         this.courseName = courseName;

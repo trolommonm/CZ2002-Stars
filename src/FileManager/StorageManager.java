@@ -220,7 +220,7 @@ public class StorageManager {
         }
     }
 
-    public void save() {
+    private void save() {
         try {
             FileOutputStream fos = new FileOutputStream("data/Storage.ser");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
