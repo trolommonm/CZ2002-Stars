@@ -24,7 +24,7 @@ public class LoginController {
         storageManager = new StorageManager();
     }
 
-    public AccountType login() {
+    public AccountType run() {
         do {
             accountType = loginUi.getAccountType();
             providedLoginInfo = loginUi.getLoginInfo();
@@ -57,6 +57,8 @@ public class LoginController {
     }
 
     private boolean verifyAccessPeriod(String userId) {
+        assert accountType != null;
+
         if (accountType == AccountType.ADMIN) {
             return true;
         }

@@ -1,6 +1,7 @@
 package View;
 
 import ErrorMessage.ErrorMessage;
+import Exception.InvalidLessonTypeException;
 import Model.Course;
 import Enum.School;
 import Enum.LessonType;
@@ -281,6 +282,24 @@ public class AdminUi extends Ui {
         return indexNumbers;
     }
 
+    private LocalTime getTime(String message) {
+        LocalTime time;
+        while (true) {
+            print(message);
+            Scanner sc = new Scanner(System.in);
+            String startTimeString = sc.next();
+            try {
+                time = LocalTime.of(Integer.parseInt(startTimeString.substring(0, 2)),
+                        Integer.parseInt(startTimeString.substring(2)));
+                break;
+            } catch (NumberFormatException | DateTimeException e) {
+                printErrorMessage(ErrorMessage.INVALID_TIME);
+            }
+        }
+
+        return time;
+    }
+
     private ArrayList<Lesson> getLessons(int indexNumber) {
         ArrayList<Lesson> lessons = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
@@ -290,23 +309,18 @@ public class AdminUi extends Ui {
 
             LessonType lessonType;
             getLessonTypeLoop: while(true) {
-                print("Enter the type of lesson (LEC, TUT, LAB) (Enter Q if you are done):");
+                print("Enter the type of lesson " + LessonType.getAllLessonType()
+                        + " (Enter Q if you are done):");
+
                 String lessonTypeString = sc.next();
-                switch (lessonTypeString) {
-                case "LEC":
-                    lessonType = LessonType.LECTURE;
-                    break getLessonTypeLoop;
-                case "TUT":
-                    lessonType = LessonType.TUTORIAL;
-                    break getLessonTypeLoop;
-                case "LAB":
-                    lessonType = LessonType.LAB;
-                    break getLessonTypeLoop;
-                case "Q":
+                if (lessonTypeString.equals("Q")) {
                     break getLessonLoop;
-                default:
-                    printErrorMessage(ErrorMessage.INVALID_LESSON_TYPE);
-                    break;
+                }
+                try {
+                    lessonType = LessonType.getLessonType(lessonTypeString);
+                    break getLessonTypeLoop;
+                } catch (InvalidLessonTypeException e) {
+                    printErrorMessage(e.getMessage());
                 }
             }
 
@@ -331,35 +345,8 @@ public class AdminUi extends Ui {
                 }
             }
 
-            LocalTime startTime;
-            while (true) {
-                print("Enter the start time (in 24 hours format e.g. 0830):");
-                String startTimeString = sc.next();
-                try {
-                    startTime = LocalTime.of(Integer.parseInt(startTimeString.substring(0, 2)),
-                            Integer.parseInt(startTimeString.substring(2)));
-                    break;
-                } catch (NumberFormatException e) {
-                    printErrorMessage(ErrorMessage.INVALID_TIME);
-                } catch (DateTimeException e) {
-                    printErrorMessage(ErrorMessage.INVALID_TIME);
-                }
-            }
-
-            LocalTime endTime;
-            while (true) {
-                print("Enter the end time (in 24 hours format e.g. 2341):");
-                String endTimeString = sc.next();
-                try {
-                    endTime = LocalTime.of(Integer.parseInt(endTimeString.substring(0, 2)),
-                            Integer.parseInt(endTimeString.substring(2)));
-                    break;
-                } catch (NumberFormatException e) {
-                    printErrorMessage(ErrorMessage.INVALID_TIME);
-                } catch (DateTimeException e) {
-                    printErrorMessage(ErrorMessage.INVALID_TIME);
-                }
-            }
+            LocalTime startTime = getTime("Enter the start time (in 24 hours format e.g. 0830):");
+            LocalTime endTime = getTime("Enter the end time (in 24 hours format e.g. 2341):");
 
             counter++;
             lessons.add(new Lesson(lessonType, dayOfWeek, startTime, endTime));
