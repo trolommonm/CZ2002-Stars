@@ -2,11 +2,13 @@ package View;
 
 import ErrorMessage.ErrorMessage;
 import Model.Course;
+import Model.IndexNumber;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Ui {
     private final String dividerLine = "____________________________________________________________";
@@ -75,6 +77,29 @@ public class Ui {
         }
 
         return coursesDescriptionList.toArray(String[]::new);
+    }
+
+    public void checkVacancyOfIndexNumber(ArrayList<Course> courses) {
+        int choice;
+        while (true) {
+            choice = getInputChoice("Which course do you want to check?",
+                    getCoursesDescription(courses, "Here are your list of courses:"));
+            if (choice < 1 || choice > courses.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            break;
+        }
+        printIndexNumberVacancies(courses.get(choice-1).getIndexNumbers(), courses.get(choice-1));
+    }
+
+    public void printIndexNumberVacancies(ArrayList<IndexNumber> indexNumbers, Course course) {
+        List<String> indexNumbersString = indexNumbers
+                .stream()
+                .map((i) -> i.toString())
+                .collect(Collectors.toList());
+        indexNumbersString.add(0, "Here are the vacancies for " + course.toString());
+        printMessageWithDivider(indexNumbersString.toArray(String[]::new));
     }
 
     public String ordinal(int i) {
