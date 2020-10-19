@@ -49,7 +49,6 @@ public class AdminController {
     private void addCourse() {
         Course course = adminUi.getCourseToAdd();
         storageManager.addCourse(course);
-
         adminUi.printCourses(storageManager.getAllCourses(), "Added " + course.toString() + "!");
     }
 

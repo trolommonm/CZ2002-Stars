@@ -1,5 +1,6 @@
 import Controller.AdminController;
 import Controller.LoginController;
+import Controller.StudentController;
 
 public class Main {
 
@@ -9,6 +10,7 @@ public class Main {
 
         AdminController ac = new AdminController();
         ac.run();
+
     }
 
 }
