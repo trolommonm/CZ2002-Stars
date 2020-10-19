@@ -12,4 +12,4 @@ Isabella Chua|Student11|U1011|German|FEMALE|2020-10-10-8-0|2020-10-15-23-59
 Elaine Lim|Student12|U1012|Malaysian|FEMALE|2020-10-10-8-0|2020-10-15-23-59
 Yi Heng|Student13|U1013|Indonesian|MALE|2020-10-10-8-0|2020-10-15-23-59
 Luke Tan|Student14|U1014|Malaysian|MALE|2020-10-10-8-0|2020-10-15-23-59
-Jamus Lee|Student15|U1015|Singaporean|MALE|2020-10-10-8-0|2020-10-15-23-59
+Jamus Lee|Student15|U1015|Singaporean|MALE|2020-10-10-8-0|2020-12-20-23-59
