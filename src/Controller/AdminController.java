@@ -14,13 +14,14 @@ public class AdminController {
         storageManager = new StorageManager();
     }
 
-    public void getUserChoice() {
+    public void run() {
         int choice;
         do {
             choice = adminUi.getMenuInputChoice();
 
             switch (choice) {
             case 1:
+                editStudentAccessPeriod();
                 break;
             case 2:
                 break;
@@ -78,8 +79,6 @@ public class AdminController {
                 adminUi.printMessageWithDivider(e.getMessage());
             }
             break;
-        default:
-            adminUi.print(ErrorMessage.ERROR_INPUT_CHOICE);
         }
     }
 
@@ -87,4 +86,7 @@ public class AdminController {
         adminUi.checkVacancyOfIndexNumber(storageManager.getAllCourses());
     }
 
+    private void editStudentAccessPeriod() {
+
+    }
 }

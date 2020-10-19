@@ -6,13 +6,11 @@ public class Main {
 
     public static void main(String[] args) {
         LoginController lc = new LoginController();
-        lc.login();
+        lc.run();
 
         AdminController ac = new AdminController();
-        ac.getUserChoice();
+        ac.run();
 
-        StudentController sc = new StudentController();
-        sc.getUserChoice();
     }
 
 }
