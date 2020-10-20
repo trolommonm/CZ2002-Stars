@@ -2,6 +2,7 @@ package Model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import Exception.InvalidAccessTimeException;
 
@@ -36,6 +37,7 @@ public class AccessTime implements Serializable {
 
     @Override
     public String toString() {
-        return start.toString() + " to " + end.toString();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        return dtf.format(start) + " to " + dtf.format(end);
     }
 }

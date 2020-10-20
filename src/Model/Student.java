@@ -18,7 +18,8 @@ public class Student implements Serializable {
     private HashMap<String, Integer> registeredIndexNumbers;
     private Storage storage;
 
-    public Student(String name, String userId, String matricNumber, String nationality, Gender gender, AccessTime accessTime) {
+    public Student(String name, String userId, String matricNumber,
+                   String nationality, Gender gender, AccessTime accessTime) {
         this.name = name;
         this.userId = userId;
         this.matricNumber = matricNumber;

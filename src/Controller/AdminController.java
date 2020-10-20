@@ -94,5 +94,6 @@ public class AdminController {
         int index = adminUi.getStudentChoiceEditAccessTime(students);
         storageManager.setNewAccessTime(students.get(index).getUserId(),
                 adminUi.getNewAccessTime(students.get(index)));
+        adminUi.printMessageWithDivider();
     }
 }

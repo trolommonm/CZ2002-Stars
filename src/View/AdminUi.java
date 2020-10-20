@@ -229,8 +229,7 @@ public class AdminUi extends Ui {
 
     public IndexNumber getIndexNumber(boolean isAdd) {
         Scanner sc = new Scanner(System.in);
-        String input = "";
-        int counter = 1;
+        String input;
 
         while (true) {
             try {
@@ -256,8 +255,6 @@ public class AdminUi extends Ui {
 
     private ArrayList<IndexNumber> getIndexNumbers() {
         ArrayList<IndexNumber> indexNumbers = new ArrayList<>();
-        Scanner sc = new Scanner(System.in);
-        String input = "";
         int counter = 1;
 
         while (true) {
@@ -285,7 +282,7 @@ public class AdminUi extends Ui {
         while (true) {
             print(message);
             Scanner sc = new Scanner(System.in);
-            String dateTimeString = sc.nextLine();
+            String dateTimeString = sc.nextLine().trim();
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
                 dateTime = LocalDateTime.parse(dateTimeString, formatter);
