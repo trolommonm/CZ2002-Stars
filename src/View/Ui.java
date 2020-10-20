@@ -3,6 +3,7 @@ package View;
 import ErrorMessage.ErrorMessage;
 import Model.Course;
 import Model.IndexNumber;
+import Model.Student;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -77,6 +78,19 @@ public class Ui {
         }
 
         return coursesDescriptionList.toArray(String[]::new);
+    }
+
+    public String[] getStudentsDescription(ArrayList<Student> students, String message) {
+        ArrayList<String> studentsDescriptionList = new ArrayList<>();
+        if (message != null) {
+            studentsDescriptionList.add(message);
+        }
+        int index = 1;
+        for (Student student: students) {
+            studentsDescriptionList.add((index++) + ". " + student.toString());
+        }
+
+        return studentsDescriptionList.toArray(String[]::new);
     }
 
     public void checkVacancyOfIndexNumber(ArrayList<Course> courses) {

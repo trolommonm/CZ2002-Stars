@@ -39,12 +39,24 @@ public class Student implements Serializable {
         return courseCodes;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public AccessTime getAccessTime() {
         return accessTime;
+    }
+
+    public void setAccessTime(AccessTime accessTime) {
+        this.accessTime = accessTime;
     }
 
     public boolean isWithinAccessTime(LocalDateTime localDateTime) {
         return accessTime.isWithinAccessTime(localDateTime);
     }
 
+    @Override
+    public String toString() {
+        return "Name: " + name + ", Gender: " + gender + ", Nationality: " + nationality;
+    }
 }

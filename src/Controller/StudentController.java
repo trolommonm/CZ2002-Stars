@@ -22,7 +22,7 @@ public class StudentController {
         storageManager = new StorageManager();
     }
 
-    public void getUserChoice() {
+    public void run() {
         int choice;
         do {
             choice = studentUi.getMenuInputChoice();

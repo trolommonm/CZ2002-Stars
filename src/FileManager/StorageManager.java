@@ -48,6 +48,11 @@ public class StorageManager {
         return storage.getCourse(courseCode);
     }
 
+    public void setNewAccessTime(String userId, AccessTime newAccessTime) {
+        storage.setAccessTime(userId, newAccessTime);
+        save();
+    }
+
     public void setNewCourseCode(String newCourseCode, String forCourseCode) {
         Course oldCourse = getCourse(forCourseCode);
         Course updatedCourse = new Course(oldCourse.getCourseName(), newCourseCode, oldCourse.getSchool());

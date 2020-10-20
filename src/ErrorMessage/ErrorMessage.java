@@ -16,8 +16,11 @@ public class ErrorMessage {
     public static final String INVALID_INDEX_NUMBER = "Invalid index number! Please try again.";
     public static final String INVALID_LESSON_TYPE = "Invalid lesson type! Please try again.";
     public static final String INVALID_TIME = "Invalid time! Please try again.";
+    public static final String INVALID_DATE = "Invalid date! Please try again.";
+    public static final String INVALID_DATE_TIME = "Invalid date and time! Please try again.";
     public static final String INVALID_DAY_OF_WEEK = "Invalid day of week! Please try again.";
     public static final String INVALID_MAX_VACANCY = "Invalid maximum vacancy! Please try again.";
     public static final String INVALID_NEW_MAX_VACANCY = "The new maximum vacancy for this index is less than"
             + "the number of registered students.\n" + "Please enter a new value.";
+    public static final String INVALID_ACCESS_TIME = "Invalid Access Time! The start time is later than end time!";
 }

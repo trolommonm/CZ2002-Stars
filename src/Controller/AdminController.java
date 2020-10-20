@@ -3,7 +3,10 @@ package Controller;
 import ErrorMessage.ErrorMessage;
 import FileManager.StorageManager;
 import Model.Course;
+import Model.Student;
 import View.AdminUi;
+
+import java.util.ArrayList;
 
 public class AdminController {
     private AdminUi adminUi;
@@ -87,6 +90,9 @@ public class AdminController {
     }
 
     private void editStudentAccessPeriod() {
-
+        ArrayList<Student> students = storageManager.getAllStudents();
+        int index = adminUi.getStudentChoiceEditAccessTime(students);
+        storageManager.setNewAccessTime(students.get(index).getUserId(),
+                adminUi.getNewAccessTime(students.get(index)));
     }
 }

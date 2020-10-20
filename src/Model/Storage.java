@@ -41,6 +41,10 @@ public class Storage implements Serializable {
         return courses.get(courseCode);
     }
 
+    public void setAccessTime(String userId, AccessTime accessTime) {
+        getStudent(userId).setAccessTime(accessTime);
+    }
+
     public ArrayList<Course> getAllCourses() {
         ArrayList<Course> coursesArrayList = new ArrayList<>();
         for (Course course: courses.values()) {

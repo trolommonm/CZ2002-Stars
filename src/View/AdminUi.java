@@ -2,17 +2,14 @@ package View;
 
 import ErrorMessage.ErrorMessage;
 import Exception.InvalidLessonTypeException;
-import Model.Course;
+import Exception.InvalidAccessTimeException;
+import Model.*;
 import Enum.School;
 import Enum.LessonType;
-import Model.IndexNumber;
-import Model.Lesson;
 
-import java.time.DateTimeException;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AdminUi extends Ui {
     private final String[] adminMenuOptions = {
@@ -48,20 +45,44 @@ public class AdminUi extends Ui {
         printMessageWithDivider(getCoursesDescription(courses, message));
     }
 
-    public void printCourses(ArrayList<Course> courses) {
-        printCourses(courses, "Here are your list of courses:");
-    }
-
     public int getMenuInputChoice() {
         return getInputChoice("Enter your choice:", adminMenuOptions);
+    }
+
+    public int getStudentChoiceEditAccessTime(ArrayList<Student> students) {
+        while (true) {
+            int index = getInputChoice("Which student would you like to edit the access time?",
+                    getStudentsDescription(students, "Here are the list of students"));
+            if (index < 1 || index > students.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            return index - 1;
+        }
+    }
+
+    public AccessTime getNewAccessTime(Student student) {
+        while (true) {
+            printMessageWithDivider("The current access period for " + student.getName() + " is:",
+                    student.getAccessTime().toString());
+            LocalDateTime newStartDateTime = getDateTime("Enter the new start date and time in "
+                    + "\"dd-MM-yyyy HH:mm\" format (e.g. 10-12-2020 23:59):");
+            LocalDateTime newEndDateTime = getDateTime("Enter the new end date and time in "
+                    + "\"dd-MM-yyyy HH:mm\" format (e.g. 10-12-2020 23:59):");
+            try {
+                AccessTime newAccessTime = new AccessTime(newStartDateTime, newEndDateTime);
+                return newAccessTime;
+            } catch (InvalidAccessTimeException e) {
+                printErrorMessage(e.getMessage());
+            }
+        }
     }
 
     public String getCourseToEdit(ArrayList<Course> courses) {
         while (true) {
             try {
-                printCourses(courses);
-
-                int index = getInputChoice("Which course do you want to edit?");
+                int index = getInputChoice("Which course do you want to edit?",
+                        getCoursesDescription(courses, "Here are your list of courses:"));
                 if (index < 1 || index > courses.size()) {
                     printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
                     continue;
@@ -257,6 +278,24 @@ public class AdminUi extends Ui {
         }
 
         return indexNumbers;
+    }
+
+    private LocalDateTime getDateTime(String message) {
+        LocalDateTime dateTime;
+        while (true) {
+            print(message);
+            Scanner sc = new Scanner(System.in);
+            String dateTimeString = sc.nextLine();
+            try {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+                dateTime = LocalDateTime.parse(dateTimeString, formatter);
+                break;
+            } catch (DateTimeException e) {
+                printErrorMessage(ErrorMessage.INVALID_DATE_TIME);
+            }
+        }
+
+        return dateTime;
     }
 
     private LocalTime getTime(String message) {
