@@ -6,6 +6,9 @@ import Enum.School;
 import Enum.LessonType;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -83,8 +86,9 @@ public class StorageManager {
         return storage.getAllCourses();
     }
 
-    public void addStudent(Student student) {
+    public void addStudent(Student student, LoginInfo loginInfo) {
         storage.addStudent(student);
+        addLoginInfoForNewStudent(loginInfo);
         save();
     }
 
@@ -101,7 +105,23 @@ public class StorageManager {
         return storage.getAllStudents();
     }
 
+    public void addLoginInfoForNewStudent(LoginInfo loginInfo) {
+        try {
+            LoginInfoFileManager loginInfoFileManager = new LoginInfoFileManager();
+            loginInfoFileManager.addLoginInfoForNewStudent(loginInfo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void preload() {
+        try {
+            Files.copy(Path.of("data/preload/StudentLoginInfo.txt"), Path.of("data/StudentLoginInfo.txt")
+                    , StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         storage = new Storage();
         File studentFile = new File("data/preload/Students.txt");
         try {

@@ -4,6 +4,8 @@ import Model.LoginInfo;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -14,6 +16,12 @@ public class LoginInfoFileManager {
     public LoginInfoFileManager() {
         adminLoginInfoFile = new File("data/AdminLoginInfo.txt");
         studentLoginInfoFile = new File("data/StudentLoginInfo.txt");
+    }
+
+    public void addLoginInfoForNewStudent(LoginInfo loginInfo) throws IOException {
+        FileWriter fw = new FileWriter(studentLoginInfoFile,true);
+        fw.write(loginInfo.getUserId() + "|" + loginInfo.getPassword());
+        fw.close();
     }
 
     public ArrayList<LoginInfo> retrieveStudentLoginInfoList() throws FileNotFoundException {

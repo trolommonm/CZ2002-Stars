@@ -23,4 +23,5 @@ public class ErrorMessage {
     public static final String INVALID_NEW_MAX_VACANCY = "The new maximum vacancy for this index is less than"
             + "the number of registered students.\n" + "Please enter a new value.";
     public static final String INVALID_ACCESS_TIME = "Invalid Access Time! The start time is later than end time!";
+    public static final String INVALID_GENDER_TYPE = "Invalid gender! Please try again!";
 }

@@ -6,6 +6,7 @@ import Exception.InvalidAccessTimeException;
 import Model.*;
 import Enum.School;
 import Enum.LessonType;
+import Enum.Gender;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -45,6 +46,10 @@ public class AdminUi extends Ui {
         printMessageWithDivider(getCoursesDescription(courses, message));
     }
 
+    public void printStudents(ArrayList<Student> students, String message) {
+        printMessageWithDivider(getStudentsDescription(students, message));
+    }
+
     public int getMenuInputChoice() {
         return getInputChoice("Enter your choice:", adminMenuOptions);
     }
@@ -61,14 +66,56 @@ public class AdminUi extends Ui {
         }
     }
 
-    public AccessTime getNewAccessTime(Student student) {
+    public Student getNewStudent(String userId) {
+        Scanner sc = new Scanner(System.in);
+        print("Enter the name:");
+        String name = sc.nextLine();
+        print("Enter the matric number:");
+        String matricNumber = sc.next();
+        print("Enter the nationality:");
+        String nationality = sc.next();
+        AccessTime accessTime = getAccessTime(null,
+                "Enter the start date and time for the access period in "
+                        + "\"dd-MM-yyyy HH:mm\" format (e.g. 10-12-2020 23:59):",
+                "Enter the end date and time for the access period in "
+                        + "\"dd-MM-yyyy HH:mm\" format (e.g. 10-12-2020 23:59):");
+        Gender gender;
+        getGenderLoop: while (true) {
+            print("Enter the gender (MALE, FEMALE):");
+            String genderString = sc.next();
+            switch (genderString) {
+            case "FEMALE":
+                gender = Gender.FEMALE;
+                break getGenderLoop;
+            case "MALE":
+                gender = Gender.MALE;
+                break getGenderLoop;
+            default:
+                printErrorMessage(ErrorMessage.INVALID_GENDER_TYPE);
+            }
+        }
+
+        return new Student(name, userId, matricNumber, nationality, gender, accessTime);
+    }
+
+    public LoginInfo getLoginInfo() {
+        Scanner sc = new Scanner(System.in);
+        print("Enter the user id for the new student:");
+        String userId = sc.next();
+        sc.nextLine();
+        print("Enter the password for the new student:");
+        String password = sc.nextLine();
+        return new LoginInfo(userId, password);
+    }
+
+    public AccessTime getAccessTime(String currentAccessPeriodMessage,
+                                    String newStartMessage, String newEndMessage) {
         while (true) {
-            printMessageWithDivider("The current access period for " + student.getName() + " is:",
-                    student.getAccessTime().toString());
-            LocalDateTime newStartDateTime = getDateTime("Enter the new start date and time in "
-                    + "\"dd-MM-yyyy HH:mm\" format (e.g. 10-12-2020 23:59):");
-            LocalDateTime newEndDateTime = getDateTime("Enter the new end date and time in "
-                    + "\"dd-MM-yyyy HH:mm\" format (e.g. 10-12-2020 23:59):");
+            if (currentAccessPeriodMessage != null) {
+                printMessageWithDivider(currentAccessPeriodMessage);
+            }
+            LocalDateTime newStartDateTime = getDateTime(newStartMessage);
+            LocalDateTime newEndDateTime = getDateTime(newEndMessage);
             try {
                 AccessTime newAccessTime = new AccessTime(newStartDateTime, newEndDateTime);
                 return newAccessTime;
@@ -76,6 +123,15 @@ public class AdminUi extends Ui {
                 printErrorMessage(e.getMessage());
             }
         }
+    }
+
+    public AccessTime getNewAccessTime(Student student) {
+        return getAccessTime("The current access period for " + student.getName()
+                        + " is:\n" + student.getAccessTime().toString(),
+                "Enter the new start date and time in "
+                        + "\"dd-MM-yyyy HH:mm\" format (e.g. 10-12-2020 23:59):",
+                "Enter the new end date and time in "
+                        + "\"dd-MM-yyyy HH:mm\" format (e.g. 10-12-2020 23:59):");
     }
 
     public String getCourseToEdit(ArrayList<Course> courses) {
@@ -171,8 +227,6 @@ public class AdminUi extends Ui {
     }
 
     public Course getCourseToAdd() {
-        Scanner sc = new Scanner(System.in);
-
         String courseName = getCourseName();
         String courseCode = getCourseCode();
         School school = getSchool();

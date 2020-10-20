@@ -3,6 +3,7 @@ package Controller;
 import ErrorMessage.ErrorMessage;
 import FileManager.StorageManager;
 import Model.Course;
+import Model.LoginInfo;
 import Model.Student;
 import View.AdminUi;
 
@@ -27,6 +28,7 @@ public class AdminController {
                 editStudentAccessPeriod();
                 break;
             case 2:
+                addStudent();
                 break;
             case 3:
                 addCourse();
@@ -92,8 +94,16 @@ public class AdminController {
     private void editStudentAccessPeriod() {
         ArrayList<Student> students = storageManager.getAllStudents();
         int index = adminUi.getStudentChoiceEditAccessTime(students);
-        storageManager.setNewAccessTime(students.get(index).getUserId(),
-                adminUi.getNewAccessTime(students.get(index)));
-        adminUi.printMessageWithDivider();
+        Student student = students.get(index);
+        storageManager.setNewAccessTime(student.getUserId(),
+                adminUi.getNewAccessTime(student));
+        adminUi.printMessageWithDivider("Updated access period for " + student.getName() + "!");
+    }
+
+    private void addStudent() {
+        LoginInfo loginInfoForStudent = adminUi.getLoginInfo();
+        Student student = adminUi.getNewStudent(loginInfoForStudent.getUserId());
+        storageManager.addStudent(student, loginInfoForStudent);
+        adminUi.printStudents(storageManager.getAllStudents(), "Added " + student.getName() + "!");
     }
 }
