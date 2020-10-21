@@ -35,6 +35,34 @@ public class StudentUi extends Ui {
         return getInputChoice("Enter your choice:", studentMenuOptions);
     }
 
+    public int getIndexOfCourseToRegister(ArrayList<Course> courses) {
+        int index;
+        while (true) {
+            index = getInputChoice("Which course would you like to add?",
+                    getCoursesDescription(courses, "Here are the available courses:"));
+            if (index < 1 || index > courses.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            break;
+        }
+        return index - 1;
+    }
+
+    public int getIndexOfIndexNumberToRegister(ArrayList<IndexNumber> indexNumbers) {
+        int index;
+        while (true) {
+            index = getInputChoice("Which index number would you like to add?",
+                    getIndexNumbersDescription(indexNumbers, "Here are the index numbers:"));
+            if (index < 1 || index > indexNumbers.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            break;
+        }
+        return index - 1;
+    }
+
     public int getIndex(String s) {
         System.out.print(s);
         Scanner sc = new Scanner(System.in);

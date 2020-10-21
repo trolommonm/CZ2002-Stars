@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Exception.CourseRegisteredException;
+import Exception.ClashingIndexNumberException;
+import Exception.NoVacancyException;
+
 public class Storage implements Serializable {
     private HashMap<String, Student> students;
     private HashMap<String, Course> courses;
@@ -43,6 +47,12 @@ public class Storage implements Serializable {
 
     public void setAccessTime(String userId, AccessTime accessTime) {
         getStudent(userId).setAccessTime(accessTime);
+    }
+
+    public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
+        throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException {
+        Student student = getStudent(userId);
+        student.addCourse(getCourse(courseCodeToBeAdded), indexNumberToBeAdded);
     }
 
     public ArrayList<Course> getAllCourses() {

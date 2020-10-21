@@ -14,7 +14,7 @@ public class Main {
             ac.run();
             break;
         case STUDENT:
-            StudentController sc = new StudentController();
+            StudentController sc = new StudentController(lc.getUserId());
             sc.run();
             break;
         default:

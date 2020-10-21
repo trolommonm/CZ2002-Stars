@@ -8,32 +8,40 @@ import Model.IndexNumber;
 import Model.LoginInfo;
 import Model.Student;
 import View.StudentUi;
+import Exception.CourseRegisteredException;
+import Exception.ClashingIndexNumberException;
+import Exception.NoVacancyException;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class StudentController {
-
+    private Student student;
     private StudentUi studentUi;
     private StorageManager storageManager;
 
-    public StudentController() {
+    public StudentController(String userId) {
         studentUi = new StudentUi();
         storageManager = new StorageManager();
+        student = storageManager.getStudent(userId);
     }
 
     public void run() {
+        studentUi.printWelcomeMessage(student.getName());
         int choice;
         do {
             choice = studentUi.getMenuInputChoice();
             switch (choice) {
                 case 1:
+                    addCourse();
                     break;
                 case 2:
                     break;
                 case 3:
+                    printRegisteredCourses();
                     break;
                 case 4:
+                    printVacancies();
                     break;
                 case 5:
                     changeIndex();
@@ -49,19 +57,41 @@ public class StudentController {
     }
 
     private void addCourse() {
-
+        ArrayList<Course> courses = storageManager.getAllCourses();
+        int index;
+        index = studentUi.getIndexOfCourseToRegister(courses);
+        Course courseToBeAdded = courses.get(index);
+        index = studentUi.getIndexOfIndexNumberToRegister(courseToBeAdded.getIndexNumbers());
+        IndexNumber indexNumberToBeAdded = courseToBeAdded.getIndexNumbers().get(index);
+        try {
+            storageManager.registerForCourse(student.getUserId(), courseToBeAdded.getCourseCode(),
+                    indexNumberToBeAdded);
+        } catch (CourseRegisteredException | ClashingIndexNumberException | NoVacancyException e) {
+            studentUi.printErrorMessage(e.getMessage());
+        }
     }
 
     private void dropCourse() {
 
     }
 
-    private void printRegisteredCourse() {
-
+    private void printRegisteredCourses() {
+        String registeredCourses = "\n";
+        int index = 1;
+        for (String courseCode: student.getCourseCodes()) {
+            Course course = storageManager.getCourse(courseCode);
+            registeredCourses += (index) + ". " + course.toString();
+            registeredCourses += "\n\t" + student.getRegisteredIndexNumbers().get(courseCode).getFullDescription();
+            if (index != student.getCourseCodes().size()) {
+                registeredCourses += "\n";
+            }
+            index++;
+        }
+        studentUi.printMessageWithDivider("Here are your registered courses:", registeredCourses);
     }
 
     private void printVacancies() {
-
+        studentUi.checkVacancyOfIndexNumber(storageManager.getAllCourses());
     }
 
     private void changeIndex() {
@@ -72,9 +102,9 @@ public class StudentController {
         ArrayList<IndexNumber> courseIndexNumbers = course.getIndexNumbers();
         int swappingIndexVacancy;
         for (IndexNumber searchCurrent : courseIndexNumbers) {
-            if (searchCurrent.getIndexNumber() == currentIndex) {
+            if (searchCurrent.getId() == currentIndex) {
                 for (IndexNumber searchSwap : courseIndexNumbers) {
-                    if (searchSwap.getIndexNumber() == swappingIndex) {
+                    if (searchSwap.getId() == swappingIndex) {
                         swappingIndexVacancy = searchSwap.getAvailableVacancy();
                         if (swappingIndexVacancy > 0) {
                             // drop current index
@@ -112,7 +142,7 @@ public class StudentController {
             Course course = storageManager.getCourse(courseCode);
             ArrayList<IndexNumber> courseIndexNumbers = course.getIndexNumbers();
             for (IndexNumber searchSwap : courseIndexNumbers) {
-                if (searchSwap.getIndexNumber() == swappingIndex) {
+                if (searchSwap.getId() == swappingIndex) {
                     ArrayList<Student> studentList = storageManager.getStudentsInCourse(course);
                     for (Student s : studentList) {
                         if (s.getUserId().equals(username)) {

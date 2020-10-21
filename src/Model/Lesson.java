@@ -18,4 +18,24 @@ public class Lesson implements Serializable {
         this.startTime = startTime;
         this.endTime = endTime;
     }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public LessonType getLessonType() {
+        return lessonType;
+    }
+
+    public DayOfWeek DayOfWeek() {
+        return dayOfWeek;
+    }
 }

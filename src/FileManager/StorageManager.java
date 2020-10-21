@@ -4,6 +4,9 @@ import Model.*;
 import Enum.Gender;
 import Enum.School;
 import Enum.LessonType;
+import Exception.CourseRegisteredException;
+import Exception.ClashingIndexNumberException;
+import Exception.NoVacancyException;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -25,7 +28,7 @@ public class StorageManager {
     public ArrayList<Student> getStudentsInCourse(Course course) {
         ArrayList<Student> students = new ArrayList<>();
         for (IndexNumber indexNumber: course.getIndexNumbers()) {
-            for (String matricNumber: indexNumber.getStudentMatricNumbers()) {
+            for (String matricNumber: indexNumber.getStudentUserIds()) {
                 students.add(storage.getStudent(matricNumber));
             }
         }
@@ -49,6 +52,12 @@ public class StorageManager {
 
     public Course getCourse(String courseCode) {
         return storage.getCourse(courseCode);
+    }
+
+    public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumber)
+        throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException {
+        storage.registerForCourse(userId, courseCodeToBeAdded, indexNumber);
+        save();
     }
 
     public void setNewAccessTime(String userId, AccessTime newAccessTime) {

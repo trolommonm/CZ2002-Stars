@@ -3,11 +3,13 @@ package View;
 import ErrorMessage.ErrorMessage;
 import Exception.InvalidLessonTypeException;
 import Exception.InvalidAccessTimeException;
+import FileManager.LoginInfoFileManager;
 import Model.*;
 import Enum.School;
 import Enum.LessonType;
 import Enum.Gender;
 
+import java.io.FileNotFoundException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -100,12 +102,35 @@ public class AdminUi extends Ui {
 
     public LoginInfo getLoginInfo() {
         Scanner sc = new Scanner(System.in);
-        print("Enter the user id for the new student:");
-        String userId = sc.next();
-        sc.nextLine();
+        String userId;
+        while (true) {
+            print("Enter the user id for the new student:");
+            userId = sc.next().trim();
+            sc.nextLine();
+            if (checkUserIdExists(userId)) {
+                printErrorMessage(ErrorMessage.USER_ID_EXISTS);
+                continue;
+            }
+            break;
+        }
         print("Enter the password for the new student:");
         String password = sc.nextLine();
         return new LoginInfo(userId, password);
+    }
+
+    private boolean checkUserIdExists(String userId) {
+        LoginInfoFileManager loginInfoFileManager = new LoginInfoFileManager();
+        try {
+            for (LoginInfo loginInfo: loginInfoFileManager.retrieveStudentLoginInfoList()) {
+                if (loginInfo.getUserId().equals(userId)) {
+                    return true;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     public AccessTime getAccessTime(String currentAccessPeriodMessage,
@@ -241,7 +266,7 @@ public class AdminUi extends Ui {
         String[] messages = new String[course.getIndexNumbers().size() + 1];
         messages[0] = "Index numbers for: " + course.toString();
         for (int i = 1; i < messages.length; i++) {
-            messages[i] = (i) + ". Index number: " + course.getIndexNumbers().get(i-1).getIndexNumber()
+            messages[i] = (i) + ". Index number: " + course.getIndexNumbers().get(i-1).getId()
                     + " (Current Max Vacancy: "
                     + course.getIndexNumbers().get(i-1).getMaxVacancy()
                     + ")";
@@ -263,7 +288,7 @@ public class AdminUi extends Ui {
 
     public int getNewMaxVacancy(Course course, int index) {
         return getMaxVacancy("Enter the new maximum vacancy for index "
-                + course.getIndexNumbers().get(index).getIndexNumber()
+                + course.getIndexNumbers().get(index).getId()
                 + " (Currently: "
                 + course.getIndexNumbers().get(index).getMaxVacancy() + "):");
     }

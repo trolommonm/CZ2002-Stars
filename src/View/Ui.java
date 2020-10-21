@@ -80,6 +80,19 @@ public class Ui {
         return coursesDescriptionList.toArray(String[]::new);
     }
 
+    public String[] getIndexNumbersDescription(ArrayList<IndexNumber> indexNumbers, String message) {
+        ArrayList<String> indexNumbersDescriptionList = new ArrayList<>();
+        if (message != null) {
+            indexNumbersDescriptionList.add(message);
+        }
+        int index = 1;
+        for (IndexNumber indexNumber: indexNumbers) {
+            indexNumbersDescriptionList.add((index++) + ". " + indexNumber.getFullDescription());
+        }
+
+        return indexNumbersDescriptionList.toArray(String[]::new);
+    }
+
     public String[] getStudentsDescription(ArrayList<Student> students, String message) {
         ArrayList<String> studentsDescriptionList = new ArrayList<>();
         if (message != null) {
@@ -97,7 +110,7 @@ public class Ui {
         int choice;
         while (true) {
             choice = getInputChoice("Which course do you want to check?",
-                    getCoursesDescription(courses, "Here are your list of courses:"));
+                    getCoursesDescription(courses, "Here are the list of courses:"));
             if (choice < 1 || choice > courses.size()) {
                 printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
                 continue;

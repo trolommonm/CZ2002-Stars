@@ -33,6 +33,11 @@ public class LoginController {
         return accountType;
     }
 
+    public String getUserId() {
+        assert providedLoginInfo == null : "Error: providedLoginInfo is not initialized!";
+        return providedLoginInfo.getUserId();
+    }
+
     private boolean verifyLoginInfo() {
         try {
             ArrayList<LoginInfo> loginInfoList = accountType == AccountType.ADMIN ?
