@@ -54,9 +54,14 @@ public class StorageManager {
         return storage.getCourse(courseCode);
     }
 
-    public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumber)
+    public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
         throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException {
-        storage.registerForCourse(userId, courseCodeToBeAdded, indexNumber);
+        storage.registerForCourse(userId, courseCodeToBeAdded, indexNumberToBeAdded);
+        save();
+    }
+
+    public void dropCourse(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
+        storage.dropCourse(userId, courseCodeToBeDropped, indexNumberToBeDropped);
         save();
     }
 

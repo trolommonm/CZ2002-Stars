@@ -35,6 +35,20 @@ public class StudentUi extends Ui {
         return getInputChoice("Enter your choice:", studentMenuOptions);
     }
 
+    public int getIndexOfCourseToDrop(ArrayList<Course> courses) {
+        int index;
+        while (true) {
+            index = getInputChoice("Which course would you like to drop?",
+                    getCoursesDescription(courses, "Here are your registered courses:"));
+            if (index < 1 || index > courses.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            break;
+        }
+        return index - 1;
+    }
+
     public int getIndexOfCourseToRegister(ArrayList<Course> courses) {
         int index;
         while (true) {

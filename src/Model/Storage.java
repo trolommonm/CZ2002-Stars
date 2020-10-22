@@ -55,6 +55,11 @@ public class Storage implements Serializable {
         student.addCourse(getCourse(courseCodeToBeAdded), indexNumberToBeAdded);
     }
 
+    public void dropCourse(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
+        Student student= getStudent(userId);
+        student.dropCourse(getCourse(courseCodeToBeDropped), indexNumberToBeDropped);
+    }
+
     public ArrayList<Course> getAllCourses() {
         ArrayList<Course> coursesArrayList = new ArrayList<>();
         for (Course course: courses.values()) {

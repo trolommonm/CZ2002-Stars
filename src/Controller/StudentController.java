@@ -36,6 +36,7 @@ public class StudentController {
                     addCourse();
                     break;
                 case 2:
+                    dropCourse();
                     break;
                 case 3:
                     printRegisteredCourses();
@@ -72,7 +73,11 @@ public class StudentController {
     }
 
     private void dropCourse() {
-
+        ArrayList<Course> courses = storageManager.getCoursesTakenByStudent(student);
+        int index = studentUi.getIndexOfCourseToDrop(courses);
+        Course course = courses.get(index);
+        IndexNumber indexNumber = student.getRegisteredIndexNumbers().get(course.getCourseCode());
+        storageManager.dropCourse(student.getUserId(), course.getCourseCode(), indexNumber);
     }
 
     private void printRegisteredCourses() {

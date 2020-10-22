@@ -94,6 +94,12 @@ public class Student implements Serializable {
         registeredIndexNumbers.put(course.getCourseCode(), indexNumberToBeAdded);
     }
 
+    public void dropCourse(Course course, IndexNumber indexNumberToBeDropped) {
+        indexNumberToBeDropped.deregisterStudent(this);
+        courseCodes.remove(course.getCourseCode());
+        registeredIndexNumbers.remove(course.getCourseCode());
+    }
+
     public ArrayList<IndexNumber> getClashingIndexNumbers(IndexNumber indexNumberToBeAdded) {
         ArrayList<IndexNumber> clashingIndexNumbers = new ArrayList<>();
         for (IndexNumber indexNumber: getAllIndexNumbersRegistered()) {

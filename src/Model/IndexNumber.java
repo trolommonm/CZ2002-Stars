@@ -55,6 +55,10 @@ public class IndexNumber implements Serializable {
         studentUserIds.add(student.getUserId());
     }
 
+    public void deregisterStudent(Student student) {
+        studentUserIds.remove(student.getUserId());
+    }
+
     public ArrayList<Lesson> getLessons() {
         return lessons;
     }
