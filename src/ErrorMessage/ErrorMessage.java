@@ -15,6 +15,8 @@ public class ErrorMessage {
             "timetable of the courses you have selected! Please try again.";
     public static final String NO_VACANCY = "There is no vacancy for that index number! You will be placed on the " +
             "waitlist.";
+    public static final String COURSE_ALREADY_IN_WAITLIST = "You have already added this course to your waitlist! " +
+            "To change index number, please drop the course first.";
 
     // Admin
     public static final String INVALID_SCHOOL = "Invalid school! Please try again.";

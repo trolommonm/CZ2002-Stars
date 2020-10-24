@@ -257,7 +257,7 @@ public class AdminUi extends Ui {
         School school = getSchool();
 
         Course course = new Course(courseName, courseCode, school);
-        course.setIndexNumbers(getIndexNumbers());
+        course.setIndexNumbers(getIndexNumbers(course));
 
         return course;
     }
@@ -306,7 +306,7 @@ public class AdminUi extends Ui {
         }
     }
 
-    public IndexNumber getIndexNumber(boolean isAdd) {
+    public IndexNumber getIndexNumber(boolean isAdd, Course course) {
         Scanner sc = new Scanner(System.in);
         String input;
 
@@ -319,20 +319,20 @@ public class AdminUi extends Ui {
                 if (input.equals("Q")) {
                     return null;
                 }
-                int indexNumberInt = Integer.parseInt(input);
+                int id = Integer.parseInt(input);
 
                 int maxVacancy = getMaxVacancy("Enter the maximum vacancy of this index:");
 
-                ArrayList<Lesson> lessons = getLessons(indexNumberInt);
+                ArrayList<Lesson> lessons = getLessons(id);
 
-                return new IndexNumber(indexNumberInt, lessons, maxVacancy);
+                return new IndexNumber(id, course, lessons, maxVacancy);
             } catch (NumberFormatException e) {
                 printErrorMessage(ErrorMessage.INVALID_INDEX_NUMBER);
             }
         }
     }
 
-    private ArrayList<IndexNumber> getIndexNumbers() {
+    private ArrayList<IndexNumber> getIndexNumbers(Course course) {
         ArrayList<IndexNumber> indexNumbers = new ArrayList<>();
         int counter = 1;
 
@@ -340,7 +340,7 @@ public class AdminUi extends Ui {
             try {
                 print("Enter the " + ordinal(counter) + " index number (Enter Q if you are done):");
 
-                IndexNumber indexNumber = getIndexNumber(false);
+                IndexNumber indexNumber = getIndexNumber(false, course);
                 if (indexNumber == null) {
                     break;
                 }
@@ -392,12 +392,12 @@ public class AdminUi extends Ui {
         return time;
     }
 
-    private ArrayList<Lesson> getLessons(int indexNumber) {
+    private ArrayList<Lesson> getLessons(int id) {
         ArrayList<Lesson> lessons = new ArrayList<>();
         Scanner sc = new Scanner(System.in);
         int counter = 1;
         getLessonLoop: while (true) {
-            print(ordinal(counter) + " Lesson for index " + indexNumber);
+            print(ordinal(counter) + " Lesson for index " + id);
 
             LessonType lessonType;
             getLessonTypeLoop: while(true) {

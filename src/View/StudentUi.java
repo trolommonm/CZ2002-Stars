@@ -18,7 +18,7 @@ public class StudentUi extends Ui {
             "Welcome to the STARS!",
             "1. Add a course.",
             "2. Drop a course.",
-            "3. Check/Print Courses Registered .",
+            "3. Check/Print Courses Registered.",
             "4. Check Vacancies Available.",
             "5. Change Index Number of Course.",
             "6. Swap Index Number with Another Student.",

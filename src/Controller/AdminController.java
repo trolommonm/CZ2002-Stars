@@ -73,7 +73,7 @@ public class AdminController {
             storageManager.setNewSchool(adminUi.getNewSchool(course), course.getCourseCode());
             break;
         case 4:
-            storageManager.addIndexNumber(adminUi.getIndexNumber(true), courseCode);
+            storageManager.addIndexNumber(adminUi.getIndexNumber(true, course), course.getCourseCode());
             break;
         case 5:
             int index = adminUi.getIndexOfIndexNumberToEdit(course);

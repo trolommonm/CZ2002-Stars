@@ -9,6 +9,7 @@ import Enum.Gender;
 import Exception.CourseRegisteredException;
 import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
+import Exception.CourseInWaitListException;
 
 public class Student implements Serializable {
     private String name;
@@ -17,8 +18,10 @@ public class Student implements Serializable {
     private String nationality;
     private Gender gender;
     private AccessTime accessTime;
-    private ArrayList<String> courseCodes;
+    private ArrayList<String> registeredCourseCodes;
     private HashMap<String, IndexNumber> registeredIndexNumbers;
+    private ArrayList<String> waitListCourseCodes;
+    private HashMap<String, IndexNumber> waitListIndexNumbers;
 
     public Student(String name, String userId, String matricNumber,
                    String nationality, Gender gender, AccessTime accessTime) {
@@ -28,8 +31,10 @@ public class Student implements Serializable {
         this.nationality = nationality;
         this.gender = gender;
         this.accessTime = accessTime;
-        courseCodes = new ArrayList<>();
+        registeredCourseCodes = new ArrayList<>();
         registeredIndexNumbers = new HashMap<>();
+        waitListCourseCodes = new ArrayList<>();
+        waitListIndexNumbers = new HashMap<>();
     }
 
     public String getMatricNumber() {
@@ -40,8 +45,12 @@ public class Student implements Serializable {
         return  userId;
     }
 
-    public ArrayList<String> getCourseCodes() {
-        return courseCodes;
+    public ArrayList<String> getRegisteredCourseCodes() {
+        return registeredCourseCodes;
+    }
+
+    public ArrayList<String> getWaitListCourseCodes() {
+        return waitListCourseCodes;
     }
 
     public String getName() {
@@ -64,6 +73,10 @@ public class Student implements Serializable {
         return registeredIndexNumbers;
     }
 
+    public HashMap<String, IndexNumber> getWaitListIndexNumbers() {
+        return waitListIndexNumbers;
+    }
+
     public ArrayList<IndexNumber> getAllIndexNumbersRegistered() {
         ArrayList<IndexNumber> indexNumbersRegistered = new ArrayList<>();
         for (IndexNumber indexNumber: registeredIndexNumbers.values()) {
@@ -72,11 +85,18 @@ public class Student implements Serializable {
         return indexNumbersRegistered;
     }
 
-    public void addCourse(Course course, IndexNumber indexNumberToBeAdded)
-            throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException {
-        for (String courseCode: getCourseCodes()) {
-            if (courseCode.equals(course.getCourseCode())) {
+    public void addCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
+            throws CourseRegisteredException, ClashingIndexNumberException,
+            NoVacancyException, CourseInWaitListException {
+        for (String courseCode: getRegisteredCourseCodes()) {
+            if (courseCode.equals(courseCodeToBeAdded)) {
                 throw new CourseRegisteredException();
+            }
+        }
+
+        for (String courseCode: getWaitListCourseCodes()) {
+            if (courseCode.equals(courseCodeToBeAdded)) {
+                throw new CourseInWaitListException();
             }
         }
 
@@ -84,20 +104,29 @@ public class Student implements Serializable {
             throw new ClashingIndexNumberException();
         }
 
-        try {
-            indexNumberToBeAdded.registerStudent(this);
-        } catch (NoVacancyException e) {
-            throw e;
+        if (indexNumberToBeAdded.getAvailableVacancy() <= 0) {
+            throw new NoVacancyException();
         }
 
-        courseCodes.add(course.getCourseCode());
-        registeredIndexNumbers.put(course.getCourseCode(), indexNumberToBeAdded);
+        registeredCourseCodes.add(courseCodeToBeAdded);
+        registeredIndexNumbers.put(courseCodeToBeAdded, indexNumberToBeAdded);
+        indexNumberToBeAdded.registerStudent(this);
     }
 
-    public void dropCourse(Course course, IndexNumber indexNumberToBeDropped) {
+    public void addCourseToWaitList(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
+        waitListCourseCodes.add(courseCodeToBeAdded);
+        waitListIndexNumbers.put(courseCodeToBeAdded, indexNumberToBeAdded);
+        indexNumberToBeAdded.addStudentToWaitList(this);
+    }
+
+    public void dropCourse(Course course, IndexNumber indexNumberToBeDropped)
+            throws CourseInWaitListException, ClashingIndexNumberException,
+            CourseRegisteredException, NoVacancyException {
         indexNumberToBeDropped.deregisterStudent(this);
-        courseCodes.remove(course.getCourseCode());
+        registeredCourseCodes.remove(course.getCourseCode());
         registeredIndexNumbers.remove(course.getCourseCode());
+
+        indexNumberToBeDropped.registerNextStudentInWaitList();
     }
 
     public ArrayList<IndexNumber> getClashingIndexNumbers(IndexNumber indexNumberToBeAdded) {

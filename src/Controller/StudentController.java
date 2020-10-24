@@ -11,6 +11,7 @@ import View.StudentUi;
 import Exception.CourseRegisteredException;
 import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
+import Exception.CourseInWaitListException;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -67,8 +68,12 @@ public class StudentController {
         try {
             storageManager.registerForCourse(student.getUserId(), courseToBeAdded.getCourseCode(),
                     indexNumberToBeAdded);
-        } catch (CourseRegisteredException | ClashingIndexNumberException | NoVacancyException e) {
+        } catch (CourseRegisteredException | ClashingIndexNumberException | CourseInWaitListException e) {
             studentUi.printErrorMessage(e.getMessage());
+        } catch (NoVacancyException e) {
+            studentUi.printMessageWithDivider(e.getMessage());
+            storageManager.addCourseToWaitList(student.getUserId(), courseToBeAdded.getCourseCode()
+                    , indexNumberToBeAdded);
         }
     }
 
@@ -77,22 +82,39 @@ public class StudentController {
         int index = studentUi.getIndexOfCourseToDrop(courses);
         Course course = courses.get(index);
         IndexNumber indexNumber = student.getRegisteredIndexNumbers().get(course.getCourseCode());
-        storageManager.dropCourse(student.getUserId(), course.getCourseCode(), indexNumber);
+        try {
+            storageManager.dropCourse(student.getUserId(), course.getCourseCode(), indexNumber);
+        } catch (NoVacancyException | CourseInWaitListException |
+                ClashingIndexNumberException | CourseRegisteredException e) {
+            assert false : "These exceptions should have already been accounted for when you add the course into wait list...";
+        }
     }
 
     private void printRegisteredCourses() {
         String registeredCourses = "\n";
         int index = 1;
-        for (String courseCode: student.getCourseCodes()) {
+        for (String courseCode: student.getRegisteredCourseCodes()) {
             Course course = storageManager.getCourse(courseCode);
             registeredCourses += (index) + ". " + course.toString();
             registeredCourses += "\n\t" + student.getRegisteredIndexNumbers().get(courseCode).getFullDescription();
-            if (index != student.getCourseCodes().size()) {
+            if (index != student.getRegisteredCourseCodes().size()) {
                 registeredCourses += "\n";
             }
             index++;
         }
         studentUi.printMessageWithDivider("Here are your registered courses:", registeredCourses);
+
+        String waitListCourses = "\n";
+        for (String courseCode: student.getWaitListCourseCodes()) {
+            Course course = storageManager.getCourse(courseCode);
+            waitListCourses += (index) + ". " + course.toString();
+            waitListCourses += "\n\t" + student.getWaitListIndexNumbers().get(courseCode).getFullDescription();
+            if (index != student.getWaitListIndexNumbers().size()) {
+                registeredCourses += "\n";
+            }
+            index++;
+        }
+        studentUi.printMessageWithDivider("Here are your wait list courses:", waitListCourses);
     }
 
     private void printVacancies() {
