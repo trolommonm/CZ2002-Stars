@@ -48,6 +48,7 @@ public class StudentController {
                     changeIndex();
                     break;
                 case 6:
+                    swapIndex();
                     break;
                 case 7:
                     break;
@@ -100,33 +101,47 @@ public class StudentController {
     }
 
     private void changeIndex() {
-        String courseCode = studentUi.getCourseCode("Enter course code: ");
-        int currentIndex = studentUi.getIndex("Enter current index: ");
-        int swappingIndex = studentUi.getIndex("Enter index to change to: ");
-        Course course = storageManager.getCourse(courseCode);
-        ArrayList<IndexNumber> courseIndexNumbers = course.getIndexNumbers();
-        int swappingIndexVacancy;
-        for (IndexNumber searchCurrent : courseIndexNumbers) {
-            if (searchCurrent.getId() == currentIndex) {
-                for (IndexNumber searchSwap : courseIndexNumbers) {
-                    if (searchSwap.getId() == swappingIndex) {
-                        swappingIndexVacancy = searchSwap.getAvailableVacancy();
-                        if (swappingIndexVacancy > 0) {
-                            // drop current index
-                            // add swapping index
-                            System.out.println("Successful: Dropped index " + currentIndex + " for " + swappingIndex);
-                        }
-                        break;
-                    }
-                }
+
+        // Input the course you want to change //
+        ArrayList<Course> coursesStudent = storageManager.getCoursesTakenByStudent(student);
+        int indexStudent = studentUi.getIndexOfCourseToChange(coursesStudent);
+        Course courseStudent = coursesStudent.get(indexStudent);
+        IndexNumber indexNumberStudent = student.getRegisteredIndexNumbers().get(courseStudent.getCourseCode());
+
+        // Input the index you want to change to: //
+        int index;
+        index = studentUi.getIndexOfIndexNumberToChange(courseStudent.getIndexNumbers());
+        IndexNumber indexNumberToBeChanged = courseStudent.getIndexNumbers().get(index);
+
+        try {
+            if (indexNumberToBeChanged.getAvailableVacancy() != 0) {
+                storageManager.dropCourse(student.getUserId(), courseStudent.getCourseCode(), indexNumberStudent);
+                storageManager.registerForCourse(student.getUserId(), courseStudent.getCourseCode(),
+                        indexNumberToBeChanged);
+                System.out.printf("Changed index %d for %d\n", indexNumberStudent.getId(), indexNumberToBeChanged.getId());
             }
+            else {
+                System.out.printf("No available vacancy for %d\n", index);
+            }
+        } catch (CourseRegisteredException | ClashingIndexNumberException | NoVacancyException e) {
+            studentUi.printErrorMessage(e.getMessage());
         }
     }
 
     private void swapIndex() {
-        String courseCode = studentUi.getCourseCode("Enter course code: ");
-        int currentIndex = studentUi.getIndex("Enter current index: ");
-        int swappingIndex = studentUi.getIndex("Enter index to change to: ");
+
+        // Input the course you want to swap //
+        ArrayList<Course> coursesStudent = storageManager.getCoursesTakenByStudent(student);
+        int indexStudent = studentUi.getIndexOfCourseToSwap(coursesStudent);
+        Course courseStudent = coursesStudent.get(indexStudent);
+        IndexNumber indexNumberStudent = student.getRegisteredIndexNumbers().get(courseStudent.getCourseCode());
+
+        // Input the index you want to swap to: //
+        int index;
+        index = studentUi.getIndexOfIndexNumberToSwap(courseStudent.getIndexNumbers());
+        IndexNumber indexNumberToBeSwap = courseStudent.getIndexNumbers().get(index);
+
+        // Checks username & password is correct
         String username = studentUi.getLoginInfo("Enter username of student swapping with you: ");
         String password = studentUi.getLoginInfo("Enter username of student swapping with you: ");
         boolean verified = false;
@@ -143,16 +158,22 @@ public class StudentController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+        // Once verified, check
         if (verified) {
-            Course course = storageManager.getCourse(courseCode);
-            ArrayList<IndexNumber> courseIndexNumbers = course.getIndexNumbers();
-            for (IndexNumber searchSwap : courseIndexNumbers) {
-                if (searchSwap.getId() == swappingIndex) {
-                    ArrayList<Student> studentList = storageManager.getStudentsInCourse(course);
-                    for (Student s : studentList) {
-                        if (s.getUserId().equals(username)) {
-                            // Add & drop index x2
-                            System.out.println("Successful: Dropped index " + currentIndex + " for " + swappingIndex);
+            for (IndexNumber searchSwap : courseStudent.getIndexNumbers()) {
+                if (searchSwap == indexNumberToBeSwap) {
+                    ArrayList<String> studentList = searchSwap.getStudentUserIds();
+                    for (String s : studentList) {
+                        if (s.equals(username)) {
+                            try {
+                                storageManager.dropCourse(student.getUserId(), courseStudent.getCourseCode(), indexNumberStudent);
+                                storageManager.registerForCourse(student.getUserId(), courseStudent.getCourseCode(),
+                                        indexNumberToBeSwap);
+                                System.out.printf("Changed index %d for %d\n", indexNumberStudent.getId(), indexNumberToBeSwap.getId());
+                            } catch (CourseRegisteredException | ClashingIndexNumberException | NoVacancyException e) {
+                                studentUi.printErrorMessage(e.getMessage());
+                            }
                         }
                     }
                 }

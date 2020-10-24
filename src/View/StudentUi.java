@@ -35,6 +35,62 @@ public class StudentUi extends Ui {
         return getInputChoice("Enter your choice:", studentMenuOptions);
     }
 
+    public int getIndexOfCourseToChange(ArrayList<Course> courses) {
+        int index;
+        while (true) {
+            index = getInputChoice("Which course would you like to change?",
+                    getCoursesDescription(courses, "Here are your registered courses:"));
+            if (index < 1 || index > courses.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            break;
+        }
+        return index - 1;
+    }
+
+    public int getIndexOfCourseToSwap(ArrayList<Course> courses) {
+        int index;
+        while (true) {
+            index = getInputChoice("Which course would you like to swap?",
+                    getCoursesDescription(courses, "Here are your registered courses:"));
+            if (index < 1 || index > courses.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            break;
+        }
+        return index - 1;
+    }
+
+    public int getIndexOfIndexNumberToSwap(ArrayList<IndexNumber> indexNumbers) {
+        int index;
+        while (true) {
+            index = getInputChoice("Which index number would you like to add?",
+                    getIndexNumbersDescription(indexNumbers, "Here are the index numbers:"));
+            if (index < 1 || index > indexNumbers.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            break;
+        }
+        return index - 1;
+    }
+
+    public int getIndexOfIndexNumberToChange(ArrayList<IndexNumber> indexNumbers) {
+        int index;
+        while (true) {
+            index = getInputChoice("Which index number would you like to change to:?",
+                    getIndexNumbersDescription(indexNumbers, "Here are the index numbers:"));
+            if (index < 1 || index > indexNumbers.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            break;
+        }
+        return index - 1;
+    }
+
     public int getIndexOfCourseToDrop(ArrayList<Course> courses) {
         int index;
         while (true) {
