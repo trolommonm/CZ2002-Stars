@@ -28,13 +28,13 @@ public class LoginController {
         do {
             accountType = loginUi.getAccountType();
             providedLoginInfo = loginUi.getLoginInfo();
-        } while(!verifyLoginInfo());
+        } while (!verifyLoginInfo());
 
         return accountType;
     }
 
     public String getUserId() {
-        assert providedLoginInfo == null : "Error: providedLoginInfo is not initialized!";
+        assert providedLoginInfo != null : "Error: providedLoginInfo is not initialized!";
         return providedLoginInfo.getUserId();
     }
 

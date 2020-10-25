@@ -18,7 +18,7 @@ public class Main {
             sc.run();
             break;
         default:
-            throw new RuntimeException("Invalid accountType returned from LoginController!");
+            assert false : "Invalid accountType returned from LoginController!";
         }
 
     }

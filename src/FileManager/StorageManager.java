@@ -7,6 +7,7 @@ import Enum.LessonType;
 import Exception.CourseRegisteredException;
 import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
+import Exception.CourseInWaitListException;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -28,8 +29,8 @@ public class StorageManager {
     public ArrayList<Student> getStudentsInCourse(Course course) {
         ArrayList<Student> students = new ArrayList<>();
         for (IndexNumber indexNumber: course.getIndexNumbers()) {
-            for (String matricNumber: indexNumber.getStudentUserIds()) {
-                students.add(storage.getStudent(matricNumber));
+            for (Student student: indexNumber.getRegisteredStudents()) {
+                students.add(student);
             }
         }
 
@@ -38,7 +39,16 @@ public class StorageManager {
 
     public ArrayList<Course> getCoursesTakenByStudent(Student student) {
         ArrayList<Course> courses = new ArrayList<>();
-        for (String courseCode: student.getCourseCodes()) {
+        for (String courseCode: student.getRegisteredCourseCodes()) {
+            courses.add(storage.getCourse(courseCode));
+        }
+
+        return courses;
+    }
+
+    public ArrayList<Course> getCoursesInWaitListByStudent(Student student) {
+        ArrayList<Course> courses = new ArrayList<>();
+        for (String courseCode: student.getWaitListCourseCodes()) {
             courses.add(storage.getCourse(courseCode));
         }
 
@@ -55,13 +65,25 @@ public class StorageManager {
     }
 
     public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
-        throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException {
+    throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException, CourseInWaitListException {
         storage.registerForCourse(userId, courseCodeToBeAdded, indexNumberToBeAdded);
         save();
     }
 
-    public void dropCourse(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
-        storage.dropCourse(userId, courseCodeToBeDropped, indexNumberToBeDropped);
+    public void dropCourseAndRegisterNextStudentInWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
+            throws CourseInWaitListException, ClashingIndexNumberException,
+            CourseRegisteredException, NoVacancyException {
+        storage.dropCourseAndRegisterNextStudentInWaitList(userId, courseCodeToBeDropped, indexNumberToBeDropped);
+        save();
+    }
+
+    public void dropCourseFromWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
+        storage.dropCourseFromWaitList(userId, courseCodeToBeDropped, indexNumberToBeDropped);
+        save();
+    }
+
+    public void addCourseToWaitList(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
+        storage.addCourseToWaitList(userId, courseCodeToBeAdded, indexNumberToBeAdded);
         save();
     }
 
@@ -154,7 +176,7 @@ public class StorageManager {
                 Course course = parseCourseFromTxt(sc.nextLine());
                 ArrayList<IndexNumber> indexNumbers = new ArrayList<>();
                 while (sc.hasNext()) {
-                    indexNumbers.add(parseIndexNumberFromTxt(sc.nextLine()));
+                    indexNumbers.add(parseIndexNumberFromTxt(sc.nextLine(), course));
                 }
 
                 course.setIndexNumbers(indexNumbers);
@@ -167,9 +189,9 @@ public class StorageManager {
         save();
     }
 
-    private IndexNumber parseIndexNumberFromTxt(String line) {
+    private IndexNumber parseIndexNumberFromTxt(String line, Course course) {
         String[] lineSplit = line.split("\\|");
-        int indexNumber = Integer.parseInt(lineSplit[0]);
+        int id = Integer.parseInt(lineSplit[0]);
         int maxVacancy = Integer.parseInt(lineSplit[1]);
         ArrayList<Lesson> lessons = new ArrayList<>();
         for (int i = 2; i < lineSplit.length; i++) {
@@ -199,7 +221,7 @@ public class StorageManager {
             lessons.add(new Lesson(lessonType, dayOfWeek, startTime, endTime));
         }
 
-        return new IndexNumber(indexNumber, lessons, maxVacancy);
+        return new IndexNumber(id, course, lessons, maxVacancy);
     }
 
     private Course parseCourseFromTxt(String line) {

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import Exception.CourseRegisteredException;
 import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
+import Exception.CourseInWaitListException;
 
 public class Storage implements Serializable {
     private HashMap<String, Student> students;
@@ -50,14 +51,26 @@ public class Storage implements Serializable {
     }
 
     public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
-        throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException {
+        throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException, CourseInWaitListException {
         Student student = getStudent(userId);
-        student.addCourse(getCourse(courseCodeToBeAdded), indexNumberToBeAdded);
+        student.addCourse(courseCodeToBeAdded, indexNumberToBeAdded);
     }
 
-    public void dropCourse(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
-        Student student= getStudent(userId);
-        student.dropCourse(getCourse(courseCodeToBeDropped), indexNumberToBeDropped);
+    public void dropCourseFromWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
+        Student student = getStudent(userId);
+        student.dropCourseFromWaitList(courseCodeToBeDropped, indexNumberToBeDropped);
+    }
+
+    public void dropCourseAndRegisterNextStudentInWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
+            throws CourseInWaitListException, ClashingIndexNumberException,
+            CourseRegisteredException, NoVacancyException {
+        Student student = getStudent(userId);
+        student.dropCourseAndRegisterNextStudentInWaitList(getCourse(courseCodeToBeDropped), indexNumberToBeDropped);
+    }
+
+    public void addCourseToWaitList(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
+        Student student = getStudent(userId);
+        student.addCourseToWaitList(courseCodeToBeAdded, indexNumberToBeAdded);
     }
 
     public ArrayList<Course> getAllCourses() {

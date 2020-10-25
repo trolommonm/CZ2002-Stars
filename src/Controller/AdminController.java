@@ -40,10 +40,13 @@ public class AdminController {
                 checkAvailableSlot();
                 break;
             case 6:
+                printStudentsByIndexNumber();
                 break;
             case 7:
+                printStudentsByCourses();
                 break;
             case 8:
+                adminUi.printGoodBye();
                 break;
             default:
                 adminUi.printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
@@ -73,7 +76,7 @@ public class AdminController {
             storageManager.setNewSchool(adminUi.getNewSchool(course), course.getCourseCode());
             break;
         case 4:
-            storageManager.addIndexNumber(adminUi.getIndexNumber(true), courseCode);
+            storageManager.addIndexNumber(adminUi.getIndexNumber(true, course), course.getCourseCode());
             break;
         case 5:
             int index = adminUi.getIndexOfIndexNumberToEdit(course);
@@ -105,5 +108,13 @@ public class AdminController {
         Student student = adminUi.getNewStudent(loginInfoForStudent.getUserId());
         storageManager.addStudent(student, loginInfoForStudent);
         adminUi.printStudents(storageManager.getAllStudents(), "Added " + student.getName() + "!");
+    }
+
+    private void printStudentsByIndexNumber() {
+        adminUi.printStudentsByIndexNumber(storageManager.getAllCourses());
+    }
+
+    private void printStudentsByCourses() {
+        adminUi.printStudentsByCourse(storageManager.getAllCourses());
     }
 }

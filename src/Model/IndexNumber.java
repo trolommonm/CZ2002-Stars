@@ -1,6 +1,9 @@
 package Model;
 
 import ErrorMessage.ErrorMessage;
+import Exception.CourseInWaitListException;
+import Exception.CourseRegisteredException;
+import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
 
 import java.io.Serializable;
@@ -8,15 +11,19 @@ import java.util.ArrayList;
 
 public class IndexNumber implements Serializable {
     private int id;
+    private Course course;
     private int maxVacancy;
     private ArrayList<Lesson> lessons;
-    private ArrayList<String> studentUserIds;
+    private ArrayList<Student> registeredStudents;
+    private ArrayList<Student> waitListStudents;
 
-    public IndexNumber(int id, ArrayList<Lesson> lessons, int maxVacancy) {
+    public IndexNumber(int id, Course course, ArrayList<Lesson> lessons, int maxVacancy) {
         this.id = id;
+        this.course = course;
         this.lessons = lessons;
         this.maxVacancy = maxVacancy;
-        studentUserIds = new ArrayList<>();
+        registeredStudents = new ArrayList<>();
+        waitListStudents = new ArrayList<>();
     }
 
     public int getId() {
@@ -28,11 +35,15 @@ public class IndexNumber implements Serializable {
     }
 
     public int getNumberOfRegisteredStudents() {
-        return studentUserIds.size();
+        return registeredStudents.size();
     }
 
-    public ArrayList<String> getStudentUserIds() {
-        return studentUserIds;
+    public ArrayList<Student> getRegisteredStudents() {
+        return registeredStudents;
+    }
+
+    public ArrayList<Student> getWaitListStudents() {
+        return waitListStudents;
     }
 
     public void setMaxVacancy(int maxVacancy) throws Exception {
@@ -46,17 +57,31 @@ public class IndexNumber implements Serializable {
         return maxVacancy - getNumberOfRegisteredStudents();
     }
 
-    public void registerStudent(Student student) throws NoVacancyException {
-        if (!(getAvailableVacancy() > 0)) {
-            // add to waitlist?
-            throw new NoVacancyException();
-        }
-
-        studentUserIds.add(student.getUserId());
+    public void registerStudent(Student student) {
+        registeredStudents.add(student);
     }
 
     public void deregisterStudent(Student student) {
-        studentUserIds.remove(student.getUserId());
+        registeredStudents.remove(student);
+    }
+
+    public void addStudentToWaitList(Student student) {
+        waitListStudents.add(student);
+    }
+
+    public void removeStudentFromWaitList(Student student) {
+        waitListStudents.remove(student);
+    }
+
+    public void registerNextStudentInWaitList()
+            throws CourseRegisteredException, CourseInWaitListException,
+            NoVacancyException, ClashingIndexNumberException {
+        if (!waitListStudents.isEmpty()) {
+            Student nextStudentInWaitList = waitListStudents.get(0);
+            waitListStudents.remove(nextStudentInWaitList);
+            nextStudentInWaitList.getWaitListCourseCodes().remove(course.getCourseCode());
+            nextStudentInWaitList.addCourse(course.getCourseCode(), this);
+        }
     }
 
     public ArrayList<Lesson> getLessons() {

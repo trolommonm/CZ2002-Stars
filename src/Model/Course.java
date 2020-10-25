@@ -53,6 +53,26 @@ public class Course implements Serializable, Cloneable {
         this.school = school;
     }
 
+    public ArrayList<Student> getRegisteredStudents() {
+        ArrayList<Student> registeredStudents = new ArrayList<>();
+        for (IndexNumber indexNumber: getIndexNumbers()) {
+            for (Student student: indexNumber.getRegisteredStudents()) {
+                registeredStudents.add(student);
+            }
+        }
+        return registeredStudents;
+    }
+
+    public ArrayList<Student> getWaitListStudents() {
+        ArrayList<Student> waitListStudents = new ArrayList<>();
+        for (IndexNumber indexNumber: getIndexNumbers()) {
+            for (Student student: indexNumber.getWaitListStudents()) {
+                waitListStudents.add(student);
+            }
+        }
+        return waitListStudents;
+    }
+
     @Override
     public String toString() {
         return courseCode + " " + courseName;

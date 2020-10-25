@@ -44,6 +44,10 @@ public class Ui {
         printErrorDivider();
     }
 
+    public void printGoodBye() {
+        printMessageWithDivider("Logging off... Hope to see you again in STARS!");
+    }
+
     public int getInputChoice(String finalMessageForInput, String... options) {
         int choice;
         while (true) {
