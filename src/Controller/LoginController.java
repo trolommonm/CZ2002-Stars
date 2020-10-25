@@ -41,9 +41,9 @@ public class LoginController {
         return providedLoginInfo.getUserId();
     }
 
-    public static String hash(String password) {
+    public static String hash(LoginInfo logininfo) {
 
-        String passwordToHash = password;
+        String passwordToHash = logininfo.getPassword();
         String generatedPassword = null;
 
         try {
@@ -70,7 +70,7 @@ public class LoginController {
                     loginInfoFileManager.retrieveAdminLoginInfoList() : loginInfoFileManager.retrieveStudentLoginInfoList();
 
             for (LoginInfo loginInfo: loginInfoList) {
-                if (hash(loginInfo.toString()).equals(hash(providedLoginInfo.toString()))) {
+                if (hash(loginInfo).equals(hash(providedLoginInfo))) {
                     return verifyAccessPeriod(loginInfo.getUserId());
                 }
             }
