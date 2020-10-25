@@ -46,6 +46,7 @@ public class AdminController {
                 printStudentsByCourses();
                 break;
             case 8:
+                adminUi.printGoodBye();
                 break;
             default:
                 adminUi.printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);

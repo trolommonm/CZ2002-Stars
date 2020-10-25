@@ -52,6 +52,7 @@ public class StudentController {
                     //swapIndex();
                     break;
                 case 8:
+                    studentUi.printGoodBye();
                     break;
                 default:
                     studentUi.printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
@@ -80,6 +81,10 @@ public class StudentController {
 
     private void dropRegisteredCourse() {
         ArrayList<Course> registeredCourses = storageManager.getCoursesTakenByStudent(student);
+        if (registeredCourses.isEmpty()) {
+            studentUi.printMessageWithDivider(ErrorMessage.NO_REGISTERED_COURSES);
+            return;
+        }
         int index = studentUi.getIndexOfCourseToDrop(registeredCourses, true);
         Course course = registeredCourses.get(index);
         IndexNumber indexNumber = student.getRegisteredIndexNumbers().get(course.getCourseCode());
@@ -93,6 +98,10 @@ public class StudentController {
 
     private void dropWaitListCourse() {
         ArrayList<Course> waitListCourses = storageManager.getCoursesInWaitListByStudent(student);
+        if (waitListCourses.isEmpty()) {
+            studentUi.printMessageWithDivider(ErrorMessage.NO_WAITLIST_COURSES);
+            return;
+        }
         int index = studentUi.getIndexOfCourseToDrop(waitListCourses, false);
         Course course = waitListCourses.get(index);
         IndexNumber indexNumber = student.getWaitListIndexNumbers().get(course.getCourseCode());

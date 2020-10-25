@@ -32,4 +32,8 @@ public class ErrorMessage {
     public static final String INVALID_ACCESS_TIME = "Invalid Access Time! The start time is later than end time!";
     public static final String INVALID_GENDER_TYPE = "Invalid gender! Please try again!";
     public static final String USER_ID_EXISTS = "User id already exists! Please enter a new user id.";
+
+    // Student
+    public static final String NO_REGISTERED_COURSES = "You have no registered courses!";
+    public static final String NO_WAITLIST_COURSES = "You have no courses on the wait list!";
 }
