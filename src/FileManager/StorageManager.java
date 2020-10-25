@@ -77,6 +77,11 @@ public class StorageManager {
         save();
     }
 
+    public void dropCourseFromWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
+        storage.dropCourseFromWaitList(userId, courseCodeToBeDropped, indexNumberToBeDropped);
+        save();
+    }
+
     public void addCourseToWaitList(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
         storage.addCourseToWaitList(userId, courseCodeToBeAdded, indexNumberToBeAdded);
         save();

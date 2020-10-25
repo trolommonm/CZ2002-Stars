@@ -69,6 +69,10 @@ public class IndexNumber implements Serializable {
         waitListStudents.add(student);
     }
 
+    public void removeStudentFromWaitList(Student student) {
+        waitListStudents.remove(student);
+    }
+
     public void registerNextStudentInWaitList()
             throws CourseRegisteredException, CourseInWaitListException,
             NoVacancyException, ClashingIndexNumberException {

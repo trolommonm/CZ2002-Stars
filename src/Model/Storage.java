@@ -56,6 +56,11 @@ public class Storage implements Serializable {
         student.addCourse(courseCodeToBeAdded, indexNumberToBeAdded);
     }
 
+    public void dropCourseFromWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
+        Student student = getStudent(userId);
+        student.dropCourseFromWaitList(courseCodeToBeDropped, indexNumberToBeDropped);
+    }
+
     public void dropCourseAndRegisterNextStudentInWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingIndexNumberException,
             CourseRegisteredException, NoVacancyException {

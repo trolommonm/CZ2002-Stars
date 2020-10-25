@@ -92,11 +92,16 @@ public class StudentUi extends Ui {
         return index - 1;
     }
 
-    public int getIndexOfCourseToDrop(ArrayList<Course> courses) {
+    public int getIndexOfCourseToDrop(ArrayList<Course> courses, boolean dropRegistered) {
         int index;
         while (true) {
-            index = getInputChoice("Which course would you like to drop?",
-                    getCoursesDescription(courses, "Here are your registered courses:"));
+            if (dropRegistered) {
+                index = getInputChoice("Which course would you like to drop?",
+                        getCoursesDescription(courses, "Here are your registered courses:"));
+            } else {
+                index = getInputChoice("Which course would you like to drop?",
+                        getCoursesDescription(courses, "Here are your wait listed courses:"));
+            }
             if (index < 1 || index > courses.size()) {
                 printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
                 continue;

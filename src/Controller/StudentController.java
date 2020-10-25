@@ -1,11 +1,9 @@
 package Controller;
 
 import ErrorMessage.ErrorMessage;
-import FileManager.LoginInfoFileManager;
 import FileManager.StorageManager;
 import Model.Course;
 import Model.IndexNumber;
-import Model.LoginInfo;
 import Model.Student;
 import View.StudentUi;
 import Exception.CourseRegisteredException;
@@ -13,7 +11,6 @@ import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
 import Exception.CourseInWaitListException;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class StudentController {
@@ -37,10 +34,10 @@ public class StudentController {
                     addCourse();
                     break;
                 case 2:
-                    dropCourse();
+                    dropRegisteredCourse();
                     break;
                 case 3:
-
+                    dropWaitListCourse();
                     break;
                 case 4:
                     printRegisteredCourses();
@@ -81,10 +78,10 @@ public class StudentController {
         }
     }
 
-    private void dropCourse() {
-        ArrayList<Course> courses = storageManager.getCoursesTakenByStudent(student);
-        int index = studentUi.getIndexOfCourseToDrop(courses);
-        Course course = courses.get(index);
+    private void dropRegisteredCourse() {
+        ArrayList<Course> registeredCourses = storageManager.getCoursesTakenByStudent(student);
+        int index = studentUi.getIndexOfCourseToDrop(registeredCourses, true);
+        Course course = registeredCourses.get(index);
         IndexNumber indexNumber = student.getRegisteredIndexNumbers().get(course.getCourseCode());
         try {
             storageManager.dropCourseAndRegisterNextStudentInWaitList(student.getUserId(), course.getCourseCode(), indexNumber);
@@ -92,6 +89,14 @@ public class StudentController {
                 ClashingIndexNumberException | CourseRegisteredException e) {
             assert false : "These exceptions should have already been accounted for when you add the course into wait list...";
         }
+    }
+
+    private void dropWaitListCourse() {
+        ArrayList<Course> waitListCourses = storageManager.getCoursesInWaitListByStudent(student);
+        int index = studentUi.getIndexOfCourseToDrop(waitListCourses, false);
+        Course course = waitListCourses.get(index);
+        IndexNumber indexNumber = student.getWaitListIndexNumbers().get(course.getCourseCode());
+        storageManager.dropCourseFromWaitList(student.getUserId(), course.getCourseCode(), indexNumber);
     }
 
     private void printRegisteredCourses() {
