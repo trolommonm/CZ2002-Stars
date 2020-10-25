@@ -7,7 +7,9 @@ import java.util.HashMap;
 import Exception.CourseRegisteredException;
 import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
+import Exception.NoVacancySwapException;
 import Exception.CourseInWaitListException;
+import Exception.SameIndexNumberSwapException;
 
 public class Storage implements Serializable {
     private HashMap<String, Student> students;
@@ -53,7 +55,13 @@ public class Storage implements Serializable {
     public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
         throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException, CourseInWaitListException {
         Student student = getStudent(userId);
-        student.addCourse(courseCodeToBeAdded, indexNumberToBeAdded);
+        student.registerForCourse(courseCodeToBeAdded, indexNumberToBeAdded);
+    }
+
+    public void swapIndexNumber(String userId, String courseCodeToBeSwapped, IndexNumber newIndexNumber)
+            throws ClashingIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
+        Student student = getStudent(userId);
+        student.swapIndexNumber(courseCodeToBeSwapped, newIndexNumber);
     }
 
     public void dropCourseFromWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {

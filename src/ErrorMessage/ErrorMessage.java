@@ -10,13 +10,6 @@ public class ErrorMessage {
             "Please provide a valid login information for the Student users!";
     public static final String WRONG_LOGIN_INFO = "Wrong UserID and/or Password. Please try again!";
     public static final String WRONG_ACCESS_PERIOD = "You are not authorised to access STARS! Your access period is:";
-    public static final String COURSE_ALREADY_REGISTERED = "You are already registered for the course!";
-    public static final String CLASHING_INDEX_NUMBER = "The index number you have selected clashes with the " +
-            "timetable of the courses you have selected! Please try again.";
-    public static final String NO_VACANCY = "There is no vacancy for that index number! You will be placed on the " +
-            "waitlist.";
-    public static final String COURSE_ALREADY_IN_WAITLIST = "You have already added this course to your waitlist! " +
-            "To change index number, please drop the course first.";
 
     // Admin
     public static final String INVALID_SCHOOL = "Invalid school! Please try again.";
@@ -36,4 +29,14 @@ public class ErrorMessage {
     // Student
     public static final String NO_REGISTERED_COURSES = "You have no registered courses!";
     public static final String NO_WAITLIST_COURSES = "You have no courses on the wait list!";
+    public static final String COURSE_ALREADY_REGISTERED = "You are already registered for the course!";
+    public static final String CLASHING_INDEX_NUMBER = "The index number you have selected clashes with the " +
+            "timetable of the courses you are registered or on the wait list for! Please try again.";
+    public static final String NO_VACANCY = "There is no vacancy for that index number! You will be placed on the " +
+            "waitlist.";
+    public static final String NO_VACANCY_SWAP = "There is no vacancy for that index number! Please try again.";
+    public static final String COURSE_ALREADY_IN_WAITLIST = "You have already added this course to your waitlist! " +
+            "To change index number, please drop the course first.";
+    public static final String SAME_INDEX_SWAP = "You have selected the same index number that you are currently " +
+            "registered for. Please try again.";
 }

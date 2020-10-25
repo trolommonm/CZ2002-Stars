@@ -7,7 +7,9 @@ import Enum.LessonType;
 import Exception.CourseRegisteredException;
 import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
+import Exception.NoVacancySwapException;
 import Exception.CourseInWaitListException;
+import Exception.SameIndexNumberSwapException;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -74,6 +76,12 @@ public class StorageManager {
             throws CourseInWaitListException, ClashingIndexNumberException,
             CourseRegisteredException, NoVacancyException {
         storage.dropCourseAndRegisterNextStudentInWaitList(userId, courseCodeToBeDropped, indexNumberToBeDropped);
+        save();
+    }
+
+    public void swapIndexNumber(String userId, String courseCodeToBeSwapped, IndexNumber newIndexNumber)
+            throws ClashingIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
+        storage.swapIndexNumber(userId, courseCodeToBeSwapped, newIndexNumber);
         save();
     }
 

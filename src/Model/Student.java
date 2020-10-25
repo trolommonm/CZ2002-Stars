@@ -9,7 +9,9 @@ import Enum.Gender;
 import Exception.CourseRegisteredException;
 import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
+import Exception.NoVacancySwapException;
 import Exception.CourseInWaitListException;
+import Exception.SameIndexNumberSwapException;
 
 public class Student implements Serializable {
     private String name;
@@ -85,7 +87,7 @@ public class Student implements Serializable {
         return indexNumbersRegistered;
     }
 
-    public void addCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
+    public void registerForCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
             throws CourseRegisteredException, ClashingIndexNumberException,
             NoVacancyException, CourseInWaitListException {
         for (String courseCode: getRegisteredCourseCodes()) {
@@ -111,6 +113,36 @@ public class Student implements Serializable {
         registeredCourseCodes.add(courseCodeToBeAdded);
         registeredIndexNumbers.put(courseCodeToBeAdded, indexNumberToBeAdded);
         indexNumberToBeAdded.registerStudent(this);
+    }
+
+    public void swapIndexNumber(String courseCodeToBeSwapped, IndexNumber newIndexNumber)
+            throws ClashingIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
+        IndexNumber indexNumberToBeSwapped = registeredIndexNumbers.get(courseCodeToBeSwapped);
+        if (indexNumberToBeSwapped == newIndexNumber) {
+            throw new SameIndexNumberSwapException();
+        }
+
+        registeredCourseCodes.remove(courseCodeToBeSwapped);
+        indexNumberToBeSwapped.deregisterStudent(this);
+        registeredIndexNumbers.remove(courseCodeToBeSwapped);
+
+        if (!getClashingIndexNumbers(newIndexNumber).isEmpty()) {
+            registeredCourseCodes.add(courseCodeToBeSwapped);
+            registeredIndexNumbers.put(courseCodeToBeSwapped, indexNumberToBeSwapped);
+            indexNumberToBeSwapped.registerStudent(this);
+            throw new ClashingIndexNumberException();
+        }
+
+        if (newIndexNumber.getAvailableVacancy() <= 0) {
+            registeredCourseCodes.add(courseCodeToBeSwapped);
+            registeredIndexNumbers.put(courseCodeToBeSwapped, indexNumberToBeSwapped);
+            indexNumberToBeSwapped.registerStudent(this);
+            throw new NoVacancySwapException();
+        }
+
+        registeredCourseCodes.add(newIndexNumber.getCourse().getCourseCode());
+        registeredIndexNumbers.put(newIndexNumber.getCourse().getCourseCode(), newIndexNumber);
+        newIndexNumber.registerStudent(this);
     }
 
     public void addCourseToWaitList(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {

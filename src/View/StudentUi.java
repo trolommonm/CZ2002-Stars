@@ -6,6 +6,7 @@ import Enum.School;
 import Enum.LessonType;
 import Model.IndexNumber;
 import Model.Lesson;
+import Model.Student;
 
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
@@ -18,7 +19,7 @@ public class StudentUi extends Ui {
             "Welcome to the STARS!",
             "1. Add a course.",
             "2. Drop a registered course.",
-            "3. Drop a wait list course",
+            "3. Drop a wait list course.",
             "4. Check/Print Courses Registered.",
             "5. Check Vacancies Available.",
             "6. Change Index Number of Course.",
@@ -115,7 +116,7 @@ public class StudentUi extends Ui {
         int index;
         while (true) {
             index = getInputChoice("Which course would you like to add?",
-                    getCoursesDescription(courses, "Here are the available courses:"));
+                    getCoursesDescription(courses, "Here are the available courses: "));
             if (index < 1 || index > courses.size()) {
                 printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
                 continue;

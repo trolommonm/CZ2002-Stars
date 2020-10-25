@@ -9,7 +9,9 @@ import View.StudentUi;
 import Exception.CourseRegisteredException;
 import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
+import Exception.NoVacancySwapException;
 import Exception.CourseInWaitListException;
+import Exception.SameIndexNumberSwapException;
 
 import java.util.ArrayList;
 
@@ -40,13 +42,13 @@ public class StudentController {
                     dropWaitListCourse();
                     break;
                 case 4:
-                    printRegisteredCourses();
+                    printRegisteredAndWaitListCourses();
                     break;
                 case 5:
                     printVacancies();
                     break;
                 case 6:
-                    //changeIndex();
+                    changeIndex();
                     break;
                 case 7:
                     //swapIndex();
@@ -108,7 +110,7 @@ public class StudentController {
         storageManager.dropCourseFromWaitList(student.getUserId(), course.getCourseCode(), indexNumber);
     }
 
-    private void printRegisteredCourses() {
+    private void printRegisteredAndWaitListCourses() {
         String registeredCourses = "\n";
         int index = 1;
         for (String courseCode: student.getRegisteredCourseCodes()) {
@@ -139,34 +141,27 @@ public class StudentController {
         studentUi.checkVacancyOfIndexNumber(storageManager.getAllCourses());
     }
 
-//    private void changeIndex() {
-//
-//        // Input the course you want to change //
-//        ArrayList<Course> coursesStudent = storageManager.getCoursesTakenByStudent(student);
-//        int indexStudent = studentUi.getIndexOfCourseToChange(coursesStudent);
-//        Course courseStudent = coursesStudent.get(indexStudent);
-//        IndexNumber indexNumberStudent = student.getRegisteredIndexNumbers().get(courseStudent.getCourseCode());
-//
-//        // Input the index you want to change to: //
-//        int index;
-//        index = studentUi.getIndexOfIndexNumberToChange(courseStudent.getIndexNumbers());
-//        IndexNumber indexNumberToBeChanged = courseStudent.getIndexNumbers().get(index);
-//
-//        try {
-//            if (indexNumberToBeChanged.getAvailableVacancy() != 0) {
-//                storageManager.dropCourseAndRegisterNextStudentInWaitList(student.getUserId(), courseStudent.getCourseCode(), indexNumberStudent);
-//                storageManager.registerForCourse(student.getUserId(), courseStudent.getCourseCode(),
-//                        indexNumberToBeChanged);
-//                System.out.printf("Changed index %d for %d\n", indexNumberStudent.getId(), indexNumberToBeChanged.getId());
-//            }
-//            else {
-//                System.out.printf("No available vacancy for %d\n", index);
-//            }
-//        } catch (CourseRegisteredException | ClashingIndexNumberException | NoVacancyException e) {
-//            studentUi.printErrorMessage(e.getMessage());
-//        }
-//    }
-//
+    private void changeIndex() {
+        // Input the course you want to change //
+        ArrayList<Course> courses = storageManager.getCoursesTakenByStudent(student);
+        int indexStudent = studentUi.getIndexOfCourseToChange(courses);
+        Course courseToBeChanged = courses.get(indexStudent);
+        IndexNumber indexNumberToBeChanged = student.getRegisteredIndexNumbers().get(courseToBeChanged.getCourseCode());
+        studentUi.printMessageWithDivider("Swapping index for course: " + courseToBeChanged.toString()
+                , "You are currently registered for Index Number: " + indexNumberToBeChanged.getId());
+
+        // Input the index you want to change to: //
+        int index;
+        index = studentUi.getIndexOfIndexNumberToChange(courseToBeChanged.getIndexNumbers());
+        IndexNumber newIndexNumber = courseToBeChanged.getIndexNumbers().get(index);
+
+        try {
+            storageManager.swapIndexNumber(student.getUserId(), courseToBeChanged.getCourseCode(), newIndexNumber);
+        } catch (NoVacancySwapException | ClashingIndexNumberException | SameIndexNumberSwapException e) {
+            studentUi.printErrorMessage(e.getMessage());
+        }
+    }
+
 //    private void swapIndex() {
 //
 //        // Input the course you want to swap //

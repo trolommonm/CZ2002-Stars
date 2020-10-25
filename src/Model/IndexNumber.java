@@ -30,6 +30,10 @@ public class IndexNumber implements Serializable {
         return id;
     }
 
+    public Course getCourse() {
+        return course;
+    }
+
     public int getMaxVacancy() {
         return maxVacancy;
     }
@@ -80,7 +84,7 @@ public class IndexNumber implements Serializable {
             Student nextStudentInWaitList = waitListStudents.get(0);
             waitListStudents.remove(nextStudentInWaitList);
             nextStudentInWaitList.getWaitListCourseCodes().remove(course.getCourseCode());
-            nextStudentInWaitList.addCourse(course.getCourseCode(), this);
+            nextStudentInWaitList.registerForCourse(course.getCourseCode(), this);
         }
     }
 
