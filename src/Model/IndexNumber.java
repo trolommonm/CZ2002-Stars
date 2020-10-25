@@ -1,10 +1,10 @@
 package Model;
 
-import ErrorMessage.ErrorMessage;
 import Exception.CourseInWaitListException;
 import Exception.CourseRegisteredException;
 import Exception.ClashingIndexNumberException;
 import Exception.NoVacancyException;
+import Exception.InvalidNewMaxException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -46,9 +46,9 @@ public class IndexNumber implements Serializable {
         return waitListStudents;
     }
 
-    public void setMaxVacancy(int maxVacancy) throws Exception {
+    public void setMaxVacancy(int maxVacancy) throws InvalidNewMaxException {
         if (maxVacancy < getNumberOfRegisteredStudents()) {
-            throw new Exception(ErrorMessage.INVALID_NEW_MAX_VACANCY);
+            throw new InvalidNewMaxException();
         }
         this.maxVacancy = maxVacancy;
     }
