@@ -17,12 +17,13 @@ public class StudentUi extends Ui {
     private final String[] studentMenuOptions = {
             "Welcome to the STARS!",
             "1. Add a course.",
-            "2. Drop a course.",
-            "3. Check/Print Courses Registered.",
-            "4. Check Vacancies Available.",
-            "5. Change Index Number of Course.",
-            "6. Swap Index Number with Another Student.",
-            "7. Quit."
+            "2. Drop a registered course.",
+            "3. Drop a wait list course",
+            "4. Check/Print Courses Registered.",
+            "5. Check Vacancies Available.",
+            "6. Change Index Number of Course.",
+            "7. Swap Index Number with Another Student.",
+            "8. Quit."
     };
 
     public void printWelcomeMessage(String studentName) {

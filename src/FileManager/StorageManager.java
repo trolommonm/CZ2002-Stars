@@ -46,6 +46,15 @@ public class StorageManager {
         return courses;
     }
 
+    public ArrayList<Course> getCoursesInWaitListByStudent(Student student) {
+        ArrayList<Course> courses = new ArrayList<>();
+        for (String courseCode: student.getWaitListCourseCodes()) {
+            courses.add(storage.getCourse(courseCode));
+        }
+
+        return courses;
+    }
+
     public void addCourse(Course course) {
         storage.addCourse(course);
         save();
@@ -61,10 +70,10 @@ public class StorageManager {
         save();
     }
 
-    public void dropCourse(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
+    public void dropCourseAndRegisterNextStudentInWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingIndexNumberException,
             CourseRegisteredException, NoVacancyException {
-        storage.dropCourse(userId, courseCodeToBeDropped, indexNumberToBeDropped);
+        storage.dropCourseAndRegisterNextStudentInWaitList(userId, courseCodeToBeDropped, indexNumberToBeDropped);
         save();
     }
 

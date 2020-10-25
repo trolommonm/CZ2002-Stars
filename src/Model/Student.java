@@ -119,7 +119,7 @@ public class Student implements Serializable {
         indexNumberToBeAdded.addStudentToWaitList(this);
     }
 
-    public void dropCourse(Course course, IndexNumber indexNumberToBeDropped)
+    public void dropCourseAndRegisterNextStudentInWaitList(Course course, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingIndexNumberException,
             CourseRegisteredException, NoVacancyException {
         indexNumberToBeDropped.deregisterStudent(this);

@@ -52,6 +52,45 @@ public class AdminUi extends Ui {
         printMessageWithDivider(getStudentsDescription(students, message));
     }
 
+    public void printStudentsByIndexNumber(ArrayList<Course> courses) {
+        for (Course course: courses) {
+            String s = "Course: " + course.toString() + "\n\n";
+            for (IndexNumber indexNumber: course.getIndexNumbers()) {
+                s += indexNumber.toString() + "\n";
+                s += "Registered Students:\n";
+                for (Student student: indexNumber.getRegisteredStudents()) {
+                    s += student.toString() + "\n";
+                }
+                s += "\n";
+
+                s += "Wait List Students:\n";
+                for (Student student: indexNumber.getWaitListStudents()) {
+                    s += student.toString() + "\n";
+                }
+                s += "\n";
+            }
+            printMessageWithDivider(s);
+        }
+    }
+
+    public void printStudentsByCourse(ArrayList<Course> courses) {
+        for (Course course: courses) {
+            String s = "Course: " + course.toString() + "\n\n";
+            s += "Registered Students:\n";
+            for (Student student: course.getRegisteredStudents()) {
+                s += student.toString() + "\n";
+            }
+            s += "\n";
+
+            s += "Wait List Students:\n";
+            for (Student student: course.getWaitListStudents()) {
+                s += student.toString() + "\n";
+            }
+            s += "\n";
+            printMessageWithDivider(s);
+        }
+    }
+
     public int getMenuInputChoice() {
         return getInputChoice("Enter your choice:", adminMenuOptions);
     }

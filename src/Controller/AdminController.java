@@ -40,8 +40,10 @@ public class AdminController {
                 checkAvailableSlot();
                 break;
             case 6:
+                printStudentsByIndexNumber();
                 break;
             case 7:
+                printStudentsByCourses();
                 break;
             case 8:
                 break;
@@ -105,5 +107,13 @@ public class AdminController {
         Student student = adminUi.getNewStudent(loginInfoForStudent.getUserId());
         storageManager.addStudent(student, loginInfoForStudent);
         adminUi.printStudents(storageManager.getAllStudents(), "Added " + student.getName() + "!");
+    }
+
+    private void printStudentsByIndexNumber() {
+        adminUi.printStudentsByIndexNumber(storageManager.getAllCourses());
+    }
+
+    private void printStudentsByCourses() {
+        adminUi.printStudentsByCourse(storageManager.getAllCourses());
     }
 }

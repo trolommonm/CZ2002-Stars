@@ -42,6 +42,10 @@ public class IndexNumber implements Serializable {
         return registeredStudents;
     }
 
+    public ArrayList<Student> getWaitListStudents() {
+        return waitListStudents;
+    }
+
     public void setMaxVacancy(int maxVacancy) throws Exception {
         if (maxVacancy < getNumberOfRegisteredStudents()) {
             throw new Exception(ErrorMessage.INVALID_NEW_MAX_VACANCY);
