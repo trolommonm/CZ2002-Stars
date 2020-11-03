@@ -278,11 +278,11 @@ public class StorageManager {
             storage = (Storage) ois.readObject();
             ois.close();
             fis.close();
-        } catch(FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             preload();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } catch(InvalidClassException e) {
+        } catch (InvalidClassException e) {
             preload();
         } catch (IOException e) {
             e.printStackTrace();
@@ -297,7 +297,7 @@ public class StorageManager {
             oos.close();
             fos.close();
             System.out.println("Serialization Done!!");
-        } catch(IOException e) {
+        } catch (IOException e) {
             System.out.println(e);
         }
     }

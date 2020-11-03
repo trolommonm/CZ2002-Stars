@@ -148,7 +148,7 @@ public class StudentController {
         Course courseToBeChanged = courses.get(indexStudent);
         IndexNumber indexNumberToBeChanged = student.getRegisteredIndexNumbers().get(courseToBeChanged.getCourseCode());
         studentUi.printMessageWithDivider("Swapping index for course: " + courseToBeChanged.toString()
-                , "You are currently registered for Index Number: " + indexNumberToBeChanged.getId());
+                , "You are currently registered for Index Number:\n" + indexNumberToBeChanged.getId());
 
         // Input the index you want to change to: //
         int index;
@@ -157,6 +157,8 @@ public class StudentController {
 
         try {
             storageManager.swapIndexNumber(student.getUserId(), courseToBeChanged.getCourseCode(), newIndexNumber);
+            studentUi.printMessageWithDivider("Index Number: " + indexNumberToBeChanged.getId() + " for "
+                    + courseToBeChanged.toString() + " has been successfully changed to " + newIndexNumber.getId());
         } catch (NoVacancySwapException | ClashingIndexNumberException | SameIndexNumberSwapException e) {
             studentUi.printErrorMessage(e.getMessage());
         }
