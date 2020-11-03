@@ -11,6 +11,9 @@ import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class LoginController {
     private AccountType accountType;
     private LoginUi loginUi;
@@ -38,13 +41,36 @@ public class LoginController {
         return providedLoginInfo.getUserId();
     }
 
+    public static String hash(LoginInfo logininfo) {
+
+        String passwordToHash = logininfo.getPassword();
+        String generatedPassword = null;
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(passwordToHash.getBytes());
+            byte[] bytes = md.digest();
+            StringBuilder sb = new StringBuilder();
+            int length = bytes.length;
+            for (int i = 0; i < length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 32).substring(1));
+            }
+            generatedPassword = sb.toString();
+        }
+
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return generatedPassword;
+    }
+
     private boolean verifyLoginInfo() {
         try {
             ArrayList<LoginInfo> loginInfoList = accountType == AccountType.ADMIN ?
                     loginInfoFileManager.retrieveAdminLoginInfoList() : loginInfoFileManager.retrieveStudentLoginInfoList();
 
             for (LoginInfo loginInfo: loginInfoList) {
-                if (loginInfo.equals(providedLoginInfo)) {
+                if (hash(loginInfo).equals(hash(providedLoginInfo))) {
                     return verifyAccessPeriod(loginInfo.getUserId());
                 }
             }
