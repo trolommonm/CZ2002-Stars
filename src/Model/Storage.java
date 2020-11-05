@@ -5,11 +5,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Exception.CourseRegisteredException;
-import Exception.ClashingIndexNumberException;
+import Exception.ClashingRegisteredIndexNumberException;
 import Exception.NoVacancyException;
 import Exception.NoVacancySwapException;
 import Exception.CourseInWaitListException;
 import Exception.SameIndexNumberSwapException;
+import Exception.ClashingWaitListedIndexNumberException;
+import Exception.PeerClashingRegisteredIndexNumberException;
+import Exception.PeerClashingWaitListedIndexNumberException;
+import Exception.PeerDoesNotTakeCourseException;
 
 public class Storage implements Serializable {
     private HashMap<String, Student> students;
@@ -53,15 +57,24 @@ public class Storage implements Serializable {
     }
 
     public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
-        throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException, CourseInWaitListException {
+            throws CourseRegisteredException, ClashingRegisteredIndexNumberException, NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException {
         Student student = getStudent(userId);
         student.registerForCourse(courseCodeToBeAdded, indexNumberToBeAdded);
     }
 
     public void swapIndexNumber(String userId, String courseCodeToBeSwapped, IndexNumber newIndexNumber)
-            throws ClashingIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
+            throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
         Student student = getStudent(userId);
         student.swapIndexNumber(courseCodeToBeSwapped, newIndexNumber);
+    }
+
+    public void swapIndexWithPeer(String userId, String peerUserId, String courseCodeToBeSwapped)
+            throws PeerClashingWaitListedIndexNumberException, PeerDoesNotTakeCourseException,
+            SameIndexNumberSwapException, ClashingWaitListedIndexNumberException,
+            ClashingRegisteredIndexNumberException, PeerClashingRegisteredIndexNumberException {
+        Student student = getStudent(userId);
+        Student peer = getStudent(peerUserId);
+        student.swapIndexNumberWithPeer(courseCodeToBeSwapped, peer);
     }
 
     public void dropCourseFromWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
@@ -70,8 +83,8 @@ public class Storage implements Serializable {
     }
 
     public void dropCourseAndRegisterNextStudentInWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
-            throws CourseInWaitListException, ClashingIndexNumberException,
-            CourseRegisteredException, NoVacancyException {
+            throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
+            CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException {
         Student student = getStudent(userId);
         student.dropCourseAndRegisterNextStudentInWaitList(getCourse(courseCodeToBeDropped), indexNumberToBeDropped);
     }

@@ -1,13 +1,11 @@
 package View;
 
 import ErrorMessage.ErrorMessage;
-import Model.Course;
+import Model.*;
 import Enum.School;
 import Enum.LessonType;
-import Model.IndexNumber;
-import Model.Lesson;
-import Model.Student;
 
+import java.io.Console;
 import java.time.DateTimeException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -51,12 +49,22 @@ public class StudentUi extends Ui {
         return index - 1;
     }
 
-    public int getIndexOfCourseToSwap(ArrayList<Course> courses) {
-        int index;
+    public int getIndexOfCourseToSwap(Student student) {
+        String registeredCourses = "Here are your registered courses:\n";
+        int index = 1;
+        for (String courseCode: student.getRegisteredCourseCodes()) {
+            IndexNumber indexNumber = student.getRegisteredIndexNumbers().get(courseCode);
+            registeredCourses += (index) + ". " + indexNumber.getCourse().toString();
+            registeredCourses += "\n\t" + indexNumber.getFullDescription();
+            if (index != student.getRegisteredCourseCodes().size()) {
+                registeredCourses += "\n";
+            }
+            index++;
+        }
+
         while (true) {
-            index = getInputChoice("Which course would you like to swap?",
-                    getCoursesDescription(courses, "Here are your registered courses:"));
-            if (index < 1 || index > courses.size()) {
+            index = getInputChoice("Which course would you like to swap?", registeredCourses);
+            if (index < 1 || index > student.getRegisteredCourseCodes().size()) {
                 printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
                 continue;
             }
@@ -176,10 +184,48 @@ public class StudentUi extends Ui {
         }
     }
 
-    public String getLoginInfo(String s) {
-        System.out.print(s);
+    public boolean confirmSwapWithPeer(Student student, Student peer, Course courseToBeSwapped) {
+        IndexNumber yourIndexNumber = student.getRegisteredIndexNumbers().get(courseToBeSwapped.getCourseCode());
+        String yourIndexNumberMessage = "Your index number:\n";
+        yourIndexNumberMessage += yourIndexNumber.getFullDescription();
+
+        IndexNumber peerIndexNumber  = peer.getRegisteredIndexNumbers().get(courseToBeSwapped.getCourseCode());
+        String peerIndexNumberMessage = "Your peer " + peer.getName() + "'s index number:\n";
+        peerIndexNumberMessage += yourIndexNumber.getFullDescription();
+
         Scanner sc = new Scanner(System.in);
-        return sc.next();
+        while (true) {
+            printMessageWithDivider("Confirm swap for " + courseToBeSwapped.getCourseCode() + " "
+                    + courseToBeSwapped.getCourseName() + " with peer?\n", yourIndexNumberMessage, peerIndexNumberMessage);
+            print("Enter (Y for yes, N for no): ");
+            String input = sc.next();
+            if (input.equals("Y")) {
+                return true;
+            } else if (input.equals("N")) {
+                return false;
+            } else {
+                printErrorMessage(ErrorMessage.INVALID_CONFIRM_SWAP_PEER);
+            }
+        }
+    }
+
+    public LoginInfo getLoginInfoOfPeer() {
+        Scanner sc = new Scanner(System.in);
+        Console con = System.console();
+        String userId;
+        //char[] passwordCharArray;
+        //String passwordString;
+        String password;
+
+        print("Enter your peer's user id:");
+        userId = sc.next();
+
+        print("Enter your peer's password:");
+        password = sc.next();
+        //passwordCharArray = con.readPassword();
+        //passwordString = String.valueOf(passwordCharArray);
+
+        return new LoginInfo(userId, password);
     }
 }
 

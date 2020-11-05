@@ -30,8 +30,10 @@ public class ErrorMessage {
     public static final String NO_REGISTERED_COURSES = "You have no registered courses!";
     public static final String NO_WAITLIST_COURSES = "You have no courses on the wait list!";
     public static final String COURSE_ALREADY_REGISTERED = "You are already registered for the course!";
-    public static final String CLASHING_INDEX_NUMBER = "The index number you have selected clashes with the " +
-            "timetable of the courses you are registered or on the wait list for! Please try again.";
+    public static final String CLASHING_REGISTERED_INDEX_NUMBER = "The index number you have selected clashes with the " +
+            "timetable of the courses you are registered for! Please try again.";
+    public static final String CLASHING_WAITLISTED_INDEX_NUMBER = "The index number you have selected clashes with the " +
+            "timetable of the courses you are waitlisted for! Please try again.";
     public static final String NO_VACANCY = "There is no vacancy for that index number! You will be placed on the " +
             "waitlist.";
     public static final String NO_VACANCY_SWAP = "There is no vacancy for that index number! Please try again.";
@@ -39,4 +41,8 @@ public class ErrorMessage {
             "To change index number, please drop the course first.";
     public static final String SAME_INDEX_SWAP = "You have selected the same index number that you are currently " +
             "registered for. Please try again.";
+    public static final String PEER_DOES_NOT_TAKE_COURSE = "Your peer does not take this course. Please try again.";
+    public static final String PEER_REGISTERED_CLASHING_INDEX = "Your peer has registered course that clashes with your index. Please try again.";
+    public static final String PEER_WAITLISTED_CLASHING_INDEX ="Your peer has wait listed course that clashes with your index. Please try again.";
+    public static final String INVALID_CONFIRM_SWAP_PEER = "Invalid input. Please try again.";
 }

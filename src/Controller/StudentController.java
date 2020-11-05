@@ -1,29 +1,42 @@
 package Controller;
 
 import ErrorMessage.ErrorMessage;
+import FileManager.LoginInfoFileManager;
+import FileManager.LoginManager;
 import FileManager.StorageManager;
 import Model.Course;
 import Model.IndexNumber;
+import Model.LoginInfo;
 import Model.Student;
+import Enum.AccountType;
 import View.StudentUi;
 import Exception.CourseRegisteredException;
-import Exception.ClashingIndexNumberException;
+import Exception.ClashingRegisteredIndexNumberException;
 import Exception.NoVacancyException;
 import Exception.NoVacancySwapException;
 import Exception.CourseInWaitListException;
 import Exception.SameIndexNumberSwapException;
+import Exception.WrongLoginInfoException;
+import Exception.WrongAccessPeriodException;
+import Exception.ClashingWaitListedIndexNumberException;
+import Exception.PeerDoesNotTakeCourseException;
+import Exception.PeerClashingRegisteredIndexNumberException;
+import Exception.PeerClashingWaitListedIndexNumberException;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class StudentController {
     private Student student;
     private StudentUi studentUi;
     private StorageManager storageManager;
+    private LoginManager loginManager;
 
     public StudentController(String userId) {
         studentUi = new StudentUi();
         storageManager = new StorageManager();
         student = storageManager.getStudent(userId);
+        loginManager = new LoginManager(new LoginInfoFileManager(), storageManager);
     }
 
     public void run() {
@@ -51,7 +64,7 @@ public class StudentController {
                     changeIndex();
                     break;
                 case 7:
-                    //swapIndex();
+                    swapIndex();
                     break;
                 case 8:
                     studentUi.printGoodBye();
@@ -72,7 +85,8 @@ public class StudentController {
         try {
             storageManager.registerForCourse(student.getUserId(), courseToBeAdded.getCourseCode(),
                     indexNumberToBeAdded);
-        } catch (CourseRegisteredException | ClashingIndexNumberException | CourseInWaitListException e) {
+        } catch (CourseRegisteredException | ClashingRegisteredIndexNumberException | CourseInWaitListException
+                | ClashingWaitListedIndexNumberException e) {
             studentUi.printErrorMessage(e.getMessage());
         } catch (NoVacancyException e) {
             studentUi.printMessageWithDivider(e.getMessage());
@@ -93,7 +107,8 @@ public class StudentController {
         try {
             storageManager.dropCourseAndRegisterNextStudentInWaitList(student.getUserId(), course.getCourseCode(), indexNumber);
         } catch (NoVacancyException | CourseInWaitListException |
-                ClashingIndexNumberException | CourseRegisteredException e) {
+                ClashingRegisteredIndexNumberException | CourseRegisteredException
+                | ClashingWaitListedIndexNumberException e) {
             assert false : "These exceptions should have already been accounted for when you add the course into wait list...";
         }
     }
@@ -159,65 +174,37 @@ public class StudentController {
             storageManager.swapIndexNumber(student.getUserId(), courseToBeChanged.getCourseCode(), newIndexNumber);
             studentUi.printMessageWithDivider("Index Number: " + indexNumberToBeChanged.getId() + " for "
                     + courseToBeChanged.toString() + " has been successfully changed to " + newIndexNumber.getId());
-        } catch (NoVacancySwapException | ClashingIndexNumberException | SameIndexNumberSwapException e) {
+        } catch (NoVacancySwapException | ClashingRegisteredIndexNumberException | SameIndexNumberSwapException e) {
             studentUi.printErrorMessage(e.getMessage());
         }
     }
 
-//    private void swapIndex() {
-//
-//        // Input the course you want to swap //
-//        ArrayList<Course> coursesStudent = storageManager.getCoursesTakenByStudent(student);
-//        int indexStudent = studentUi.getIndexOfCourseToSwap(coursesStudent);
-//        Course courseStudent = coursesStudent.get(indexStudent);
-//        IndexNumber indexNumberStudent = student.getRegisteredIndexNumbers().get(courseStudent.getCourseCode());
-//
-//        // Input the index you want to swap to: //
-//        int index;
-//        index = studentUi.getIndexOfIndexNumberToSwap(courseStudent.getIndexNumbers());
-//        IndexNumber indexNumberToBeSwap = courseStudent.getIndexNumbers().get(index);
-//
-//        // Checks username & password is correct
-//        String username = studentUi.getLoginInfo("Enter username of student swapping with you: ");
-//        String password = studentUi.getLoginInfo("Enter username of student swapping with you: ");
-//        boolean verified = false;
-//        LoginInfo toSwapInfo = new LoginInfo(username, password);
-//        LoginInfoFileManager verify = new LoginInfoFileManager();
-//        try {
-//            ArrayList<LoginInfo> loginInfoList = verify.retrieveStudentLoginInfoList();
-//            for (LoginInfo loginInfo: loginInfoList) {
-//                if (loginInfo.equals(toSwapInfo)) {
-//                    verified = true;
-//                    break;
-//                }
-//            }
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Once verified, check
-//        if (verified) {
-//            for (IndexNumber searchSwap : courseStudent.getIndexNumbers()) {
-//                if (searchSwap == indexNumberToBeSwap) {
-//                    ArrayList<String> studentList = searchSwap.getRegisteredStudents();
-//                    for (String s : studentList) {
-//                        if (s.equals(username)) {
-//                            try {
-//                                storageManager.dropCourseAndRegisterNextStudentInWaitList(student.getUserId(), courseStudent.getCourseCode(), indexNumberStudent);
-//                                storageManager.registerForCourse(student.getUserId(), courseStudent.getCourseCode(),
-//                                        indexNumberToBeSwap);
-//                                System.out.printf("Changed index %d for %d\n", indexNumberStudent.getId(), indexNumberToBeSwap.getId());
-//                            } catch (CourseRegisteredException | ClashingIndexNumberException | NoVacancyException e) {
-//                                studentUi.printErrorMessage(e.getMessage());
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        else {
-//            System.out.println("Error");
-//        }
-//    }
+    private void swapIndex() {
+        int index = studentUi.getIndexOfCourseToSwap(student);
+        Course courseToBeSwapped = storageManager.getCourse(student.getRegisteredCourseCodes().get(index));
+
+        LoginInfo loginInfoOfPeer = studentUi.getLoginInfoOfPeer();
+        try {
+            loginManager.verifyLoginInfo(AccountType.STUDENT, loginInfoOfPeer);
+        } catch (FileNotFoundException | WrongLoginInfoException e) {
+            studentUi.printErrorMessage(e.getMessage());
+            return;
+        } catch (WrongAccessPeriodException e) {
+            // ignore, doesn't matter since we are just swapping index with peer
+        }
+
+        Student peer = storageManager.getStudent(loginInfoOfPeer.getUserId());
+        if (!studentUi.confirmSwapWithPeer(student, peer, courseToBeSwapped)) {
+            return;
+        }
+
+        try {
+            storageManager.swapIndexWithPeer(student.getUserId(), peer.getUserId(), courseToBeSwapped.getCourseCode());
+        } catch (PeerClashingRegisteredIndexNumberException | SameIndexNumberSwapException
+                | ClashingRegisteredIndexNumberException | PeerDoesNotTakeCourseException
+                | PeerClashingWaitListedIndexNumberException | ClashingWaitListedIndexNumberException e) {
+            studentUi.printErrorMessage(e.getMessage());
+        }
+    }
 
 }

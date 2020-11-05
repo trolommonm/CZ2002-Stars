@@ -5,11 +5,15 @@ import Enum.Gender;
 import Enum.School;
 import Enum.LessonType;
 import Exception.CourseRegisteredException;
-import Exception.ClashingIndexNumberException;
+import Exception.ClashingRegisteredIndexNumberException;
 import Exception.NoVacancyException;
 import Exception.NoVacancySwapException;
 import Exception.CourseInWaitListException;
 import Exception.SameIndexNumberSwapException;
+import Exception.ClashingWaitListedIndexNumberException;
+import Exception.PeerClashingWaitListedIndexNumberException;
+import Exception.PeerClashingRegisteredIndexNumberException;
+import Exception.PeerDoesNotTakeCourseException;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -67,21 +71,29 @@ public class StorageManager {
     }
 
     public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
-    throws CourseRegisteredException, ClashingIndexNumberException, NoVacancyException, CourseInWaitListException {
+            throws CourseRegisteredException, ClashingRegisteredIndexNumberException, NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException {
         storage.registerForCourse(userId, courseCodeToBeAdded, indexNumberToBeAdded);
         save();
     }
 
     public void dropCourseAndRegisterNextStudentInWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
-            throws CourseInWaitListException, ClashingIndexNumberException,
-            CourseRegisteredException, NoVacancyException {
+            throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
+            CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException {
         storage.dropCourseAndRegisterNextStudentInWaitList(userId, courseCodeToBeDropped, indexNumberToBeDropped);
         save();
     }
 
     public void swapIndexNumber(String userId, String courseCodeToBeSwapped, IndexNumber newIndexNumber)
-            throws ClashingIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
+            throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
         storage.swapIndexNumber(userId, courseCodeToBeSwapped, newIndexNumber);
+        save();
+    }
+
+    public void swapIndexWithPeer(String userId, String peerUserId, String courseCodeToBeSwapped)
+            throws PeerDoesNotTakeCourseException, SameIndexNumberSwapException,
+            ClashingWaitListedIndexNumberException, PeerClashingRegisteredIndexNumberException,
+            ClashingRegisteredIndexNumberException, PeerClashingWaitListedIndexNumberException {
+        storage.swapIndexWithPeer(userId, peerUserId, courseCodeToBeSwapped);
         save();
     }
 
