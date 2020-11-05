@@ -1,5 +1,8 @@
 package Model;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class LoginInfo {
 
     private String userId;
@@ -7,7 +10,7 @@ public class LoginInfo {
 
     public LoginInfo(String userId, String password) {
         this.userId = userId;
-        this.password = password;
+        this.password = hash(password);
     }
 
     public String getPassword() {
@@ -16,6 +19,27 @@ public class LoginInfo {
 
     public String getUserId() {
         return userId;
+    }
+
+    private String hash(String password) {
+        String passwordToHash = password;
+        String generatedPassword = null;
+
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(passwordToHash.getBytes());
+            byte[] bytes = md.digest();
+            StringBuilder sb = new StringBuilder();
+            int length = bytes.length;
+            for (int i = 0; i < length; i++) {
+                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 32).substring(1));
+            }
+            generatedPassword = sb.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return generatedPassword;
     }
 
     @Override

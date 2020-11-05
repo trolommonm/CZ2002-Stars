@@ -77,9 +77,4 @@ public class Course implements Serializable, Cloneable {
     public String toString() {
         return courseCode + " " + courseName;
     }
-
-    @Override
-    public Course clone() throws CloneNotSupportedException {
-        return (Course) super.clone();
-    }
 }
