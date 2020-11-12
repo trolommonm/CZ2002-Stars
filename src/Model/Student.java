@@ -23,10 +23,7 @@ public class Student implements Serializable {
     private String nationality;
     private Gender gender;
     private AccessTime accessTime;
-    private ArrayList<String> registeredCourseCodes;
-    private HashMap<String, IndexNumber> registeredIndexNumbers;
-    private ArrayList<String> waitListCourseCodes;
-    private HashMap<String, IndexNumber> waitListIndexNumbers;
+    private TimeTable timeTable;
 
     public Student(String name, String userId, String matricNumber,
                    String nationality, Gender gender, AccessTime accessTime) {
@@ -36,10 +33,7 @@ public class Student implements Serializable {
         this.nationality = nationality;
         this.gender = gender;
         this.accessTime = accessTime;
-        registeredCourseCodes = new ArrayList<>();
-        registeredIndexNumbers = new HashMap<>();
-        waitListCourseCodes = new ArrayList<>();
-        waitListIndexNumbers = new HashMap<>();
+        timeTable = new TimeTable(this);
     }
 
     public String getMatricNumber() {
@@ -51,11 +45,15 @@ public class Student implements Serializable {
     }
 
     public ArrayList<String> getRegisteredCourseCodes() {
-        return registeredCourseCodes;
+        return timeTable.getRegisteredCourseCodes();
     }
 
     public ArrayList<String> getWaitListCourseCodes() {
-        return waitListCourseCodes;
+        return timeTable.getWaitListCourseCodes();
+    }
+
+    public TimeTable getTimeTable() {
+        return timeTable;
     }
 
     public String getName() {
@@ -75,203 +73,51 @@ public class Student implements Serializable {
     }
 
     public HashMap<String, IndexNumber> getRegisteredIndexNumbers() {
-        return registeredIndexNumbers;
+        return timeTable.getRegisteredIndexNumbers();
     }
 
     public HashMap<String, IndexNumber> getWaitListIndexNumbers() {
-        return waitListIndexNumbers;
+        return timeTable.getWaitListIndexNumbers();
     }
 
     public ArrayList<IndexNumber> getAllIndexNumbersRegistered() {
-        ArrayList<IndexNumber> indexNumbersRegistered = new ArrayList<>();
-        for (IndexNumber indexNumber: registeredIndexNumbers.values()) {
-            indexNumbersRegistered.add(indexNumber);
-        }
-        return indexNumbersRegistered;
+        return timeTable.getAllIndexNumbersRegistered();
     }
 
     public ArrayList<IndexNumber> getAllIndexNumbersWaitListed() {
-        ArrayList<IndexNumber> indexNumbersWaitListed = new ArrayList<>();
-        for (IndexNumber indexNumber: waitListIndexNumbers.values()) {
-            indexNumbersWaitListed.add(indexNumber);
-        }
-        return indexNumbersWaitListed;
+        return timeTable.getAllIndexNumbersWaitListed();
     }
 
     public void registerForCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
             throws CourseRegisteredException, ClashingRegisteredIndexNumberException,
             NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException {
-        for (String courseCode: getRegisteredCourseCodes()) {
-            if (courseCode.equals(courseCodeToBeAdded)) {
-                throw new CourseRegisteredException();
-            }
-        }
-
-        for (String courseCode: getWaitListCourseCodes()) {
-            if (courseCode.equals(courseCodeToBeAdded)) {
-                throw new CourseInWaitListException();
-            }
-        }
-
-        if (!getClashingRegisteredIndexNumbers(indexNumberToBeAdded).isEmpty()) {
-            throw new ClashingRegisteredIndexNumberException();
-        }
-
-        if (!getClashingWaitListedIndexNumbers(indexNumberToBeAdded).isEmpty()) {
-            throw new ClashingWaitListedIndexNumberException();
-        }
-
-        if (indexNumberToBeAdded.getAvailableVacancy() <= 0) {
-            throw new NoVacancyException();
-        }
-
-        addCourse(courseCodeToBeAdded, indexNumberToBeAdded);
-    }
-
-    private void addCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
-        registeredCourseCodes.add(courseCodeToBeAdded);
-        registeredIndexNumbers.put(courseCodeToBeAdded, indexNumberToBeAdded);
-        indexNumberToBeAdded.registerStudent(this);
-    }
-
-    private void dropCourse(String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
-        registeredCourseCodes.remove(courseCodeToBeDropped);
-        indexNumberToBeDropped.deregisterStudent(this);
-        registeredIndexNumbers.remove(indexNumberToBeDropped);
+        timeTable.registerForCourse(courseCodeToBeAdded, indexNumberToBeAdded);
     }
 
     public void swapIndexNumberWithPeer(String courseCodeToBeSwapped, Student peer)
             throws ClashingRegisteredIndexNumberException, SameIndexNumberSwapException,
             ClashingWaitListedIndexNumberException, PeerClashingRegisteredIndexNumberException,
             PeerClashingWaitListedIndexNumberException {
-
-        IndexNumber myIndexNumber = registeredIndexNumbers.get(courseCodeToBeSwapped);
-        IndexNumber peerIndexNumber = peer.getRegisteredIndexNumbers().get(courseCodeToBeSwapped);
-
-        if (myIndexNumber == peerIndexNumber) {
-            throw new SameIndexNumberSwapException();
-        }
-
-        // deregister myself
-        dropCourse(courseCodeToBeSwapped, myIndexNumber);
-        // deregister peer
-        peer.dropCourse(courseCodeToBeSwapped, peerIndexNumber);
-
-        if (!getClashingRegisteredIndexNumbers(peerIndexNumber).isEmpty()) {
-            // register back myself
-            addCourse(courseCodeToBeSwapped, myIndexNumber);
-            // register back peer
-            peer.addCourse(courseCodeToBeSwapped, peerIndexNumber);
-            throw new ClashingRegisteredIndexNumberException();
-        }
-
-        if (!getClashingWaitListedIndexNumbers(peerIndexNumber).isEmpty()) {
-            // register back myself
-            addCourse(courseCodeToBeSwapped, myIndexNumber);
-            // register back peer
-            peer.addCourse(courseCodeToBeSwapped, peerIndexNumber);
-            throw new ClashingWaitListedIndexNumberException();
-        }
-
-        if (!peer.getClashingRegisteredIndexNumbers(myIndexNumber).isEmpty()) {
-            // register back myself
-            addCourse(courseCodeToBeSwapped, myIndexNumber);
-            // register back peer
-            peer.addCourse(courseCodeToBeSwapped, peerIndexNumber);
-            throw new PeerClashingRegisteredIndexNumberException();
-        }
-
-        if (!peer.getClashingWaitListedIndexNumbers(myIndexNumber).isEmpty()) {
-            // register back myself
-            addCourse(courseCodeToBeSwapped, myIndexNumber);
-            // register back peer
-            peer.addCourse(courseCodeToBeSwapped, peerIndexNumber);
-            throw new PeerClashingWaitListedIndexNumberException();
-        }
-
-        addCourse(courseCodeToBeSwapped, peerIndexNumber);
-        peer.addCourse(courseCodeToBeSwapped, myIndexNumber);
+        timeTable.swapIndexNumberWithPeer(courseCodeToBeSwapped, peer);
     }
 
     public void swapIndexNumber(String courseCodeToBeSwapped, IndexNumber newIndexNumber)
             throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
-        IndexNumber indexNumberToBeSwapped = registeredIndexNumbers.get(courseCodeToBeSwapped);
-        if (indexNumberToBeSwapped == newIndexNumber) {
-            throw new SameIndexNumberSwapException();
-        }
-
-        dropCourse(courseCodeToBeSwapped, indexNumberToBeSwapped);
-
-        if (!getClashingRegisteredIndexNumbers(newIndexNumber).isEmpty()) {
-            addCourse(courseCodeToBeSwapped, indexNumberToBeSwapped);
-            throw new ClashingRegisteredIndexNumberException();
-        }
-
-        if (newIndexNumber.getAvailableVacancy() <= 0) {
-            addCourse(courseCodeToBeSwapped, indexNumberToBeSwapped);
-            throw new NoVacancySwapException();
-        }
-
-        addCourse(newIndexNumber.getCourse().getCourseCode(), newIndexNumber);
+        timeTable.swapIndexNumber(courseCodeToBeSwapped, newIndexNumber);
     }
 
     public void addCourseToWaitList(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
-        waitListCourseCodes.add(courseCodeToBeAdded);
-        waitListIndexNumbers.put(courseCodeToBeAdded, indexNumberToBeAdded);
-        indexNumberToBeAdded.addStudentToWaitList(this);
+        timeTable.addCourseToWaitList(courseCodeToBeAdded, indexNumberToBeAdded);
     }
 
     public void dropCourseFromWaitList(String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
-        waitListCourseCodes.remove(courseCodeToBeDropped);
-        waitListIndexNumbers.remove(courseCodeToBeDropped);
-        indexNumberToBeDropped.removeStudentFromWaitList(this);
+        timeTable.dropCourseFromWaitList(courseCodeToBeDropped, indexNumberToBeDropped);
     }
 
     public void dropCourseAndRegisterNextStudentInWaitList(Course course, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
             CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException {
-        indexNumberToBeDropped.deregisterStudent(this);
-        registeredCourseCodes.remove(course.getCourseCode());
-        registeredIndexNumbers.remove(course.getCourseCode());
-
-        indexNumberToBeDropped.registerNextStudentInWaitList();
-    }
-
-    public ArrayList<IndexNumber> getClashingWaitListedIndexNumbers(IndexNumber indexNumberToBeAdded) {
-        ArrayList<IndexNumber> clashingIndexNumbers = new ArrayList<>();
-        for (IndexNumber indexNumber: getAllIndexNumbersWaitListed()) {
-            if (checkIndexNumberClash(indexNumberToBeAdded, indexNumber)) {
-                clashingIndexNumbers.add(indexNumber);
-            }
-        }
-
-        return clashingIndexNumbers;
-    }
-
-    public ArrayList<IndexNumber> getClashingRegisteredIndexNumbers(IndexNumber indexNumberToBeAdded) {
-        ArrayList<IndexNumber> clashingIndexNumbers = new ArrayList<>();
-        for (IndexNumber indexNumber: getAllIndexNumbersRegistered()) {
-            if (checkIndexNumberClash(indexNumberToBeAdded, indexNumber)) {
-                clashingIndexNumbers.add(indexNumber);
-            }
-        }
-
-        return clashingIndexNumbers;
-    }
-
-    private boolean checkIndexNumberClash(IndexNumber indexNumberToBeAdded, IndexNumber indexNumberToCheck) {
-        for (Lesson lesson: indexNumberToCheck.getLessons()) {
-            for (Lesson lessonToBeAdded: indexNumberToBeAdded.getLessons()) {
-                if (lessonToBeAdded.getDayOfWeek() == lesson.getDayOfWeek()) {
-                    if (lessonToBeAdded.getStartTime().isBefore(lesson.getEndTime())  &&
-                            lesson.getStartTime().isBefore(lessonToBeAdded.getEndTime())) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+        timeTable.dropCourseAndRegisterNextStudentInWaitList(course, indexNumberToBeDropped);
     }
 
     @Override
