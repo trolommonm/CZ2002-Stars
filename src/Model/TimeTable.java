@@ -86,6 +86,10 @@ public class TimeTable implements Serializable {
         }
 
         addCourse(courseCodeToBeAdded, indexNumberToBeAdded);
+
+        String messageToSend = "You have successfully registered for the course:\n\n"
+                + indexNumberToBeAdded.getCourse().toString() + "\n\n" + indexNumberToBeAdded.getFullDescription();
+        student.notify(messageToSend);
     }
 
     private void addCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
@@ -148,6 +152,17 @@ public class TimeTable implements Serializable {
 
         addCourse(courseCodeToBeSwapped, peerIndexNumber);
         peer.getTimeTable().addCourse(courseCodeToBeSwapped, myIndexNumber);
+
+        String messageToSend = "You have successfully swapped index with your peer, " + peer.getName() + ", for the course:\n\n"
+                + myIndexNumber.getCourse().toString() + "\n\n"
+                + "Your old index number was: " + myIndexNumber.getFullDescription() + "\n\n"
+                + "You are now registered for index number: " + peerIndexNumber.getFullDescription();
+        student.notify(messageToSend);
+        String peerMessageToSend = "You have successfully swapped index with your peer, " + student.getName() + ", for the course:\n\n"
+                + myIndexNumber.getCourse().toString() + "\n\n"
+                + "Your old index number was: " + peerIndexNumber.getFullDescription() + "\n\n"
+                + "You are now registered for index number: " + myIndexNumber.getFullDescription();
+        peer.notify(peerMessageToSend);
     }
 
     public void swapIndexNumber(String courseCodeToBeSwapped, IndexNumber newIndexNumber)
@@ -170,16 +185,32 @@ public class TimeTable implements Serializable {
         }
 
         addCourse(newIndexNumber.getCourse().getCourseCode(), newIndexNumber);
+
+        String messageToSend = "You have successfully swapped index for the course:\n\n"
+                + indexNumberToBeSwapped.getCourse().toString() + "\n\n"
+                + "Your old index number was:" + indexNumberToBeSwapped.getFullDescription() + "\n\n"
+                + "You are now registered for index number:" + newIndexNumber.getFullDescription();
+        student.notify(messageToSend);
     }
 
     public void addCourseToWaitList(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
         waitListIndexNumbers.put(courseCodeToBeAdded, indexNumberToBeAdded);
         indexNumberToBeAdded.addStudentToWaitList(student);
+
+        String messageToSend = "You have added to the wait list for the course:\n\n"
+                + indexNumberToBeAdded.getCourse().toString() + "\n\n"
+                + indexNumberToBeAdded.getFullDescription();
+        student.notify(messageToSend);
     }
 
     public void dropCourseFromWaitList(String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
         waitListIndexNumbers.remove(courseCodeToBeDropped);
         indexNumberToBeDropped.removeStudentFromWaitList(student);
+
+        String messageToSend = "You have dropped from the wait list for the course:\n\n"
+                + indexNumberToBeDropped.getCourse().toString() + "\n\n"
+                + indexNumberToBeDropped.getFullDescription();
+        student.notify(messageToSend);
     }
 
     public void dropCourseAndRegisterNextStudentInWaitList(Course course, IndexNumber indexNumberToBeDropped)
@@ -189,6 +220,11 @@ public class TimeTable implements Serializable {
         registeredIndexNumbers.remove(course.getCourseCode());
 
         indexNumberToBeDropped.registerNextStudentInWaitList();
+
+        String messageToSend = "You have successfully dropped from the course:\n\n"
+                + indexNumberToBeDropped.getCourse().toString() + "\n\n"
+                + indexNumberToBeDropped.getFullDescription();
+        student.notify(messageToSend);
     }
 
     public ArrayList<IndexNumber> getClashingWaitListedIndexNumbers(IndexNumber indexNumberToBeAdded) {

@@ -21,19 +21,23 @@ public class Student implements Serializable {
     private String userId;
     private String matricNumber;
     private String nationality;
+    private String emailAddress;
     private Gender gender;
     private AccessTime accessTime;
     private TimeTable timeTable;
+    private INotification preferredNotification;
 
     public Student(String name, String userId, String matricNumber,
-                   String nationality, Gender gender, AccessTime accessTime) {
+                   String nationality, String emailAddress, Gender gender, AccessTime accessTime) {
         this.name = name;
         this.userId = userId;
         this.matricNumber = matricNumber;
         this.nationality = nationality;
+        this.emailAddress = emailAddress;
         this.gender = gender;
         this.accessTime = accessTime;
         timeTable = new TimeTable(this);
+        preferredNotification = EmailNotification.getInstance();
     }
 
     public String getMatricNumber() {
@@ -80,14 +84,6 @@ public class Student implements Serializable {
         return timeTable.getWaitListIndexNumbers();
     }
 
-    public ArrayList<IndexNumber> getAllIndexNumbersRegistered() {
-        return timeTable.getAllIndexNumbersRegistered();
-    }
-
-    public ArrayList<IndexNumber> getAllIndexNumbersWaitListed() {
-        return timeTable.getAllIndexNumbersWaitListed();
-    }
-
     public void registerForCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
             throws CourseRegisteredException, ClashingRegisteredIndexNumberException,
             NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException {
@@ -118,6 +114,10 @@ public class Student implements Serializable {
             throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
             CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException {
         timeTable.dropCourseAndRegisterNextStudentInWaitList(course, indexNumberToBeDropped);
+    }
+
+    protected void notify(String messageToSend) {
+        preferredNotification.send(emailAddress, "Dear " + name + ",\n\n" + messageToSend);
     }
 
     @Override

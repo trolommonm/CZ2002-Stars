@@ -115,6 +115,8 @@ public class AdminUi extends Ui {
         String matricNumber = sc.next();
         print("Enter the nationality:");
         String nationality = sc.next();
+        print("Enter the email address:");
+        String emailAddress = sc.next();
         AccessTime accessTime = getAccessTime(null,
                 "Enter the start date and time for the access period in "
                         + "\"dd-MM-yyyy HH:mm\" format (e.g. 10-12-2020 23:59):",
@@ -136,7 +138,7 @@ public class AdminUi extends Ui {
             }
         }
 
-        return new Student(name, userId, matricNumber, nationality, gender, accessTime);
+        return new Student(name, userId, matricNumber, nationality, emailAddress, gender, accessTime);
     }
 
     public LoginInfo getLoginInfo() {

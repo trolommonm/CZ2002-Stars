@@ -269,8 +269,9 @@ public class StorageManager {
         String matricNumber = lineSplit[2];
         String nationality = lineSplit[3];
         Gender gender = lineSplit[4].equals("MALE") ? Gender.MALE : Gender.FEMALE;
-        String[] accessStartTimeSplit = lineSplit[5].split("-");
-        String[] accessEndTimeStringSplit = lineSplit[6].split("-");
+        String emailAddress = lineSplit[5];
+        String[] accessStartTimeSplit = lineSplit[6].split("-");
+        String[] accessEndTimeStringSplit = lineSplit[7].split("-");
         LocalDateTime acccessStartTime = LocalDateTime.of(Integer.parseInt(accessStartTimeSplit[0]),
                 Integer.parseInt(accessStartTimeSplit[1]), Integer.parseInt(accessStartTimeSplit[2]),
                 Integer.parseInt(accessStartTimeSplit[3]), Integer.parseInt(accessStartTimeSplit[4]));
@@ -278,7 +279,7 @@ public class StorageManager {
                 Integer.parseInt(accessEndTimeStringSplit[1]), Integer.parseInt(accessEndTimeStringSplit[2]),
                 Integer.parseInt(accessEndTimeStringSplit[3]), Integer.parseInt(accessEndTimeStringSplit[4]));
 
-        return new Student(name, userId, matricNumber, nationality, gender,
+        return new Student(name, userId, matricNumber, nationality, emailAddress, gender,
                 new AccessTime(acccessStartTime, accessEndTime));
     }
 
