@@ -13,7 +13,6 @@ import Exception.SameIndexNumberSwapException;
 import Exception.ClashingWaitListedIndexNumberException;
 import Exception.PeerClashingWaitListedIndexNumberException;
 import Exception.PeerClashingRegisteredIndexNumberException;
-import Exception.PeerDoesNotTakeCourseException;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -90,9 +89,9 @@ public class StorageManager {
     }
 
     public void swapIndexWithPeer(String userId, String peerUserId, String courseCodeToBeSwapped)
-            throws PeerDoesNotTakeCourseException, SameIndexNumberSwapException,
-            ClashingWaitListedIndexNumberException, PeerClashingRegisteredIndexNumberException,
-            ClashingRegisteredIndexNumberException, PeerClashingWaitListedIndexNumberException {
+            throws SameIndexNumberSwapException, ClashingWaitListedIndexNumberException,
+            PeerClashingRegisteredIndexNumberException, ClashingRegisteredIndexNumberException,
+            PeerClashingWaitListedIndexNumberException {
         storage.swapIndexWithPeer(userId, peerUserId, courseCodeToBeSwapped);
         save();
     }

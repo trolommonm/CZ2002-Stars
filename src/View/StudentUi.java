@@ -73,20 +73,6 @@ public class StudentUi extends Ui {
         return index - 1;
     }
 
-    public int getIndexOfIndexNumberToSwap(ArrayList<IndexNumber> indexNumbers) {
-        int index;
-        while (true) {
-            index = getInputChoice("Which index number would you like to add?",
-                    getIndexNumbersDescription(indexNumbers, "Here are the index numbers:"));
-            if (index < 1 || index > indexNumbers.size()) {
-                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
-                continue;
-            }
-            break;
-        }
-        return index - 1;
-    }
-
     public int getIndexOfIndexNumberToChange(ArrayList<IndexNumber> indexNumbers) {
         int index;
         while (true) {
@@ -148,42 +134,6 @@ public class StudentUi extends Ui {
         return index - 1;
     }
 
-    public int getIndex(String s) {
-        System.out.print(s);
-        Scanner sc = new Scanner(System.in);
-        String input = "";
-
-        while (true) {
-            try {
-                input = sc.next();
-                if (input.equals("Q")) {
-                    return 0;
-                }
-                return Integer.parseInt(input);
-            } catch (NumberFormatException e) {
-                printErrorMessage(ErrorMessage.INVALID_INDEX_NUMBER);
-            }
-        }
-    }
-
-    public String getCourseCode(String s) {
-        System.out.print(s);
-        Scanner sc = new Scanner(System.in);
-        String input;
-
-        while (true) {
-            try {
-                input = sc.next();
-                if (input.equals("Q")) {
-                    return null;
-                }
-                return input;
-            } catch (NumberFormatException e) {
-                printErrorMessage(ErrorMessage.INVALID_INDEX_NUMBER);
-            }
-        }
-    }
-
     public boolean confirmSwapWithPeer(Student student, Student peer, Course courseToBeSwapped) {
         IndexNumber yourIndexNumber = student.getRegisteredIndexNumbers().get(courseToBeSwapped.getCourseCode());
         String yourIndexNumberMessage = "Your index number:\n";
@@ -191,7 +141,7 @@ public class StudentUi extends Ui {
 
         IndexNumber peerIndexNumber  = peer.getRegisteredIndexNumbers().get(courseToBeSwapped.getCourseCode());
         String peerIndexNumberMessage = "Your peer " + peer.getName() + "'s index number:\n";
-        peerIndexNumberMessage += yourIndexNumber.getFullDescription();
+        peerIndexNumberMessage += peerIndexNumber.getFullDescription();
 
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -199,9 +149,9 @@ public class StudentUi extends Ui {
                     + courseToBeSwapped.getCourseName() + " with peer?\n", yourIndexNumberMessage, peerIndexNumberMessage);
             print("Enter (Y for yes, N for no): ");
             String input = sc.next();
-            if (input.equals("Y")) {
+            if (input.trim().toUpperCase().equals("Y")) {
                 return true;
-            } else if (input.equals("N")) {
+            } else if (input.trim().toUpperCase().equals("N")) {
                 return false;
             } else {
                 printErrorMessage(ErrorMessage.INVALID_CONFIRM_SWAP_PEER);

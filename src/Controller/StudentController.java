@@ -19,7 +19,6 @@ import Exception.SameIndexNumberSwapException;
 import Exception.WrongLoginInfoException;
 import Exception.WrongAccessPeriodException;
 import Exception.ClashingWaitListedIndexNumberException;
-import Exception.PeerDoesNotTakeCourseException;
 import Exception.PeerClashingRegisteredIndexNumberException;
 import Exception.PeerClashingWaitListedIndexNumberException;
 
@@ -194,6 +193,12 @@ public class StudentController {
         }
 
         Student peer = storageManager.getStudent(loginInfoOfPeer.getUserId());
+
+        if (!peer.getRegisteredCourseCodes().contains(courseToBeSwapped.getCourseCode())) {
+            studentUi.printErrorMessage(ErrorMessage.PEER_DOES_NOT_TAKE_COURSE);
+            return;
+        }
+
         if (!studentUi.confirmSwapWithPeer(student, peer, courseToBeSwapped)) {
             return;
         }
@@ -201,8 +206,8 @@ public class StudentController {
         try {
             storageManager.swapIndexWithPeer(student.getUserId(), peer.getUserId(), courseToBeSwapped.getCourseCode());
         } catch (PeerClashingRegisteredIndexNumberException | SameIndexNumberSwapException
-                | ClashingRegisteredIndexNumberException | PeerDoesNotTakeCourseException
-                | PeerClashingWaitListedIndexNumberException | ClashingWaitListedIndexNumberException e) {
+                | ClashingRegisteredIndexNumberException | PeerClashingWaitListedIndexNumberException
+                | ClashingWaitListedIndexNumberException e) {
             studentUi.printErrorMessage(e.getMessage());
         }
     }

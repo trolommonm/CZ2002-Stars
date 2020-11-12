@@ -13,7 +13,6 @@ import Exception.NoVacancySwapException;
 import Exception.CourseInWaitListException;
 import Exception.SameIndexNumberSwapException;
 import Exception.ClashingWaitListedIndexNumberException;
-import Exception.PeerDoesNotTakeCourseException;
 import Exception.PeerClashingRegisteredIndexNumberException;
 import Exception.PeerClashingWaitListedIndexNumberException;
 
@@ -143,11 +142,8 @@ public class Student implements Serializable {
 
     public void swapIndexNumberWithPeer(String courseCodeToBeSwapped, Student peer)
             throws ClashingRegisteredIndexNumberException, SameIndexNumberSwapException,
-            PeerDoesNotTakeCourseException, ClashingWaitListedIndexNumberException,
-            PeerClashingRegisteredIndexNumberException, PeerClashingWaitListedIndexNumberException {
-        if (!peer.getRegisteredCourseCodes().contains(courseCodeToBeSwapped)) {
-            throw new PeerDoesNotTakeCourseException();
-        }
+            ClashingWaitListedIndexNumberException, PeerClashingRegisteredIndexNumberException,
+            PeerClashingWaitListedIndexNumberException {
 
         IndexNumber myIndexNumber = registeredIndexNumbers.get(courseCodeToBeSwapped);
         IndexNumber peerIndexNumber = peer.getRegisteredIndexNumbers().get(courseCodeToBeSwapped);
