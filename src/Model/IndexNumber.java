@@ -9,6 +9,7 @@ import Exception.ClashingWaitListedIndexNumberException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class IndexNumber implements Serializable {
     private int id;
@@ -16,7 +17,7 @@ public class IndexNumber implements Serializable {
     private int maxVacancy;
     private ArrayList<Lesson> lessons;
     private ArrayList<Student> registeredStudents;
-    private ArrayList<Student> waitListStudents;
+    private LinkedList<Student> waitListStudents;
 
     public IndexNumber(int id, Course course, ArrayList<Lesson> lessons, int maxVacancy) {
         this.id = id;
@@ -24,7 +25,7 @@ public class IndexNumber implements Serializable {
         this.lessons = lessons;
         this.maxVacancy = maxVacancy;
         registeredStudents = new ArrayList<>();
-        waitListStudents = new ArrayList<>();
+        waitListStudents = new LinkedList<>();
     }
 
     public int getId() {
@@ -47,7 +48,7 @@ public class IndexNumber implements Serializable {
         return registeredStudents;
     }
 
-    public ArrayList<Student> getWaitListStudents() {
+    public LinkedList<Student> getWaitListStudents() {
         return waitListStudents;
     }
 
@@ -82,8 +83,7 @@ public class IndexNumber implements Serializable {
             throws CourseRegisteredException, CourseInWaitListException,
             NoVacancyException, ClashingRegisteredIndexNumberException, ClashingWaitListedIndexNumberException {
         if (!waitListStudents.isEmpty()) {
-            Student nextStudentInWaitList = waitListStudents.get(0);
-            waitListStudents.remove(nextStudentInWaitList);
+            Student nextStudentInWaitList = waitListStudents.poll();
             nextStudentInWaitList.getWaitListCourseCodes().remove(course.getCourseCode());
             nextStudentInWaitList.getWaitListIndexNumbers().remove(course.getCourseCode());
             nextStudentInWaitList.registerForCourse(course.getCourseCode(), this);
@@ -106,6 +106,6 @@ public class IndexNumber implements Serializable {
     @Override
     public String toString() {
         return "Index Number: " + id + ", "
-                + "Vacancy: " + getAvailableVacancy() + " / " + maxVacancy ;
+                + "Current Vacancy: " + getAvailableVacancy() + " / " + maxVacancy ;
     }
 }

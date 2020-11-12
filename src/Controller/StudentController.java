@@ -84,13 +84,16 @@ public class StudentController {
         try {
             storageManager.registerForCourse(student.getUserId(), courseToBeAdded.getCourseCode(),
                     indexNumberToBeAdded);
+            String messageSuccess = "You have been successfully registered for the course:\n\n"
+                    + courseToBeAdded.toString() + "\n\n" + indexNumberToBeAdded.getFullDescription();
+            studentUi.printMessageWithDivider(messageSuccess, "An email will be sent to you.");
         } catch (CourseRegisteredException | ClashingRegisteredIndexNumberException | CourseInWaitListException
                 | ClashingWaitListedIndexNumberException e) {
             studentUi.printErrorMessage(e.getMessage());
         } catch (NoVacancyException e) {
             studentUi.printMessageWithDivider(e.getMessage());
-            storageManager.addCourseToWaitList(student.getUserId(), courseToBeAdded.getCourseCode()
-                    , indexNumberToBeAdded);
+            storageManager.addCourseToWaitList(student.getUserId(), courseToBeAdded.getCourseCode(),
+                    indexNumberToBeAdded);
         }
     }
 
@@ -101,10 +104,13 @@ public class StudentController {
             return;
         }
         int index = studentUi.getIndexOfCourseToDrop(registeredCourses, true);
-        Course course = registeredCourses.get(index);
-        IndexNumber indexNumber = student.getRegisteredIndexNumbers().get(course.getCourseCode());
+        Course courseToBeDropped = registeredCourses.get(index);
+        IndexNumber indexNumber = student.getRegisteredIndexNumbers().get(courseToBeDropped.getCourseCode());
         try {
-            storageManager.dropCourseAndRegisterNextStudentInWaitList(student.getUserId(), course.getCourseCode(), indexNumber);
+            storageManager.dropCourseAndRegisterNextStudentInWaitList(student.getUserId(), courseToBeDropped.getCourseCode(), indexNumber);
+            String messageSuccess = "You have successfully dropped the course:\n\n"
+                    + courseToBeDropped.toString() + "\n\n" + indexNumber.getFullDescription();
+            studentUi.printMessageWithDivider(messageSuccess, "An email will be sent to you");
         } catch (NoVacancyException | CourseInWaitListException |
                 ClashingRegisteredIndexNumberException | CourseRegisteredException
                 | ClashingWaitListedIndexNumberException e) {
@@ -122,6 +128,10 @@ public class StudentController {
         Course course = waitListCourses.get(index);
         IndexNumber indexNumber = student.getWaitListIndexNumbers().get(course.getCourseCode());
         storageManager.dropCourseFromWaitList(student.getUserId(), course.getCourseCode(), indexNumber);
+
+        String messageSuccess = "You have dropped from wait list for the course:\n\n"
+                + course.toString() + "\n\n" + indexNumber.getFullDescription();
+        studentUi.printMessageWithDivider(messageSuccess, "An email will be sent to you.");
     }
 
     private void printRegisteredAndWaitListCourses() {
@@ -172,7 +182,8 @@ public class StudentController {
         try {
             storageManager.swapIndexNumber(student.getUserId(), courseToBeChanged.getCourseCode(), newIndexNumber);
             studentUi.printMessageWithDivider("Index Number: " + indexNumberToBeChanged.getId() + " for "
-                    + courseToBeChanged.toString() + " has been successfully changed to " + newIndexNumber.getId());
+                    + courseToBeChanged.toString() + " has been successfully changed to " + newIndexNumber.getId(),
+                    "An email will be sent to you.");
         } catch (NoVacancySwapException | ClashingRegisteredIndexNumberException | SameIndexNumberSwapException e) {
             studentUi.printErrorMessage(e.getMessage());
         }
@@ -205,6 +216,13 @@ public class StudentController {
 
         try {
             storageManager.swapIndexWithPeer(student.getUserId(), peer.getUserId(), courseToBeSwapped.getCourseCode());
+
+
+            studentUi.printMessageWithDivider("Your Index Number: "
+                            + peer.getRegisteredIndexNumbers().get(courseToBeSwapped.getCourseCode()).getId() + " for "
+                            + courseToBeSwapped.toString() + " has been successfully changed to: "
+                            + student.getRegisteredIndexNumbers().get(courseToBeSwapped.getCourseCode()).getId(),
+                            "An email will be sent to you and your peer.");
         } catch (PeerClashingRegisteredIndexNumberException | SameIndexNumberSwapException
                 | ClashingRegisteredIndexNumberException | PeerClashingWaitListedIndexNumberException
                 | ClashingWaitListedIndexNumberException e) {
