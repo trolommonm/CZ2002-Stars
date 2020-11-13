@@ -1,7 +1,7 @@
-import Controller.AdminController;
-import Controller.LoginController;
-import Controller.StudentController;
-import Enum.AccountType;
+import controller.AdminController;
+import controller.LoginController;
+import controller.StudentController;
+import model.AccountType;
 
 public class Main {
 
