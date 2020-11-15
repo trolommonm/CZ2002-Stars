@@ -3,7 +3,7 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Course implements Serializable, Cloneable {
+public class Course implements Serializable {
     private String courseName;
     private String courseCode;
     private ArrayList<IndexNumber> indexNumbers;

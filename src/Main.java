@@ -8,6 +8,7 @@ import filemanager.LoginInfoFileManager;
 import filemanager.LoginManager;
 import filemanager.StorageManager;
 import model.AccountType;
+import model.LoginInfo;
 
 public class Main {
 
@@ -17,14 +18,14 @@ public class Main {
         ILoginable loginManager = new LoginManager(loginInfoFileManager, storageManager);
 
         LoginController lc = new LoginController(storageManager, loginManager);
-        AccountType accountType = lc.run();
-        switch (accountType) {
+        LoginInfo providedLoginInfo = lc.run();
+        switch (providedLoginInfo.getAccountType()) {
         case ADMIN:
             AdminController ac = new AdminController(storageManager);
             ac.run();
             break;
         case STUDENT:
-            StudentController sc = new StudentController(lc.getUserId(), storageManager, loginManager);
+            StudentController sc = new StudentController(providedLoginInfo.getUserId(), storageManager, loginManager);
             sc.run();
             break;
         default:

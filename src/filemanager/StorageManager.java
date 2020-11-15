@@ -192,6 +192,8 @@ public class StorageManager implements IStorageManager {
         try {
             Files.copy(Path.of("data/preload/StudentLoginInfo.txt"), Path.of("data/StudentLoginInfo.txt")
                     , StandardCopyOption.REPLACE_EXISTING);
+            Files.copy(Path.of("data/preload/AdminLoginInfo.txt"), Path.of("data/AdminLoginInfo.txt")
+                    , StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
         }
