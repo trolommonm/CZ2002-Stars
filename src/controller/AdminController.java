@@ -1,6 +1,7 @@
 package controller;
 
 import errormessage.ErrorMessage;
+import filemanager.ILoginInfoFileManager;
 import filemanager.IStorageManager;
 import filemanager.LoginInfoFileManager;
 import model.Course;
@@ -13,10 +14,12 @@ import java.util.ArrayList;
 public class AdminController {
     private AdminUi adminUi;
     private IStorageManager storageManager;
+    private ILoginInfoFileManager loginInfoFileManager;
 
-    public AdminController(IStorageManager storageManager) {
+    public AdminController(IStorageManager storageManager, ILoginInfoFileManager loginInfoFileManager) {
         adminUi = new AdminUi();
         this.storageManager = storageManager;
+        this.loginInfoFileManager = loginInfoFileManager;
     }
 
     public void run() {
@@ -115,7 +118,8 @@ public class AdminController {
             break;
         }
         Student student = adminUi.getNewStudent(loginInfoForStudent.getUserId());
-        storageManager.addStudent(student, loginInfoForStudent);
+        storageManager.addStudent(student);
+        loginInfoFileManager.addLoginInfoForNewStudent(loginInfoForStudent);
         adminUi.printStudents(storageManager.getAllStudents(), "Added " + student.getName() + "!");
     }
 

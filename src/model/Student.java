@@ -55,7 +55,7 @@ public class Student implements Serializable {
         return timeTable.getWaitListCourseCodes();
     }
 
-    public TimeTable getTimeTable() {
+    protected TimeTable getTimeTable() {
         return timeTable;
     }
 

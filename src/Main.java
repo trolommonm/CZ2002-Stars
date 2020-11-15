@@ -20,7 +20,7 @@ public class Main {
         LoginInfo providedLoginInfo = lc.run();
         switch (providedLoginInfo.getAccountType()) {
         case ADMIN:
-            AdminController ac = new AdminController(storageManager);
+            AdminController ac = new AdminController(storageManager, loginInfoFileManager);
             ac.run();
             break;
         case STUDENT:

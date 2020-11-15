@@ -1,6 +1,10 @@
 package filemanager;
 
-import model.*;
+import model.AccessTime;
+import model.Course;
+import model.IndexNumber;
+import model.School;
+import model.Student;
 
 import java.util.ArrayList;
 
@@ -41,13 +45,11 @@ public interface IStorageManager {
 
     ArrayList<Course> getAllCourses();
 
-    void addStudent(Student student, LoginInfo loginInfo);
+    void addStudent(Student student);
 
     void addIndexNumber(IndexNumber indexNumber, String courseCode);
 
     Student getStudent(String userId);
 
     ArrayList<Student> getAllStudents();
-
-    void addLoginInfoForNewStudent(LoginInfo loginInfo);
 }

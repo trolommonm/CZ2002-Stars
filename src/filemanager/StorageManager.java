@@ -160,9 +160,8 @@ public class StorageManager implements IStorageManager {
     }
 
     @Override
-    public void addStudent(Student student, LoginInfo loginInfo) {
+    public void addStudent(Student student) {
         storage.addStudent(student);
-        addLoginInfoForNewStudent(loginInfo);
         save();
     }
 
@@ -180,12 +179,6 @@ public class StorageManager implements IStorageManager {
     @Override
     public ArrayList<Student> getAllStudents() {
         return storage.getAllStudents();
-    }
-
-    @Override
-    public void addLoginInfoForNewStudent(LoginInfo loginInfo) {
-        LoginInfoFileManager loginInfoFileManager = new LoginInfoFileManager();
-        loginInfoFileManager.addLoginInfoForNewStudent(loginInfo);
     }
 
     private void preload() {
