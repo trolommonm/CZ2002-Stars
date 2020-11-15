@@ -165,6 +165,10 @@ public class StudentController {
     private void changeIndex() {
         // Input the course you want to change //
         ArrayList<Course> courses = storageManager.getCoursesTakenByStudent(student);
+        if (courses.isEmpty()) {
+            studentUi.printMessageWithDivider(ErrorMessage.NO_REGISTERED_COURSES);
+            return;
+        }
         int indexStudent = studentUi.getIndexOfCourseToChange(courses);
         Course courseToBeChanged = courses.get(indexStudent);
         IndexNumber indexNumberToBeChanged = student.getRegisteredIndexNumbers().get(courseToBeChanged.getCourseCode());
@@ -189,7 +193,12 @@ public class StudentController {
     }
 
     private void swapIndex() {
-        int index = studentUi.getIndexOfCourseToSwap(student);
+        ArrayList<Course> courses = storageManager.getCoursesTakenByStudent(student);
+        if (courses.isEmpty()) {
+            studentUi.printMessageWithDivider(ErrorMessage.NO_REGISTERED_COURSES);
+            return;
+        }
+        int index = studentUi.getIndexOfCourseToChange(courses);
         Course courseToBeSwapped = storageManager.getCourse(student.getRegisteredCourseCodes().get(index));
 
         LoginInfo loginInfoOfPeer = studentUi.getLoginInfoOfPeer();

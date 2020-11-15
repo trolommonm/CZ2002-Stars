@@ -1,10 +1,14 @@
 package view;
 
 import errormessage.ErrorMessage;
+import model.AccountType;
 import model.Course;
 import model.IndexNumber;
+import model.LoginInfo;
 import model.Student;
+import utility.SHA256Hasher;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -67,10 +71,6 @@ public class Ui {
         return choice;
     }
 
-    public int getInputChoice(String message) {
-        return getInputChoice(message, new String[0]);
-    }
-
     public String[] getCoursesDescription(ArrayList<Course> courses, String message) {
         ArrayList<String> coursesDescriptionList = new ArrayList<>();
         if (message != null) {
@@ -131,6 +131,25 @@ public class Ui {
                 .collect(Collectors.toList());
         indexNumbersString.add(0, "Here are the vacancies for " + course.toString());
         printMessageWithDivider(indexNumbersString.toArray(String[]::new));
+    }
+
+    public LoginInfo getLoginInfo(AccountType accountType) {
+        Scanner sc = new Scanner(System.in);
+        Console con = System.console();
+        String userId;
+        //char[] passwordCharArray;
+        //String passwordString;
+        String password;
+
+        print("Enter user id:");
+        userId = sc.next();
+
+        print("Enter password:");
+        password = sc.next();
+        //passwordCharArray = con.readPassword();
+        //passwordString = String.valueOf(passwordCharArray);
+
+        return new LoginInfo(accountType, userId, SHA256Hasher.hash(password));
     }
 
     public String ordinal(int i) {

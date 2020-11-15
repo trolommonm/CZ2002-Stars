@@ -99,7 +99,7 @@ public class TimeTable implements Serializable {
 
     private void dropCourse(String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
         indexNumberToBeDropped.deregisterStudent(student);
-        registeredIndexNumbers.remove(indexNumberToBeDropped);
+        registeredIndexNumbers.remove(courseCodeToBeDropped);
     }
 
     public void swapIndexNumberWithPeer(String courseCodeToBeSwapped, Student peer)

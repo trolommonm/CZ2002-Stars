@@ -11,7 +11,6 @@ import exception.WrongLoginInfoException;
 public class LoginController {
     private AccountType accountType;
     private LoginUi loginUi;
-    private LoginInfo providedLoginInfo;
     private ILoginable loginManager;
     private IStorageManager storageManager;
 
@@ -21,7 +20,8 @@ public class LoginController {
         this.loginManager = loginManager;
     }
 
-    public AccountType run() {
+    public LoginInfo run() {
+        LoginInfo providedLoginInfo;
         while (true) {
             accountType = loginUi.getAccountType();
             providedLoginInfo = loginUi.getLoginInfo(accountType);
@@ -34,12 +34,7 @@ public class LoginController {
             }
         }
 
-        return accountType;
-    }
-
-    public String getUserId() {
-        assert providedLoginInfo != null : "Error: providedLoginInfo is not initialized!";
-        return providedLoginInfo.getUserId();
+        return providedLoginInfo;
     }
 
 }

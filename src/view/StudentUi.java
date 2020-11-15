@@ -7,7 +7,6 @@ import model.IndexNumber;
 import model.LoginInfo;
 import model.Student;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -159,22 +158,7 @@ public class StudentUi extends Ui {
     }
 
     public LoginInfo getLoginInfoOfPeer() {
-        Scanner sc = new Scanner(System.in);
-        Console con = System.console();
-        String userId;
-        //char[] passwordCharArray;
-        //String passwordString;
-        String password;
-
-        print("Enter your peer's user id:");
-        userId = sc.next();
-
-        print("Enter your peer's password:");
-        password = sc.next();
-        //passwordCharArray = con.readPassword();
-        //passwordString = String.valueOf(passwordCharArray);
-
-        return new LoginInfo(AccountType.STUDENT, userId, password);
+        return getLoginInfo(AccountType.STUDENT);
     }
 }
 

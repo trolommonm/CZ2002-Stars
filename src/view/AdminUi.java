@@ -3,7 +3,6 @@ package view;
 import errormessage.ErrorMessage;
 import exception.InvalidLessonTypeException;
 import exception.InvalidAccessTimeException;
-import filemanager.LoginInfoFileManager;
 import model.AccessTime;
 import model.AccountType;
 import model.Course;
@@ -152,16 +151,7 @@ public class AdminUi extends Ui {
     }
 
     public LoginInfo getLoginInfo() {
-        Scanner sc = new Scanner(System.in);
-        String userId;
-
-        print("Enter the user id for the new student:");
-        userId = sc.next().trim();
-        sc.nextLine();
-
-        print("Enter the password for the new student:");
-        String password = sc.nextLine();
-        return new LoginInfo(AccountType.STUDENT, userId, password);
+        return getLoginInfo(AccountType.STUDENT);
     }
 
     public AccessTime getAccessTime(String currentAccessPeriodMessage,

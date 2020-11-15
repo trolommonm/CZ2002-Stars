@@ -1,12 +1,8 @@
 package view;
 
 import errormessage.ErrorMessage;
-import model.LoginInfo;
 
 import model.AccountType;
-
-import java.io.Console;
-import java.util.Scanner;
 
 public class LoginUi extends Ui {
     private final String STARS_LOGO = "  _________________________ __________  _________\n" +
@@ -52,25 +48,6 @@ public class LoginUi extends Ui {
         }
 
         return accountType;
-    }
-
-    public LoginInfo getLoginInfo(AccountType accountType) {
-        Scanner sc = new Scanner(System.in);
-        Console con = System.console();
-        String userId;
-        //char[] passwordCharArray;
-        //String passwordString;
-        String password;
-
-        print("Enter user id:");
-        userId = sc.next();
-
-        print("Enter password:");
-        password = sc.next();
-        //passwordCharArray = con.readPassword();
-        //passwordString = String.valueOf(passwordCharArray);
-
-        return new LoginInfo(accountType, userId, password);
     }
 
 }
