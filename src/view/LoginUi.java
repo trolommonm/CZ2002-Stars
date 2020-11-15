@@ -22,13 +22,6 @@ public class LoginUi extends Ui {
         print(WELCOME_MESSAGE);
     }
 
-    public void printLoginMessage() {
-        printMessageWithDivider(
-                "1. Student Login",
-                "2. Admin Login"
-        );
-    }
-
     public AccountType getAccountType() {
         int choice;
         AccountType accountType;

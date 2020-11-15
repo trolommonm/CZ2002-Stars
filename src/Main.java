@@ -7,7 +7,6 @@ import filemanager.IStorageManager;
 import filemanager.LoginInfoFileManager;
 import filemanager.LoginManager;
 import filemanager.StorageManager;
-import model.AccountType;
 import model.LoginInfo;
 
 public class Main {
