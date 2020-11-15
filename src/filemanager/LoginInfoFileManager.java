@@ -1,5 +1,6 @@
 package filemanager;
 
+import model.AccountType;
 import model.LoginInfo;
 
 import java.io.File;
@@ -9,7 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class LoginInfoFileManager {
+public class LoginInfoFileManager implements ILoginInfoFileManager {
     private File studentLoginInfoFile;
     private File adminLoginInfoFile;
 
@@ -18,27 +19,39 @@ public class LoginInfoFileManager {
         studentLoginInfoFile = new File("data/StudentLoginInfo.txt");
     }
 
-    public void addLoginInfoForNewStudent(LoginInfo loginInfo) throws IOException {
-        FileWriter fw = new FileWriter(studentLoginInfoFile,true);
-        fw.write(loginInfo.getUserId() + "|" + loginInfo.getPassword());
-        fw.close();
+    @Override
+    public void addLoginInfoForNewStudent(LoginInfo loginInfo) {
+        try {
+            FileWriter fw = new FileWriter(studentLoginInfoFile, true);
+            fw.write(loginInfo.getUserId() + "|" + loginInfo.getPassword());
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public ArrayList<LoginInfo> retrieveStudentLoginInfoList() throws FileNotFoundException {
-        return retrieveLoginInfoList(studentLoginInfoFile);
+    @Override
+    public ArrayList<LoginInfo> retrieveStudentLoginInfoList() {
+        return retrieveLoginInfoList(studentLoginInfoFile, AccountType.STUDENT);
     }
 
-    public ArrayList<LoginInfo> retrieveAdminLoginInfoList() throws FileNotFoundException {
-        return retrieveLoginInfoList(adminLoginInfoFile);
+    @Override
+    public ArrayList<LoginInfo> retrieveAdminLoginInfoList() {
+        return retrieveLoginInfoList(adminLoginInfoFile, AccountType.ADMIN);
     }
 
-    private ArrayList<LoginInfo> retrieveLoginInfoList(File file) throws FileNotFoundException {
-        Scanner sc = new Scanner(file);
+    private ArrayList<LoginInfo> retrieveLoginInfoList(File file, AccountType accountType) {
         ArrayList<LoginInfo> adminLoginInfoList = new ArrayList<>();
+        try {
+            Scanner sc = new Scanner(file);
 
-        while (sc.hasNext()) {
-            String[] lineSplit = sc.nextLine().split("\\|");
-            adminLoginInfoList.add(new LoginInfo(lineSplit[0], lineSplit[1]));
+            while (sc.hasNext()) {
+                String[] lineSplit = sc.nextLine().split("\\|");
+                adminLoginInfoList.add(new LoginInfo(accountType, lineSplit[0], lineSplit[1]));
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
         return adminLoginInfoList;
