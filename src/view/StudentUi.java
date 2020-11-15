@@ -1,10 +1,15 @@
 package view;
 
 import errormessage.ErrorMessage;
-import model.*;
+import model.AccountType;
+import model.Course;
+import model.IndexNumber;
+import model.LoginInfo;
+import model.Student;
 
 import java.io.Console;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class StudentUi extends Ui {
     private final String[] studentMenuOptions = {
@@ -169,7 +174,7 @@ public class StudentUi extends Ui {
         //passwordCharArray = con.readPassword();
         //passwordString = String.valueOf(passwordCharArray);
 
-        return new LoginInfo(userId, password);
+        return new LoginInfo(AccountType.STUDENT, userId, password);
     }
 }
 

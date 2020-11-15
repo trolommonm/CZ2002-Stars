@@ -4,15 +4,25 @@ import errormessage.ErrorMessage;
 import exception.InvalidLessonTypeException;
 import exception.InvalidAccessTimeException;
 import filemanager.LoginInfoFileManager;
-import model.*;
-import model.School;
-import model.LessonType;
+import model.AccessTime;
+import model.AccountType;
+import model.Course;
 import model.Gender;
+import model.IndexNumber;
+import model.Lesson;
+import model.LessonType;
+import model.LoginInfo;
+import model.School;
+import model.Student;
 
-import java.io.FileNotFoundException;
-import java.time.*;
+import java.time.DateTimeException;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class AdminUi extends Ui {
     private final String[] adminMenuOptions = {
@@ -144,34 +154,14 @@ public class AdminUi extends Ui {
     public LoginInfo getLoginInfo() {
         Scanner sc = new Scanner(System.in);
         String userId;
-        while (true) {
-            print("Enter the user id for the new student:");
-            userId = sc.next().trim();
-            sc.nextLine();
-            if (checkUserIdExists(userId)) {
-                printErrorMessage(ErrorMessage.USER_ID_EXISTS);
-                continue;
-            }
-            break;
-        }
+
+        print("Enter the user id for the new student:");
+        userId = sc.next().trim();
+        sc.nextLine();
+
         print("Enter the password for the new student:");
         String password = sc.nextLine();
-        return new LoginInfo(userId, password);
-    }
-
-    private boolean checkUserIdExists(String userId) {
-        LoginInfoFileManager loginInfoFileManager = new LoginInfoFileManager();
-        try {
-            for (LoginInfo loginInfo: loginInfoFileManager.retrieveStudentLoginInfoList()) {
-                if (loginInfo.getUserId().equals(userId)) {
-                    return true;
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+        return new LoginInfo(AccountType.STUDENT, userId, password);
     }
 
     public AccessTime getAccessTime(String currentAccessPeriodMessage,

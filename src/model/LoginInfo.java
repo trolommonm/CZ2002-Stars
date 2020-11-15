@@ -4,11 +4,12 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class LoginInfo {
-
+    private AccountType accountType;
     private String userId;
     private String password;
 
-    public LoginInfo(String userId, String password) {
+    public LoginInfo(AccountType accountType, String userId, String password) {
+        this.accountType = accountType;
         this.userId = userId;
         this.password = hash(password);
     }
@@ -19,6 +20,10 @@ public class LoginInfo {
 
     public String getUserId() {
         return userId;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
     }
 
     private String hash(String password) {
@@ -48,7 +53,8 @@ public class LoginInfo {
             LoginInfo loginInfoObj = (LoginInfo) obj;
 
             return getUserId().equals(loginInfoObj.getUserId()) &&
-                    getPassword().equals(loginInfoObj.getPassword());
+                    getPassword().equals(loginInfoObj.getPassword()) &&
+                    getAccountType().equals(loginInfoObj.getAccountType());
         }
 
         return false;

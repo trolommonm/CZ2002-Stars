@@ -1,14 +1,12 @@
 package controller;
 
 import errormessage.ErrorMessage;
-import filemanager.LoginInfoFileManager;
-import filemanager.LoginManager;
-import filemanager.StorageManager;
+import filemanager.ILoginable;
+import filemanager.IStorageManager;
 import model.Course;
 import model.IndexNumber;
 import model.LoginInfo;
 import model.Student;
-import model.AccountType;
 import view.StudentUi;
 import exception.CourseRegisteredException;
 import exception.ClashingRegisteredIndexNumberException;
@@ -22,20 +20,19 @@ import exception.ClashingWaitListedIndexNumberException;
 import exception.PeerClashingRegisteredIndexNumberException;
 import exception.PeerClashingWaitListedIndexNumberException;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class StudentController {
     private Student student;
     private StudentUi studentUi;
-    private StorageManager storageManager;
-    private LoginManager loginManager;
+    private IStorageManager storageManager;
+    private ILoginable loginManager;
 
-    public StudentController(String userId) {
+    public StudentController(String userId, IStorageManager storageManager, ILoginable loginManager) {
         studentUi = new StudentUi();
-        storageManager = new StorageManager();
+        this.storageManager = storageManager;
         student = storageManager.getStudent(userId);
-        loginManager = new LoginManager(new LoginInfoFileManager(), storageManager);
+        this.loginManager = loginManager;
     }
 
     public void run() {
@@ -94,6 +91,8 @@ public class StudentController {
             studentUi.printMessageWithDivider(e.getMessage());
             storageManager.addCourseToWaitList(student.getUserId(), courseToBeAdded.getCourseCode(),
                     indexNumberToBeAdded);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -111,9 +110,7 @@ public class StudentController {
             String messageSuccess = "You have successfully dropped the course:\n\n"
                     + courseToBeDropped.toString() + "\n\n" + indexNumber.getFullDescription();
             studentUi.printMessageWithDivider(messageSuccess, "An email will be sent to you");
-        } catch (NoVacancyException | CourseInWaitListException |
-                ClashingRegisteredIndexNumberException | CourseRegisteredException
-                | ClashingWaitListedIndexNumberException e) {
+        } catch (Exception e) {
             assert false : "These exceptions should have already been accounted for when you add the course into wait list...";
         }
     }
@@ -186,6 +183,8 @@ public class StudentController {
                     "An email will be sent to you.");
         } catch (NoVacancySwapException | ClashingRegisteredIndexNumberException | SameIndexNumberSwapException e) {
             studentUi.printErrorMessage(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -195,8 +194,8 @@ public class StudentController {
 
         LoginInfo loginInfoOfPeer = studentUi.getLoginInfoOfPeer();
         try {
-            loginManager.verifyLoginInfo(AccountType.STUDENT, loginInfoOfPeer);
-        } catch (FileNotFoundException | WrongLoginInfoException e) {
+            loginManager.verifyLoginInfo(loginInfoOfPeer);
+        } catch (WrongLoginInfoException e) {
             studentUi.printErrorMessage(e.getMessage());
             return;
         } catch (WrongAccessPeriodException e) {
@@ -226,6 +225,8 @@ public class StudentController {
                 | ClashingRegisteredIndexNumberException | PeerClashingWaitListedIndexNumberException
                 | ClashingWaitListedIndexNumberException e) {
             studentUi.printErrorMessage(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -1,26 +1,25 @@
 package filemanager;
 
-import model.AccountType;
 import model.LoginInfo;
 import exception.WrongLoginInfoException;
 import exception.WrongAccessPeriodException;
 
-import java.io.FileNotFoundException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class LoginManager {
-    private LoginInfoFileManager loginInfoFileManager;
-    private StorageManager storageManager;
+public class LoginManager implements ILoginable {
+    private ILoginInfoFileManager loginInfoFileManager;
+    private IStorageManager storageManager;
 
-    public LoginManager(LoginInfoFileManager loginInfoFileManager, StorageManager storageManager) {
+    public LoginManager(ILoginInfoFileManager loginInfoFileManager, IStorageManager storageManager) {
         this.loginInfoFileManager = loginInfoFileManager;
         this.storageManager = storageManager;
     }
 
-    public void verifyLoginInfo(AccountType accountType, LoginInfo providedLoginInfo)
-        throws FileNotFoundException, WrongLoginInfoException, WrongAccessPeriodException {
-        switch (accountType) {
+    @Override
+    public void verifyLoginInfo(LoginInfo providedLoginInfo)
+        throws WrongLoginInfoException, WrongAccessPeriodException {
+        switch (providedLoginInfo.getAccountType()) {
             case ADMIN:
                 verifyAdminLoginInfo(providedLoginInfo);
                 break;
@@ -33,7 +32,7 @@ public class LoginManager {
     }
 
     private void verifyStudentLoginInfo(LoginInfo providedLoginInfo)
-            throws WrongAccessPeriodException, WrongLoginInfoException, FileNotFoundException {
+            throws WrongAccessPeriodException, WrongLoginInfoException {
         ArrayList<LoginInfo> loginInfoList = loginInfoFileManager.retrieveStudentLoginInfoList();
         for (LoginInfo loginInfo: loginInfoList) {
             if (loginInfo.equals(providedLoginInfo)) {
@@ -48,7 +47,7 @@ public class LoginManager {
         throw new WrongLoginInfoException();
     }
 
-    private void verifyAdminLoginInfo(LoginInfo providedLoginInfo) throws FileNotFoundException, WrongLoginInfoException {
+    private void verifyAdminLoginInfo(LoginInfo providedLoginInfo) throws WrongLoginInfoException {
         ArrayList<LoginInfo> loginInfoList = loginInfoFileManager.retrieveAdminLoginInfoList();
         for (LoginInfo loginInfo: loginInfoList) {
             if (loginInfo.equals(providedLoginInfo)) {

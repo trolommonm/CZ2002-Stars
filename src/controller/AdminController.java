@@ -1,7 +1,8 @@
 package controller;
 
 import errormessage.ErrorMessage;
-import filemanager.StorageManager;
+import filemanager.IStorageManager;
+import filemanager.LoginInfoFileManager;
 import model.Course;
 import model.LoginInfo;
 import model.Student;
@@ -11,11 +12,11 @@ import java.util.ArrayList;
 
 public class AdminController {
     private AdminUi adminUi;
-    private StorageManager storageManager;
+    private IStorageManager storageManager;
 
-    public AdminController() {
+    public AdminController(IStorageManager storageManager) {
         adminUi = new AdminUi();
-        storageManager = new StorageManager();
+        this.storageManager = storageManager;
     }
 
     public void run() {
@@ -104,10 +105,29 @@ public class AdminController {
     }
 
     private void addStudent() {
-        LoginInfo loginInfoForStudent = adminUi.getLoginInfo();
+        LoginInfo loginInfoForStudent;
+        while (true) {
+            loginInfoForStudent = adminUi.getLoginInfo();
+            if (checkUserIdExists(loginInfoForStudent.getUserId())) {
+                adminUi.printErrorMessage(ErrorMessage.USER_ID_EXISTS);
+                continue;
+            }
+            break;
+        }
         Student student = adminUi.getNewStudent(loginInfoForStudent.getUserId());
         storageManager.addStudent(student, loginInfoForStudent);
         adminUi.printStudents(storageManager.getAllStudents(), "Added " + student.getName() + "!");
+    }
+
+    private boolean checkUserIdExists(String userId) {
+        LoginInfoFileManager loginInfoFileManager = new LoginInfoFileManager();
+        for (LoginInfo loginInfo: loginInfoFileManager.retrieveStudentLoginInfoList()) {
+            if (loginInfo.getUserId().equals(userId)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void printStudentsByIndexNumber() {

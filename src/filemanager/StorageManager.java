@@ -1,6 +1,5 @@
 package filemanager;
 
-import model.*;
 import exception.CourseRegisteredException;
 import exception.ClashingRegisteredIndexNumberException;
 import exception.NoVacancyException;
@@ -10,8 +9,25 @@ import exception.SameIndexNumberSwapException;
 import exception.ClashingWaitListedIndexNumberException;
 import exception.PeerClashingWaitListedIndexNumberException;
 import exception.PeerClashingRegisteredIndexNumberException;
+import model.AccessTime;
+import model.Course;
+import model.Gender;
+import model.IndexNumber;
+import model.Lesson;
+import model.LessonType;
+import model.LoginInfo;
+import model.School;
+import model.Storage;
+import model.Student;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InvalidClassException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -21,24 +37,14 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class StorageManager {
+public class StorageManager implements IStorageManager {
     private Storage storage;
 
     public StorageManager() {
         load();
     }
 
-    public ArrayList<Student> getStudentsInCourse(Course course) {
-        ArrayList<Student> students = new ArrayList<>();
-        for (IndexNumber indexNumber: course.getIndexNumbers()) {
-            for (Student student: indexNumber.getRegisteredStudents()) {
-                students.add(student);
-            }
-        }
-
-        return students;
-    }
-
+    @Override
     public ArrayList<Course> getCoursesTakenByStudent(Student student) {
         ArrayList<Course> courses = new ArrayList<>();
         for (String courseCode: student.getRegisteredCourseCodes()) {
@@ -48,6 +54,7 @@ public class StorageManager {
         return courses;
     }
 
+    @Override
     public ArrayList<Course> getCoursesInWaitListByStudent(Student student) {
         ArrayList<Course> courses = new ArrayList<>();
         for (String courseCode: student.getWaitListCourseCodes()) {
@@ -57,21 +64,25 @@ public class StorageManager {
         return courses;
     }
 
+    @Override
     public void addCourse(Course course) {
         storage.addCourse(course);
         save();
     }
 
+    @Override
     public Course getCourse(String courseCode) {
         return storage.getCourse(courseCode);
     }
 
+    @Override
     public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
             throws CourseRegisteredException, ClashingRegisteredIndexNumberException, NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException {
         storage.registerForCourse(userId, courseCodeToBeAdded, indexNumberToBeAdded);
         save();
     }
 
+    @Override
     public void dropCourseAndRegisterNextStudentInWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
             CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException {
@@ -79,12 +90,14 @@ public class StorageManager {
         save();
     }
 
+    @Override
     public void swapIndexNumber(String userId, String courseCodeToBeSwapped, IndexNumber newIndexNumber)
             throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
         storage.swapIndexNumber(userId, courseCodeToBeSwapped, newIndexNumber);
         save();
     }
 
+    @Override
     public void swapIndexWithPeer(String userId, String peerUserId, String courseCodeToBeSwapped)
             throws SameIndexNumberSwapException, ClashingWaitListedIndexNumberException,
             PeerClashingRegisteredIndexNumberException, ClashingRegisteredIndexNumberException,
@@ -93,21 +106,25 @@ public class StorageManager {
         save();
     }
 
+    @Override
     public void dropCourseFromWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
         storage.dropCourseFromWaitList(userId, courseCodeToBeDropped, indexNumberToBeDropped);
         save();
     }
 
+    @Override
     public void addCourseToWaitList(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
         storage.addCourseToWaitList(userId, courseCodeToBeAdded, indexNumberToBeAdded);
         save();
     }
 
+    @Override
     public void setNewAccessTime(String userId, AccessTime newAccessTime) {
         storage.setAccessTime(userId, newAccessTime);
         save();
     }
 
+    @Override
     public void setNewCourseCode(String newCourseCode, String forCourseCode) {
         Course oldCourse = getCourse(forCourseCode);
         Course updatedCourse = new Course(oldCourse.getCourseName(), newCourseCode, oldCourse.getSchool());
@@ -119,51 +136,56 @@ public class StorageManager {
         save();
     }
 
+    @Override
     public void setNewCourseName(String newCourseName, String forCourseCode) {
         getCourse(forCourseCode).setCourseName(newCourseName);
         save();
     }
 
+    @Override
     public void setNewSchool(School newSchool, String forCourseCode) {
         getCourse(forCourseCode).setSchool(newSchool);
         save();
     }
 
+    @Override
     public void setNewMaxVacancy(String courseCode, int index, int newMaxVacancy) throws Exception {
         getCourse(courseCode).getIndexNumbers().get(index).setMaxVacancy(newMaxVacancy);
         save();
     }
 
+    @Override
     public ArrayList<Course> getAllCourses() {
         return storage.getAllCourses();
     }
 
+    @Override
     public void addStudent(Student student, LoginInfo loginInfo) {
         storage.addStudent(student);
         addLoginInfoForNewStudent(loginInfo);
         save();
     }
 
+    @Override
     public void addIndexNumber(IndexNumber indexNumber, String courseCode) {
         storage.addIndexNumber(indexNumber, courseCode);
         save();
     }
 
+    @Override
     public Student getStudent(String userId) {
         return storage.getStudent(userId);
     }
 
+    @Override
     public ArrayList<Student> getAllStudents() {
         return storage.getAllStudents();
     }
 
+    @Override
     public void addLoginInfoForNewStudent(LoginInfo loginInfo) {
-        try {
-            LoginInfoFileManager loginInfoFileManager = new LoginInfoFileManager();
-            loginInfoFileManager.addLoginInfoForNewStudent(loginInfo);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        LoginInfoFileManager loginInfoFileManager = new LoginInfoFileManager();
+        loginInfoFileManager.addLoginInfoForNewStudent(loginInfo);
     }
 
     private void preload() {

@@ -54,7 +54,7 @@ public class LoginUi extends Ui {
         return accountType;
     }
 
-    public LoginInfo getLoginInfo() {
+    public LoginInfo getLoginInfo(AccountType accountType) {
         Scanner sc = new Scanner(System.in);
         Console con = System.console();
         String userId;
@@ -70,7 +70,7 @@ public class LoginUi extends Ui {
         //passwordCharArray = con.readPassword();
         //passwordString = String.valueOf(passwordCharArray);
 
-        return new LoginInfo(userId, password);
+        return new LoginInfo(accountType, userId, password);
     }
 
 }
