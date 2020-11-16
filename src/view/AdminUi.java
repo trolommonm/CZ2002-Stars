@@ -63,43 +63,65 @@ public class AdminUi extends Ui {
         printMessageWithDivider(getStudentsDescription(students, message));
     }
 
-    public void printStudentsByIndexNumber(ArrayList<Course> courses) {
-        for (Course course: courses) {
-            String s = "Course: " + course.toString() + "\n\n";
-            for (IndexNumber indexNumber: course.getIndexNumbers()) {
-                s += indexNumber.toString() + "\n";
-                s += "Registered Students:\n";
-                for (Student student: indexNumber.getRegisteredStudents()) {
-                    s += student.toString() + "\n";
-                }
-                s += "\n";
-
-                s += "Wait List Students:\n";
-                for (Student student: indexNumber.getWaitListStudents()) {
-                    s += student.toString() + "\n";
-                }
-                s += "\n";
+    public int getIndexOfIndexNumberToPrint(ArrayList<IndexNumber> indexNumbers) {
+        int index;
+        while (true) {
+            index = getInputChoice("Which index number would you like to print the students?",
+                    getIndexNumbersDescription(indexNumbers, "Here are the list of index numbers:"));
+            if (index < 1 || index > indexNumbers.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
             }
-            printMessageWithDivider(s);
+            break;
         }
+        return index - 1;
     }
 
-    public void printStudentsByCourse(ArrayList<Course> courses) {
-        for (Course course: courses) {
-            String s = "Course: " + course.toString() + "\n\n";
-            s += "Registered Students:\n";
-            for (Student student: course.getRegisteredStudents()) {
-                s += student.toString() + "\n";
-            }
-            s += "\n";
-
-            s += "Wait List Students:\n";
-            for (Student student: course.getWaitListStudents()) {
-                s += student.toString() + "\n";
-            }
-            s += "\n";
-            printMessageWithDivider(s);
+    public void printStudentsByIndexNumber(IndexNumber indexNumber) {
+        String s = "Course: " + indexNumber.getCourse().toString() + "\n\n";
+        s += indexNumber.toString() + "\n";
+        s += "Registered Students:\n";
+        for (Student student: indexNumber.getRegisteredStudents()) {
+            s += student.toString() + "\n";
         }
+        s += "\n";
+
+        s += "Wait List Students:\n";
+        for (Student student: indexNumber.getWaitListStudents()) {
+            s += student.toString() + "\n";
+        }
+        s += "\n";
+        printMessageWithDivider(s);
+    }
+
+    public int getIndexOfCourseToPrint(ArrayList<Course> courses) {
+        int index;
+        while (true) {
+            index = getInputChoice("Which course would you like to print the students?",
+                    getCoursesDescription(courses, "Here are the list of courses:"));
+            if (index < 1 || index > courses.size()) {
+                printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
+                continue;
+            }
+            break;
+        }
+        return index - 1;
+    }
+
+    public void printStudentsByCourse(Course course) {
+        String s = "Course: " + course.toString() + "\n\n";
+        s += "Registered Students:\n";
+        for (Student student: course.getRegisteredStudents()) {
+            s += student.toString() + "\n";
+        }
+        s += "\n";
+
+        s += "Wait List Students:\n";
+        for (Student student: course.getWaitListStudents()) {
+            s += student.toString() + "\n";
+        }
+        s += "\n";
+        printMessageWithDivider(s);
     }
 
     public int getMenuInputChoice() {

@@ -5,10 +5,12 @@ import filemanager.ILoginInfoFileManager;
 import filemanager.IStorageManager;
 import filemanager.LoginInfoFileManager;
 import model.Course;
+import model.IndexNumber;
 import model.LoginInfo;
 import model.Student;
 import view.AdminUi;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AdminController {
@@ -134,11 +136,23 @@ public class AdminController {
         return false;
     }
 
-    private void printStudentsByIndexNumber() {
-        adminUi.printStudentsByIndexNumber(storageManager.getAllCourses());
+    private void printStudentsByCourses() {
+        ArrayList<Course> allCourses = storageManager.getAllCourses();
+        int index = adminUi.getIndexOfCourseToPrint(allCourses);
+        Course selectedCourse = allCourses.get(index);
+        adminUi.printStudentsByCourse(selectedCourse);
     }
 
-    private void printStudentsByCourses() {
-        adminUi.printStudentsByCourse(storageManager.getAllCourses());
+    private void printStudentsByIndexNumber() {
+        ArrayList<Course> allCourses = storageManager.getAllCourses();
+        int index = adminUi.getIndexOfCourseToPrint(allCourses);
+
+        Course selectedCourse = allCourses.get(index);
+        index = adminUi.getIndexOfIndexNumberToPrint(selectedCourse.getIndexNumbers());
+
+        ArrayList<IndexNumber> allIndexNumbers = selectedCourse.getIndexNumbers();
+        IndexNumber indexNumberSelected = allIndexNumbers.get(index);
+
+        adminUi.printStudentsByIndexNumber(indexNumberSelected);
     }
 }
