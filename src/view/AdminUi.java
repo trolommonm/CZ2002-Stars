@@ -22,6 +22,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AdminUi extends Ui {
     private final String[] adminMenuOptions = {
@@ -151,8 +153,18 @@ public class AdminUi extends Ui {
     }
 
     public LoginInfo getLoginInfo() {
-        return getLoginInfo(AccountType.STUDENT);
-    }
+        LoginInfo loginInfo;
+        while (true) {
+            loginInfo = getLoginInfo(AccountType.STUDENT);
+            Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+            Matcher m = p.matcher(loginInfo.getUserId());
+            if (m.find()) {
+                printErrorMessage("Please enter a valid user id! (no special characters e.g. *, !, {)");
+                continue;
+            }
+            break;
+        }
+        return loginInfo;    }
 
     public AccessTime getAccessTime(String currentAccessPeriodMessage,
                                     String newStartMessage, String newEndMessage) {
@@ -219,8 +231,20 @@ public class AdminUi extends Ui {
 
     public String getCourseCode(String message) {
         Scanner sc = new Scanner(System.in);
-        print(message);
-        String courseCode = sc.next();
+        String courseCode;
+
+        while (true) {
+            print(message);
+            courseCode = sc.next();
+
+            Pattern p = Pattern.compile("[^a-z0-9 ]", Pattern.CASE_INSENSITIVE);
+            Matcher m = p.matcher(courseCode);
+            if (m.find()) {
+                printErrorMessage("Please enter a valid course code! (no special characters e.g. *, !, {)");
+                continue;
+            }
+            break;
+        }
 
         return courseCode;
     }
@@ -321,7 +345,7 @@ public class AdminUi extends Ui {
                 print(message);
                 int maxVacancy = sc.nextInt();
                 return maxVacancy;
-            } catch (NumberFormatException e) {
+            } catch (InputMismatchException e) {
                 printErrorMessage(ErrorMessage.INVALID_MAX_VACANCY);
             }
         }

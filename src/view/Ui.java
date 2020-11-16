@@ -137,19 +137,19 @@ public class Ui {
         Scanner sc = new Scanner(System.in);
         Console con = System.console();
         String userId;
-        //char[] passwordCharArray;
-        //String passwordString;
-        String password;
+        char[] passwordCharArray;
+        String passwordString;
+        //String password;
 
         print("Enter user id:");
         userId = sc.next();
 
         print("Enter password:");
-        password = sc.next();
-        //passwordCharArray = con.readPassword();
-        //passwordString = String.valueOf(passwordCharArray);
+        //password = sc.next();
+        passwordCharArray = con.readPassword();
+        passwordString = String.valueOf(passwordCharArray);
 
-        return new LoginInfo(accountType, userId, SHA256Hasher.hash(password));
+        return new LoginInfo(accountType, userId, SHA256Hasher.hash(passwordString));
     }
 
     public String ordinal(int i) {

@@ -204,6 +204,9 @@ public class StorageManager implements IStorageManager {
 
         File[] courseFiles = new File("data/preload/Courses").listFiles();
         for (File file: courseFiles) {
+            if (file.getName().startsWith(".")) {
+                continue;
+            }
             try {
                 Scanner sc = new Scanner(file);
                 Course course = parseCourseFromTxt(sc.nextLine());
