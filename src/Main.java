@@ -30,7 +30,6 @@ public class Main {
         default:
             assert false : "Invalid accountType returned from LoginController!";
         }
-
     }
 
 }

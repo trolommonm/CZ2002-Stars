@@ -10,7 +10,6 @@ import model.LoginInfo;
 import model.Student;
 import view.AdminUi;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AdminController {
@@ -61,7 +60,15 @@ public class AdminController {
     }
 
     private void addCourse() {
-        Course course = adminUi.getCourseToAdd();
+        Course course;
+        while (true) {
+            course = adminUi.getCourseToAdd();
+            if (checkCourseCodeExists(course.getCourseCode())) {
+                adminUi.printErrorMessage(ErrorMessage.COURSE_CODE_EXISTS);
+                continue;
+            }
+            break;
+        }
         storageManager.addCourse(course);
         adminUi.printCourses(storageManager.getAllCourses(), "Added " + course.toString() + "!");
     }
@@ -131,6 +138,14 @@ public class AdminController {
             if (loginInfo.getUserId().equals(userId)) {
                 return true;
             }
+        }
+
+        return false;
+    }
+
+    private boolean checkCourseCodeExists(String courseCode) {
+        if (storageManager.getCourse(courseCode) != null) {
+            return true;
         }
 
         return false;
