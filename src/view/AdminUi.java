@@ -361,9 +361,9 @@ public class AdminUi extends Ui {
     }
 
     private int getMaxVacancy(String message) {
-        Scanner sc = new Scanner(System.in);
         while (true) {
             try {
+                Scanner sc = new Scanner(System.in);
                 print(message);
                 int maxVacancy = sc.nextInt();
                 return maxVacancy;
@@ -388,7 +388,15 @@ public class AdminUi extends Ui {
                 }
                 int id = Integer.parseInt(input);
 
-                int maxVacancy = getMaxVacancy("Enter the maximum vacancy of this index:");
+                int maxVacancy;
+                while (true) {
+                    maxVacancy = getMaxVacancy("Enter the maximum vacancy of this index:");
+                    if (maxVacancy <= 0) {
+                        printErrorMessage(ErrorMessage.INVALID_MAX_VACANCY);
+                        continue;
+                    }
+                    break;
+                }
 
                 ArrayList<Lesson> lessons = getLessons(id);
 
@@ -451,7 +459,7 @@ public class AdminUi extends Ui {
                 time = LocalTime.of(Integer.parseInt(startTimeString.substring(0, 2)),
                         Integer.parseInt(startTimeString.substring(2)));
                 break;
-            } catch (NumberFormatException | DateTimeException e) {
+            } catch (NumberFormatException | DateTimeException | StringIndexOutOfBoundsException e) {
                 printErrorMessage(ErrorMessage.INVALID_TIME);
             }
         }
@@ -461,13 +469,13 @@ public class AdminUi extends Ui {
 
     private ArrayList<Lesson> getLessons(int id) {
         ArrayList<Lesson> lessons = new ArrayList<>();
-        Scanner sc = new Scanner(System.in);
         int counter = 1;
         getLessonLoop: while (true) {
             print(ordinal(counter) + " Lesson for index " + id);
 
             LessonType lessonType;
             getLessonTypeLoop: while(true) {
+                Scanner sc = new Scanner(System.in);
                 print("Enter the type of lesson " + LessonType.getAllLessonType()
                         + " (Enter Q if you are done):");
 
@@ -485,6 +493,7 @@ public class AdminUi extends Ui {
 
             DayOfWeek dayOfWeek;
             while (true) {
+                Scanner sc = new Scanner(System.in);
                 print("1. Monday\n" + "2. Tuesday\n" +
                         "3. Wednesday\n" + "4. Thursday\n" +
                         "5. Friday\n" + "6. Saturday\n" + "7. Sunday");
