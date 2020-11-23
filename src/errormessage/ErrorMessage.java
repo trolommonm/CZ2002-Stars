@@ -4,10 +4,6 @@ public class ErrorMessage {
     public static final String ERROR_INPUT_CHOICE = "Invalid input choice, please input a valid input choice!";
 
     // Login
-    public static final String MISSING_ADMIN_LOGIN_INFO = "AdminLogoInfo.txt is missing." +
-            "Please provide a valid login information for the Admin users!";
-    public static final String MISSING_STUDENT_LOGIN_INFO = "StudentLoginInfo.txt is missing." +
-            "Please provide a valid login information for the Student users!";
     public static final String WRONG_LOGIN_INFO = "Wrong UserID and/or Password. Please try again!";
     public static final String WRONG_ACCESS_PERIOD = "You are not authorised to access STARS! Your access period is:";
 
@@ -26,7 +22,6 @@ public class ErrorMessage {
     public static final String INVALID_GENDER_TYPE = "Invalid gender! Please try again!";
     public static final String USER_ID_EXISTS = "User id already exists! Please enter a new user id.";
     public static final String COURSE_CODE_EXISTS = "Course code already exists! Please enter a new course code.";
-    public static final String MAX_VACANCY_INVALID = "Invalid max vacancy! Max vacancy cannot be 0 or less.";
 
     // Student
     public static final String NO_REGISTERED_COURSES = "You have no registered courses!";

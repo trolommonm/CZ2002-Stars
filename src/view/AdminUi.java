@@ -384,6 +384,10 @@ public class AdminUi extends Ui {
                 Scanner sc = new Scanner(System.in);
                 print(message);
                 int maxVacancy = sc.nextInt();
+                if (maxVacancy <= 0) {
+                    printErrorMessage(ErrorMessage.INVALID_MAX_VACANCY);
+                    continue;
+                }
                 return maxVacancy;
             } catch (InputMismatchException e) {
                 printErrorMessage(ErrorMessage.INVALID_MAX_VACANCY);
