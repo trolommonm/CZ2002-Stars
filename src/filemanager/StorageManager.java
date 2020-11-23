@@ -328,7 +328,6 @@ public class StorageManager implements IStorageManager {
             oos.writeObject(storage);
             oos.close();
             fos.close();
-            System.out.println("Serialization Done!!");
         } catch (IOException e) {
             System.out.println(e);
         }
