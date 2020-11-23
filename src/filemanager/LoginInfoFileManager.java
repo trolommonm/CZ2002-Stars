@@ -23,7 +23,7 @@ public class LoginInfoFileManager implements ILoginInfoFileManager {
     public void addLoginInfoForNewStudent(LoginInfo loginInfo) {
         try {
             FileWriter fw = new FileWriter(studentLoginInfoFile, true);
-            fw.write(loginInfo.getUserId() + "|" + loginInfo.getPassword());
+            fw.write(loginInfo.getUserId() + "|" + loginInfo.getPassword() + "\n");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
