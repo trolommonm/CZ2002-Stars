@@ -244,7 +244,7 @@ public class AdminUi extends Ui {
         }
     }
 
-    public String getCourseCode() {
+    private String getCourseCode() {
         return getCourseCode("Enter course code:");
     }
 
@@ -252,7 +252,7 @@ public class AdminUi extends Ui {
         return getCourseCode("Enter the new course code (currently: " + course.getCourseCode() + "):");
     }
 
-    public String getCourseCode(String message) {
+    private String getCourseCode(String message) {
         Scanner sc = new Scanner(System.in);
         String courseCode;
 
@@ -272,7 +272,7 @@ public class AdminUi extends Ui {
         return courseCode;
     }
 
-    public String getCourseName() {
+    private String getCourseName() {
         return getCourseName("Enter course name:");
     }
 
@@ -280,7 +280,7 @@ public class AdminUi extends Ui {
         return getCourseName("Enter the new course name (currently: " + course.getCourseName() + "):");
     }
 
-    public String getCourseName(String message) {
+    private String getCourseName(String message) {
         Scanner sc = new Scanner(System.in);
         print(message);
         String courseName = sc.nextLine();
@@ -288,7 +288,7 @@ public class AdminUi extends Ui {
         return courseName;
     }
 
-    public School getSchool() {
+    private School getSchool() {
         return getSchool("Enter the school offering the course (SCSE, SSS):");
     }
 
@@ -297,7 +297,7 @@ public class AdminUi extends Ui {
                 + course.getSchool().toString() + "):");
     }
 
-    public School getSchool(String message) {
+    private School getSchool(String message) {
         Scanner sc = new Scanner(System.in);
         School school;
         getSchoolLoop: while(true) {
@@ -319,12 +319,29 @@ public class AdminUi extends Ui {
         return school;
     }
 
+    private int getAuOfCourse() {
+        int au;
+        while (true) {
+            print("Enter the number of AU of this course:");
+            try {
+                Scanner sc = new Scanner(System.in);
+                au = sc.nextInt();
+            } catch (InputMismatchException e) {
+                printErrorMessage(ErrorMessage.INVALID_AU);
+                continue;
+            }
+            break;
+        }
+        return au;
+    }
+
     public Course getCourseToAdd() {
         String courseName = getCourseName();
         String courseCode = getCourseCode();
         School school = getSchool();
+        int au = getAuOfCourse();
 
-        Course course = new Course(courseName, courseCode, school);
+        Course course = new Course(courseName, courseCode, school, au);
         course.setIndexNumbers(getIndexNumbers(course));
 
         return course;

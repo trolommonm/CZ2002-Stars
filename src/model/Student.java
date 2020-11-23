@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import exception.CourseRegisteredException;
 import exception.ClashingRegisteredIndexNumberException;
+import exception.MaxAuExceededException;
 import exception.NoVacancyException;
 import exception.NoVacancySwapException;
 import exception.CourseInWaitListException;
@@ -16,6 +17,7 @@ import exception.PeerClashingRegisteredIndexNumberException;
 import exception.PeerClashingWaitListedIndexNumberException;
 
 public class Student implements Serializable {
+    public static int maxAu = 21;
     private String name;
     private String userId;
     private String matricNumber;
@@ -83,9 +85,22 @@ public class Student implements Serializable {
         return timeTable.getWaitListIndexNumbers();
     }
 
+    public int getRegisteredAu() {
+        return timeTable.getRegisteredAu();
+    }
+
+    public int getWaitListAu() {
+        return timeTable.getWaitListAu();
+    }
+
+    public int getTotalAuInRegisteredAndWaitList() {
+        return timeTable.getTotalAuInRegisteredAndWaitList();
+    }
+
     public void registerForCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
             throws CourseRegisteredException, ClashingRegisteredIndexNumberException,
-            NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException {
+            NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException,
+            MaxAuExceededException {
         timeTable.registerForCourse(courseCodeToBeAdded, indexNumberToBeAdded);
     }
 
@@ -111,7 +126,7 @@ public class Student implements Serializable {
 
     public void dropCourseAndRegisterNextStudentInWaitList(Course course, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
-            CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException {
+            CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException, MaxAuExceededException {
         timeTable.dropCourseAndRegisterNextStudentInWaitList(course, indexNumberToBeDropped);
     }
 

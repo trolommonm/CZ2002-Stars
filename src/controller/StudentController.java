@@ -1,6 +1,7 @@
 package controller;
 
 import errormessage.ErrorMessage;
+import exception.MaxAuExceededException;
 import filemanager.ILoginable;
 import filemanager.IStorageManager;
 import model.Course;
@@ -85,7 +86,7 @@ public class StudentController {
                     + courseToBeAdded.toString() + "\n\n" + indexNumberToBeAdded.getFullDescription();
             studentUi.printMessageWithDivider(messageSuccess, "An email will be sent to you.");
         } catch (CourseRegisteredException | ClashingRegisteredIndexNumberException | CourseInWaitListException
-                | ClashingWaitListedIndexNumberException e) {
+                | ClashingWaitListedIndexNumberException | MaxAuExceededException e) {
             studentUi.printErrorMessage(e.getMessage());
         } catch (NoVacancyException e) {
             studentUi.printMessageWithDivider(e.getMessage());
@@ -132,6 +133,7 @@ public class StudentController {
     }
 
     private void printRegisteredAndWaitListCourses() {
+        String registeredAu = "You are registered for " + student.getRegisteredAu() + " AU.";
         String registeredCourses = "\n";
         int index = 1;
         for (String courseCode: student.getRegisteredCourseCodes()) {
@@ -143,8 +145,10 @@ public class StudentController {
             }
             index++;
         }
-        studentUi.printMessageWithDivider("Here are the courses you are registered for:", registeredCourses);
+        studentUi.printMessageWithDivider(registeredAu, "Here are the courses you are registered for:",
+                registeredCourses);
 
+        String waitListAu = "You have " + student.getWaitListAu() + " AU in the wait list.";
         String waitListCourses = "\n";
         for (String courseCode: student.getWaitListCourseCodes()) {
             Course course = storageManager.getCourse(courseCode);
@@ -155,7 +159,9 @@ public class StudentController {
             }
             index++;
         }
-        studentUi.printMessageWithDivider("Here are the courses on your wait list:", waitListCourses);
+        studentUi.printMessageWithDivider(waitListAu, "Here are the courses on your wait list:", waitListCourses);
+
+        studentUi.print("Your total AU (registered + wait list) is " + student.getTotalAuInRegisteredAndWaitList() + ".");
     }
 
     private void printVacancies() {

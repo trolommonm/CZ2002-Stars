@@ -8,11 +8,13 @@ public class Course implements Serializable {
     private String courseCode;
     private ArrayList<IndexNumber> indexNumbers;
     private School school;
+    private int au;
 
-    public Course(String courseName, String courseCode, School school) {
+    public Course(String courseName, String courseCode, School school, int au) {
         this.courseName = courseName;
         this.courseCode = courseCode;
         this.school = school;
+        this.au = au;
     }
 
     public ArrayList<IndexNumber> getIndexNumbers() {
@@ -31,10 +33,6 @@ public class Course implements Serializable {
         return courseCode;
     }
 
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
-    }
-
     public String getCourseName() {
         return courseName;
     }
@@ -45,6 +43,10 @@ public class Course implements Serializable {
 
     public School getSchool() {
         return school;
+    }
+
+    public int getAu() {
+        return au;
     }
 
     public void setSchool(School school) {
