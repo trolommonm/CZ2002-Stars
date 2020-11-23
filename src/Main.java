@@ -16,7 +16,7 @@ public class Main {
         ILoginInfoFileManager loginInfoFileManager = new LoginInfoFileManager();
         ILoginable loginManager = new LoginManager(loginInfoFileManager, storageManager);
 
-        LoginController lc = new LoginController(storageManager, loginManager);
+        LoginController lc = new LoginController(loginManager);
         LoginInfo providedLoginInfo = lc.run();
         switch (providedLoginInfo.getAccountType()) {
         case ADMIN:

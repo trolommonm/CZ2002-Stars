@@ -97,8 +97,9 @@ public class AdminUi extends Ui {
     public int getIndexOfCourseToPrint(ArrayList<Course> courses) {
         int index;
         while (true) {
+            String[] coursesDescription = getCoursesDescription(courses, "Here are the list of courses:");
             index = getInputChoice("Which course would you like to print the students?",
-                    getCoursesDescription(courses, "Here are the list of courses:"));
+                    coursesDescription);
             if (index < 1 || index > courses.size()) {
                 printErrorMessage(ErrorMessage.ERROR_INPUT_CHOICE);
                 continue;
