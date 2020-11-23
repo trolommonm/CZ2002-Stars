@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import exception.CourseRegisteredException;
 import exception.ClashingRegisteredIndexNumberException;
+import exception.MaxAuExceededException;
 import exception.NoVacancyException;
 import exception.NoVacancySwapException;
 import exception.CourseInWaitListException;
@@ -56,7 +57,8 @@ public class Storage implements Serializable {
     }
 
     public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
-            throws CourseRegisteredException, ClashingRegisteredIndexNumberException, NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException {
+            throws CourseRegisteredException, ClashingRegisteredIndexNumberException, NoVacancyException,
+            CourseInWaitListException, ClashingWaitListedIndexNumberException, MaxAuExceededException {
         Student student = getStudent(userId);
         student.registerForCourse(courseCodeToBeAdded, indexNumberToBeAdded);
     }
@@ -83,7 +85,7 @@ public class Storage implements Serializable {
 
     public void dropCourseAndRegisterNextStudentInWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
-            CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException {
+            CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException, MaxAuExceededException {
         Student student = getStudent(userId);
         student.dropCourseAndRegisterNextStudentInWaitList(getCourse(courseCodeToBeDropped), indexNumberToBeDropped);
     }

@@ -47,4 +47,7 @@ public class ErrorMessage {
     public static final String PEER_REGISTERED_CLASHING_INDEX = "Your peer has registered course that clashes with your index. Please try again.";
     public static final String PEER_WAITLISTED_CLASHING_INDEX ="Your peer has wait listed course that clashes with your index. Please try again.";
     public static final String INVALID_CONFIRM_SWAP_PEER = "Invalid input. Please try again.";
+    public static final String MAX_AU_EXCEEDED = "You have exceeded the maximum AU allowed! Please drop your " +
+            "\nregistered courses or wait list courses before trying again.";
+    public static final String INVALID_AU = "Invalid AU input. Please try again.";
 }

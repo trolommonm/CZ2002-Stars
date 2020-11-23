@@ -4,10 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import errormessage.ErrorMessage;
 import exception.CourseRegisteredException;
 import exception.CourseInWaitListException;
 import exception.ClashingWaitListedIndexNumberException;
 import exception.ClashingRegisteredIndexNumberException;
+import exception.MaxAuExceededException;
 import exception.NoVacancyException;
 import exception.NoVacancySwapException;
 import exception.SameIndexNumberSwapException;
@@ -42,6 +44,26 @@ public class TimeTable implements Serializable {
         return waitListIndexNumbers;
     }
 
+    public int getRegisteredAu() {
+        int registeredAu = 0;
+        for (IndexNumber indexNumber: registeredIndexNumbers.values()) {
+            registeredAu += indexNumber.getCourse().getAu();
+        }
+        return registeredAu;
+    }
+
+    public int getWaitListAu() {
+        int waitListAu = 0;
+        for (IndexNumber indexNumber: waitListIndexNumbers.values()) {
+            waitListAu += indexNumber.getCourse().getAu();
+        }
+        return waitListAu;
+    }
+
+    public int getTotalAuInRegisteredAndWaitList() {
+        return getRegisteredAu() + getWaitListAu();
+    }
+
     public ArrayList<IndexNumber> getAllIndexNumbersRegistered() {
         ArrayList<IndexNumber> indexNumbersRegistered = new ArrayList<>();
         for (IndexNumber indexNumber: registeredIndexNumbers.values()) {
@@ -60,11 +82,16 @@ public class TimeTable implements Serializable {
 
     public void registerForCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
             throws CourseRegisteredException, ClashingRegisteredIndexNumberException,
-            NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException {
+            NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException,
+            MaxAuExceededException {
         for (String courseCode: getRegisteredCourseCodes()) {
             if (courseCode.equals(courseCodeToBeAdded)) {
                 throw new CourseRegisteredException();
             }
+        }
+
+        if (getTotalAuInRegisteredAndWaitList() + indexNumberToBeAdded.getCourse().getAu() > Student.maxAu) {
+            throw new MaxAuExceededException(ErrorMessage.MAX_AU_EXCEEDED);
         }
 
         for (String courseCode: getWaitListCourseCodes()) {
@@ -215,7 +242,7 @@ public class TimeTable implements Serializable {
 
     public void dropCourseAndRegisterNextStudentInWaitList(Course course, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
-            CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException {
+            CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException, MaxAuExceededException {
         indexNumberToBeDropped.deregisterStudent(student);
         registeredIndexNumbers.remove(course.getCourseCode());
 

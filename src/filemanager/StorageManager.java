@@ -2,6 +2,7 @@ package filemanager;
 
 import exception.CourseRegisteredException;
 import exception.ClashingRegisteredIndexNumberException;
+import exception.MaxAuExceededException;
 import exception.NoVacancyException;
 import exception.NoVacancySwapException;
 import exception.CourseInWaitListException;
@@ -77,7 +78,8 @@ public class StorageManager implements IStorageManager {
 
     @Override
     public void registerForCourse(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
-            throws CourseRegisteredException, ClashingRegisteredIndexNumberException, NoVacancyException, CourseInWaitListException, ClashingWaitListedIndexNumberException {
+            throws CourseRegisteredException, ClashingRegisteredIndexNumberException, NoVacancyException,
+            CourseInWaitListException, ClashingWaitListedIndexNumberException, MaxAuExceededException {
         storage.registerForCourse(userId, courseCodeToBeAdded, indexNumberToBeAdded);
         save();
     }
@@ -85,7 +87,7 @@ public class StorageManager implements IStorageManager {
     @Override
     public void dropCourseAndRegisterNextStudentInWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
-            CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException {
+            CourseRegisteredException, NoVacancyException, ClashingWaitListedIndexNumberException, MaxAuExceededException {
         storage.dropCourseAndRegisterNextStudentInWaitList(userId, courseCodeToBeDropped, indexNumberToBeDropped);
         save();
     }
@@ -127,7 +129,7 @@ public class StorageManager implements IStorageManager {
     @Override
     public void setNewCourseCode(String newCourseCode, String forCourseCode) {
         Course oldCourse = getCourse(forCourseCode);
-        Course updatedCourse = new Course(oldCourse.getCourseName(), newCourseCode, oldCourse.getSchool());
+        Course updatedCourse = new Course(oldCourse.getCourseName(), newCourseCode, oldCourse.getSchool(), oldCourse.getAu());
         updatedCourse.setIndexNumbers(oldCourse.getIndexNumbers());
 
         storage.removeCourse(oldCourse);
@@ -275,8 +277,9 @@ public class StorageManager implements IStorageManager {
         default:
             throw new IllegalStateException("Unexpected value: " + lineSplit[2]);
         }
+        int au = Integer.parseInt(lineSplit[3]);
 
-        return new Course(courseName, courseCode, school);
+        return new Course(courseName, courseCode, school, au);
     }
 
     private Student parseStudentFromTxt(String line) {

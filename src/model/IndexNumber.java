@@ -3,6 +3,7 @@ package model;
 import exception.CourseInWaitListException;
 import exception.CourseRegisteredException;
 import exception.ClashingRegisteredIndexNumberException;
+import exception.MaxAuExceededException;
 import exception.NoVacancyException;
 import exception.InvalidNewMaxException;
 import exception.ClashingWaitListedIndexNumberException;
@@ -80,8 +81,8 @@ public class IndexNumber implements Serializable {
     }
 
     public void registerNextStudentInWaitList()
-            throws CourseRegisteredException, CourseInWaitListException,
-            NoVacancyException, ClashingRegisteredIndexNumberException, ClashingWaitListedIndexNumberException {
+            throws CourseRegisteredException, CourseInWaitListException, NoVacancyException,
+            ClashingRegisteredIndexNumberException, ClashingWaitListedIndexNumberException, MaxAuExceededException {
         if (!waitListStudents.isEmpty()) {
             Student nextStudentInWaitList = waitListStudents.poll();
             nextStudentInWaitList.getWaitListCourseCodes().remove(course.getCourseCode());
