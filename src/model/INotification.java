@@ -4,7 +4,6 @@ package model;
  * This is an interface which sends an email notification detailing the pending/actual outcome of the student's actions
  * when he or she uses the STARS Planner.
  */
-
 public interface INotification {
 
     /**
