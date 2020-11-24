@@ -1,18 +1,21 @@
 package errormessage;
 
+/**
+ * This class contains all the error messages displayed in the program.
+ */
 public class ErrorMessage {
+    // Common error message
     public static final String ERROR_INPUT_CHOICE = "Invalid input choice, please input a valid input choice!";
 
-    // Login
+    // Error messages related to the login panel
     public static final String WRONG_LOGIN_INFO = "Wrong UserID and/or Password. Please try again!";
     public static final String WRONG_ACCESS_PERIOD = "You are not authorised to access STARS! Your access period is:";
 
-    // Admin
+    // Error messages related to the admin panel
     public static final String INVALID_SCHOOL = "Invalid school! Please try again.";
     public static final String INVALID_INDEX_NUMBER = "Invalid index number! Please try again.";
     public static final String INVALID_LESSON_TYPE = "Invalid lesson type! Please try again.";
     public static final String INVALID_TIME = "Invalid time! Please try again.";
-    public static final String INVALID_DATE = "Invalid date! Please try again.";
     public static final String INVALID_DATE_TIME = "Invalid date and time! Please try again.";
     public static final String INVALID_DAY_OF_WEEK = "Invalid day of week! Please try again.";
     public static final String INVALID_MAX_VACANCY = "Invalid maximum vacancy! Please try again.";
@@ -22,8 +25,9 @@ public class ErrorMessage {
     public static final String INVALID_GENDER_TYPE = "Invalid gender! Please try again!";
     public static final String USER_ID_EXISTS = "User id already exists! Please enter a new user id.";
     public static final String COURSE_CODE_EXISTS = "Course code already exists! Please enter a new course code.";
+    public static final String INVALID_COURSE_CODE = "Please enter a valid course code! (no special characters e.g. *, !, {)";
 
-    // Student
+    // Error messages related to the student panel
     public static final String NO_REGISTERED_COURSES = "You have no registered courses!";
     public static final String NO_WAITLIST_COURSES = "You have no courses on the wait list!";
     public static final String COURSE_ALREADY_REGISTERED = "You are already registered for the course!";

@@ -23,12 +23,40 @@ import exception.PeerClashingWaitListedIndexNumberException;
 
 import java.util.ArrayList;
 
+/**
+ * This class is responsible for handling all the tasks related to the student panel.
+ */
 public class StudentController {
+    /**
+     * Represents the student which is logged in.
+     */
     private Student student;
+
+    /**
+     * A StudentUi object responsible for input/output to the user.
+     */
     private StudentUi studentUi;
+
+    /**
+     * An object that implements IStorageManager.
+     * @see IStorageManager
+     */
     private IStorageManager storageManager;
+
+    /**
+     * An object that implements ILoginable.
+     * @see ILoginable
+     */
     private ILoginable loginManager;
 
+    /**
+     * Constructs a StudentController
+     * @param userId The user id of the student that is using the program.
+     * @param storageManager An object that implements IStorageManager.
+     * @param loginManager An object that implements ILoginable.
+     * @see IStorageManager
+     * @see ILoginable
+     */
     public StudentController(String userId, IStorageManager storageManager, ILoginable loginManager) {
         studentUi = new StudentUi();
         this.storageManager = storageManager;
@@ -36,6 +64,9 @@ public class StudentController {
         this.loginManager = loginManager;
     }
 
+    /**
+     * Runs the main loop for the student panel to get user's input on what tasks they want to do.
+     */
     public void run() {
         studentUi.printWelcomeMessage(student.getName());
         int choice;
@@ -72,6 +103,11 @@ public class StudentController {
         } while (choice != 8);
     }
 
+    /**
+     * Displays the list of courses available and ask the user for input on which course to add. Then, display all
+     * the index numbers associated with that course and ask the user for input on which index number they want to
+     * add.
+     */
     private void addCourse() {
         ArrayList<Course> courses = storageManager.getAllCourses();
         int index;
@@ -97,6 +133,11 @@ public class StudentController {
         }
     }
 
+    /**
+     * Displays the list of courses that the student has registered for and get the user input for which course
+     * to drop. If the student does not have any courses registered for, the method prints a message and returns.
+     * The next student in the wait list for the same course and index number will be automatically registered.
+     */
     private void dropRegisteredCourse() {
         ArrayList<Course> registeredCourses = storageManager.getCoursesTakenByStudent(student);
         if (registeredCourses.isEmpty()) {
@@ -116,6 +157,11 @@ public class StudentController {
         }
     }
 
+    /**
+     * Displays the list of courses that the student is in the wait list for and get the user input for which course
+     * in the wait list to drop. If the student does not have any courses in the wait list, the method prints a
+     * message and returns.
+     */
     private void dropWaitListCourse() {
         ArrayList<Course> waitListCourses = storageManager.getCoursesInWaitListByStudent(student);
         if (waitListCourses.isEmpty()) {
@@ -132,6 +178,10 @@ public class StudentController {
         studentUi.printMessageWithDivider(messageSuccess, "An email will be sent to you.");
     }
 
+    /**
+     * Prints all the registered and wait list courses for the student, as well as the number of AU (for both registered
+     * and wait list) that the student has.
+     */
     private void printRegisteredAndWaitListCourses() {
         String registeredAu = "You are registered for " + student.getRegisteredAu() + " AU.";
         String registeredCourses = "\n";
@@ -164,10 +214,19 @@ public class StudentController {
         studentUi.print("Your total AU (registered + wait list) is " + student.getTotalAuInRegisteredAndWaitList() + ".");
     }
 
+    /**
+     * Displays all the courses and ask user input for which course which he/she wants to check the vacancies for.
+     * Then, prints the vacancies of all the index numbers associated with that course.
+     */
     private void printVacancies() {
         studentUi.checkVacancyOfIndexNumber(storageManager.getAllCourses());
     }
 
+    /**
+     * Displays all the registered courses and ask which course the user wants to change the index for. Then, ask the
+     * user for the new index number which he/she wants to register for.  If the user does not have any registered
+     * courses, the method prints a message and returns.
+     */
     private void changeIndex() {
         // Input the course you want to change //
         ArrayList<Course> courses = storageManager.getCoursesTakenByStudent(student);
@@ -198,6 +257,11 @@ public class StudentController {
         }
     }
 
+    /**
+     * Displays the list of registered courses by the student and ask for which course which the student would like
+     * to swap with his/her peer. Then, get the user to input the login information of his/her peer to perform the swap.
+     * If the user does not have any registered courses, the method prints a message and returns.
+     */
     private void swapIndex() {
         ArrayList<Course> courses = storageManager.getCoursesTakenByStudent(student);
         if (courses.isEmpty()) {
