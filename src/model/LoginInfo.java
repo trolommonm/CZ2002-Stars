@@ -1,5 +1,9 @@
 package model;
 
+/**
+ * This class is responsible for modelling LoginInfo which details the attributes and methods of each LoginInfo object
+ * from a particular user logging into the STARS Planner.
+ */
 public class LoginInfo {
 
     /**
