@@ -28,10 +28,6 @@ public class Storage implements Serializable {
         students.put(student.getUserId(), student);
     }
 
-    public void removeStudent(Student student) {
-        students.remove(student.getUserId(), student);
-    }
-
     public Student getStudent(String userId) {
         return students.get(userId);
     }
@@ -64,7 +60,7 @@ public class Storage implements Serializable {
     }
 
     public void swapIndexNumber(String userId, String courseCodeToBeSwapped, IndexNumber newIndexNumber)
-            throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
+            throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException, ClashingWaitListedIndexNumberException {
         Student student = getStudent(userId);
         student.swapIndexNumber(courseCodeToBeSwapped, newIndexNumber);
     }

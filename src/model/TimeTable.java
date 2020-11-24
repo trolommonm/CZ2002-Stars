@@ -19,19 +19,18 @@ import view.LoginUi;
 
 /**
  * This class is responsible for modelling TimeTable which details the attributes and methods of each TimeTable object
- * from a particular user logging into the STARS Planner.
+ * for a particular student.
  */
-
 public class TimeTable implements Serializable {
 
     /**
-     * A Student object represents each student user.
+     * A Student object representing the student which this TimeTable object is for.
      * @see Student
      */
     private Student student;
 
     /**
-     * A  hashmap that contains registered IndexNumbers in Strings datatype for the different Courses available
+     * A hashmap that contains registered IndexNumbers in Strings datatype for the different Courses available
      * @see IndexNumber
      */
     private HashMap<String, IndexNumber> registeredIndexNumbers;
@@ -167,7 +166,7 @@ public class TimeTable implements Serializable {
         }
 
         if (getTotalAuInRegisteredAndWaitList() + indexNumberToBeAdded.getCourse().getAu() > Student.maxAu) {
-            throw new MaxAuExceededException(ErrorMessage.MAX_AU_EXCEEDED);
+            throw new MaxAuExceededException();
         }
 
         for (String courseCode: getWaitListCourseCodes()) {
@@ -298,7 +297,7 @@ public class TimeTable implements Serializable {
      */
 
     public void swapIndexNumber(String courseCodeToBeSwapped, IndexNumber newIndexNumber)
-            throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
+            throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException, ClashingWaitListedIndexNumberException {
         IndexNumber indexNumberToBeSwapped = registeredIndexNumbers.get(courseCodeToBeSwapped);
         if (indexNumberToBeSwapped == newIndexNumber) {
             throw new SameIndexNumberSwapException();
@@ -309,6 +308,11 @@ public class TimeTable implements Serializable {
         if (!getClashingRegisteredIndexNumbers(newIndexNumber).isEmpty()) {
             addCourse(courseCodeToBeSwapped, indexNumberToBeSwapped);
             throw new ClashingRegisteredIndexNumberException();
+        }
+
+        if (!getClashingWaitListedIndexNumbers(newIndexNumber).isEmpty()) {
+            addCourse(courseCodeToBeSwapped, indexNumberToBeSwapped);
+            throw new ClashingWaitListedIndexNumberException();
         }
 
         if (newIndexNumber.getAvailableVacancy() <= 0) {

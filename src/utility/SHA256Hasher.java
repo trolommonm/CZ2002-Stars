@@ -3,9 +3,17 @@ package utility;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * This class is responsible for the logic of hashing a password.
+ */
 public class SHA256Hasher {
+    /**
+     * This method uses the SHA-256 method to hash a string.
+     * @param password The password to be hashed.
+     * @return A String containing the hashed password.
+     */
     public static String hash(String password) {
-        String generatedPassword = null;
+        String generatedPassword = "";
 
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

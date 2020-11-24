@@ -50,7 +50,7 @@ public class StudentController {
     private ILoginable loginManager;
 
     /**
-     * Constructs a StudentController
+     * Constructs a StudentController.
      * @param userId The user id of the student that is using the program.
      * @param storageManager An object that implements IStorageManager.
      * @param loginManager An object that implements ILoginable.

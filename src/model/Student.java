@@ -281,7 +281,7 @@ public class Student implements Serializable {
      * @see TimeTable
      */
     public void swapIndexNumber(String courseCodeToBeSwapped, IndexNumber newIndexNumber)
-            throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
+            throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException, ClashingWaitListedIndexNumberException {
         timeTable.swapIndexNumber(courseCodeToBeSwapped, newIndexNumber);
     }
 
