@@ -22,12 +22,12 @@ public class Ui {
     /**
      * Divider line used to contain normal messages printed to the user.
      */
-    private final String dividerLine = "____________________________________________________________";
+    private final String DIVIDER_LINE = "____________________________________________________________";
 
     /**
      * Divider line used to contain error messages printed to the user.
      */
-    private final String errorDividerLine = "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    private final String ERROR_DIVIDER_LINE = "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 
     /**
      * Prints a message.
@@ -41,14 +41,14 @@ public class Ui {
      * Prints the normal divider line.
      */
     private void printDivider() {
-        System.out.println(dividerLine);
+        System.out.println(DIVIDER_LINE);
     }
 
     /**
      * Prints the error divider line.
      */
     private void printErrorDivider() {
-        System.out.println(errorDividerLine);
+        System.out.println(ERROR_DIVIDER_LINE);
     }
 
     /**

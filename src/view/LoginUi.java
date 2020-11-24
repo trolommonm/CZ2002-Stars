@@ -26,7 +26,7 @@ public class LoginUi extends Ui {
     /**
      * A String array containing all the options for the user to choose in the login panel.
      */
-    private final String[] loginOptions = {
+    private final String[] LOGIN_OPTIONS = {
             "1. Student Login",
             "2. Admin Login"
     };
@@ -49,7 +49,7 @@ public class LoginUi extends Ui {
 
         printWelcomeMessage();
         while (true) {
-            choice = getInputChoice("Enter your choice:", loginOptions);
+            choice = getInputChoice("Enter your choice:", LOGIN_OPTIONS);
             if (choice == 1) {
                 accountType = AccountType.STUDENT;
                 break;

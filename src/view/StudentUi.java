@@ -18,7 +18,7 @@ public class StudentUi extends Ui {
     /**
      * A String array containing all the options for the user to choose in the student panel.
      */
-    private final String[] studentMenuOptions = {
+    private final String[] STUDENT_MENU_OPTIONS = {
             "Welcome to the STARS!",
             "1. Add a course.",
             "2. Drop a registered course.",
@@ -45,7 +45,7 @@ public class StudentUi extends Ui {
      * @return A integer representing the user's input choice.
      */
     public int getMenuInputChoice() {
-        return getInputChoice("Enter your choice:", studentMenuOptions);
+        return getInputChoice("Enter your choice:", STUDENT_MENU_OPTIONS);
     }
 
     /**

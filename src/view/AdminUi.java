@@ -33,7 +33,7 @@ public class AdminUi extends Ui {
     /**
      * A String array containing all the options for the user to choose in the admin panel.
      */
-    private final String[] adminMenuOptions = {
+    private final String[] ADMIN_MENU_OPTIONS = {
             "Welcome to the Admin panel!",
             "1. Edit student access period.",
             "2. Add a student.",
@@ -170,7 +170,7 @@ public class AdminUi extends Ui {
      * @return An integer representing the user's input choice.
      */
     public int getMenuInputChoice() {
-        return getInputChoice("Enter your choice:", adminMenuOptions);
+        return getInputChoice("Enter your choice:", ADMIN_MENU_OPTIONS);
     }
 
     /**
