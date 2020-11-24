@@ -24,26 +24,28 @@ import view.LoginUi;
 public class TimeTable implements Serializable {
 
     /**
-     * A Student object representing the student which this TimeTable object is for.
+     * A Student object representing the student which this TimeTable is associated to.
      * @see Student
      */
     private Student student;
 
     /**
-     * A hashmap that contains registered IndexNumbers in Strings datatype for the different Courses available
+     * A hashmap with the key being a String representation of the registered course code and the value is the {@code IndexNumber}
+     * object that is associated with that registered course code.
      * @see IndexNumber
      */
     private HashMap<String, IndexNumber> registeredIndexNumbers;
 
     /**
-     * A hashmap that contains the waitlisted IndexNumbers stored in String data type.
+     * A hashmap with the key being the String representation of the wait list course code and the value is the {@code IndexNumber}
+     * object that is associated with that wait list course code.
      * @see IndexNumber
      */
     private HashMap<String, IndexNumber> waitListIndexNumbers;
 
     /**
      * A constructor which constructs the Timetable object.
-     * @param student The student of the user logging in.
+     * @param student The {@code Student} object which this {@code TimeTable} is associated to.
      * @see Student
      */
     public TimeTable(Student student) {
@@ -53,16 +55,16 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     *Displays the list of Registered Course Codes
-     * @return an array list that contains the registered Course Codes
+     * Returns the course codes of all the registered courses.
+     * @return An ArrayList that contains the registered course codes.
      */
     public ArrayList<String> getRegisteredCourseCodes() {
         return new ArrayList<>(registeredIndexNumbers.keySet());
     }
 
     /**
-     * Displays the Registered Index Numbers
-     * @return a HashMap object contain the all the registered index numbers in String format
+     * Returns the HashMap of the registered index numbers.
+     * @return A HashMap object containing all the registered {@code IndexNumber} objects.
      * @see IndexNumber
      */
     public HashMap<String, IndexNumber> getRegisteredIndexNumbers() {
@@ -70,24 +72,24 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * Displays the Course codes that have been waitlisted
-     * @return an array list of the Course codes that have been waitlisted
+     * Returns the course codes of all the wait list courses.
+     * @return An ArrayList that contains the wait list course codes.
      */
     public ArrayList<String> getWaitListCourseCodes() {
         return new ArrayList<>(waitListIndexNumbers.keySet());
     }
 
     /**
-     * Displays the Index Numbers that have been waitlisted
-     * @return a hashmap objects that contains the Index Numbers that have been wait listed
+     * Returns the HashMap of the wait listed index numbers.
+     * @return A Hashmap object containing all the wait listed {@code IndexNumber} objects.
      */
     public HashMap<String, IndexNumber> getWaitListIndexNumbers() {
         return waitListIndexNumbers;
     }
 
     /**
-     * Counts the amount of Academic Units that a particular student have been registered for using a loop
-     * @return the total AU that have been registered by the Student
+     * Counts the number of AU that the student associated to this timetable have been registered for.
+     * @return the total AU that have been registered by the student associated to this timetable.
      */
     public int getRegisteredAu() {
         int registeredAu = 0;
@@ -98,8 +100,8 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * Counts the amount of Academic Units that a particular student have been waitlisted for using a loop
-     * @return the total AU that have been waitlisted by the Student
+     * Counts the number of AU that the student associated to this timetable have been waitlisted for.
+     * @return the total AU that have been waitlisted by the student associated to this timetable.
      */
     public int getWaitListAu() {
         int waitListAu = 0;
@@ -110,16 +112,17 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * Counts the sum of the amount of registered AUs and waitlisted AUs
-     * @return the count of the total AUs that have been registed and waitlisted
+     * Returns the sum of the amount of registered AUs and wait listed AUs
+     * @return the total AUs that have been registered and wait listed for.
      */
     public int getTotalAuInRegisteredAndWaitList() {
         return getRegisteredAu() + getWaitListAu();
     }
 
     /**
-     * Displays the lists of all the Index Numbers of the Courses that have been successfully registered
-     * @return an array list that contains the index numbers that have been registered.
+     * Returns an ArrayList of {@code IndexNumber} that has been registered for.
+     * @return an ArrayList of {@code IndexNumber} that has been registered.
+     * @see IndexNumber
      */
     public ArrayList<IndexNumber> getAllIndexNumbersRegistered() {
         ArrayList<IndexNumber> indexNumbersRegistered = new ArrayList<>();
@@ -130,8 +133,8 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * Displays the lists of all the Index Numbers of the Courses that have been successfully wait listed
-     * @return an array list that contains the index numbers that have been waitlisted.
+     * Returns an ArrayList of {@code IndexNumber} that has been wait listed for.
+     * @return an ArrayList of {@code IndexNumber} that has been wait listed.
      */
     public ArrayList<IndexNumber> getAllIndexNumbersWaitListed() {
         ArrayList<IndexNumber> indexNumbersWaitListed = new ArrayList<>();
@@ -142,18 +145,20 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * A method that registers the student for a specific course and index numbers if the requirements are fulfilled by calling the addCourse method
-     * Displays that they have successfully registered from the course
-     * (i.e Au registered has not reached it max, no clashing of timeslots etc)
-     * @param courseCodeToBeAdded User selected Course Code to add
-     * @param indexNumberToBeAdded User selected Index number to add for that particular course
+     * A method that registers the student for a specific course and index number and sends an email to notify the student
+     * if he/she has been successfully registered for the course.
+     * @param courseCodeToBeAdded course code of the course to be registered for.
+     * @param indexNumberToBeAdded {@code IndexNumber} object that is to be registered for.
+     * @throws CourseRegisteredException if the course selected is already registered.
+     * @throws ClashingRegisteredIndexNumberException if the index number that has been selected clashes with the current
+     * courses that have been registered already.
+     * @throws NoVacancyException if the index of the course selected does not have vacancy.
+     * @throws CourseInWaitListException if the course selected is already added to the wait list.
+     * @throws ClashingWaitListedIndexNumberException if the index number of the course that have been selected clashes
+     * with the timetable of the courses that have already been wait listed for.
+     * @throws MaxAuExceededException throws exception when user is still trying to add course when he/she already has
+     * reached the maximum AU allowable.
      * @see IndexNumber
-     * @throws CourseRegisteredException throws exception if  the course selected is already registered
-     * @throws ClashingRegisteredIndexNumberException throws exception if the index number that has been selected, clashes with the current courses that have been registered already
-     * @throws NoVacancyException throws exception if the index of the course selected does not have vacancy anymore
-     * @throws CourseInWaitListException throws exception if the course slected is already added to the waitlist
-     * @throws ClashingWaitListedIndexNumberException throws exception if the index number of the course that have been selected clashes with the timetable of the courses that have already been waitlisted for
-     * @throws MaxAuExceededException throws exception when user is still trying to add course when he/she already has reached the max Au allowable
      */
     public void registerForCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
             throws CourseRegisteredException, ClashingRegisteredIndexNumberException,
@@ -195,9 +200,9 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * Method that adds the selected course for the student
-     * @param courseCodeToBeAdded User selected Course Code to add
-     * @param indexNumberToBeAdded User selected Index number to add for that particular course
+     * Method that adds the selected course and index number for the student.
+     * @param courseCodeToBeAdded course code of the course to be added.
+     * @param indexNumberToBeAdded {@code IndexNumber} object which is to be added.
      */
     private void addCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
         registeredIndexNumbers.put(courseCodeToBeAdded, indexNumberToBeAdded);
@@ -205,9 +210,9 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * Method that helps the user drop the course that has been registered
-     * @param courseCodeToBeDropped User selected course to drop
-     * @param indexNumberToBeDropped User selected Index number to drop for that particular course
+     * Method that drops the course and index number for the student.
+     * @param courseCodeToBeDropped course code of the course to be dropped.
+     * @param indexNumberToBeDropped {@code IndexNumber} object which is to be dropped.
      */
     private void dropCourse(String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
         indexNumberToBeDropped.deregisterStudent(student);
@@ -215,14 +220,18 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     *This method allows the swapping of index with a peer when all conditions are met
-     * @param courseCodeToBeSwapped the Student/current user index number to be swapped with peer
-     * @param peer is a Student object that the current user will be swapping index with
-     * @throws ClashingRegisteredIndexNumberException throws exception if the index number that has been selected, clashes with the current courses that have been registered already
-     * @throws SameIndexNumberSwapException throws exception if the student have selected the same index number that they are currently registered for
-     * @throws ClashingWaitListedIndexNumberException throws exception if the index number Student have selected clashes with the timetable of the courses that he/she is waitlisted for
-     * @throws PeerClashingRegisteredIndexNumberException throws exception if the index of the course to be swapped will classh with current timetable
-     * @throws PeerClashingWaitListedIndexNumberException throws exception if the Student's peer has a wait listed course that clashes with User's current indexes.
+     * This method performs the swapping of an index number with a peer when all conditions are met.
+     * @param courseCodeToBeSwapped course code of the course to be swapped with peer.
+     * @param peer {@code Student} object that the current user will be swapping index with.
+     * @throws SameIndexNumberSwapException if the student and the peer has the same index number.
+     * @throws ClashingWaitListedIndexNumberException if the peer's index number clashes with an index number that is in
+     * the student's wait list.
+     * @throws PeerClashingRegisteredIndexNumberException if the student's index number clashes with an index number
+     * that is in the peer's registered list.
+     * @throws ClashingRegisteredIndexNumberException if the peer's index number clashes with an index number that is in
+     * the student's registered list.
+     * @throws PeerClashingWaitListedIndexNumberException if the student's index number clashes with an index number
+     * that is in the peer's wait list.
     */
     public void swapIndexNumberWithPeer(String courseCodeToBeSwapped, Student peer)
             throws ClashingRegisteredIndexNumberException, SameIndexNumberSwapException,
@@ -288,14 +297,17 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * A method that allows swapping of index numbers when a vacant index number has appeared
-     * @param courseCodeToBeSwapped the Student/current user index number to be swapped with peer
-     * @param newIndexNumber the new index number that has a vacant seat allowing the user to swap
-     * @throws ClashingRegisteredIndexNumberException throws exception if the index number that has been selected, clashes with the current courses that have been registered already
-     * @throws NoVacancySwapException throws exception when the student tries to swap to an index that has no vacancy
-     * @throws SameIndexNumberSwapException throws exception when the Student selects an index number that is the same as his current one
+     * Swap index number for a course that the student is registered for.
+     * @param courseCodeToBeSwapped The course code of the course for which the index number will swapped for the student.
+     * @param newIndexNumber The {@code IndexNumber} object that represents the new index number that the student wants
+     *                       to swap to.
+     * @throws ClashingRegisteredIndexNumberException if the new index number to be swapped clashes with a registered
+     * index number of the student.
+     * @throws NoVacancySwapException if the new index number to be swapped has no vacancies.
+     * @throws SameIndexNumberSwapException if the new index number is the same as current index number of the student.
+     * @throws ClashingWaitListedIndexNumberException if the new index number to be swapped clashes with an index number
+     * that is in the wait list of the student.
      */
-
     public void swapIndexNumber(String courseCodeToBeSwapped, IndexNumber newIndexNumber)
             throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException, ClashingWaitListedIndexNumberException {
         IndexNumber indexNumberToBeSwapped = registeredIndexNumbers.get(courseCodeToBeSwapped);
@@ -330,9 +342,11 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * Method that waitlists the selected course for the student
-     * @param courseCodeToBeAdded User selected Course Code to add
-     * @param indexNumberToBeAdded User selected Index number to add for that particular course
+     * Add a course to the wait list for the student.
+     * @param courseCodeToBeAdded The course code of the course for which it will be added to the wait list for the
+     *                            student.
+     * @param indexNumberToBeAdded The {@code IndexNumber} object for which it will be added to the wait list for the
+     *                             student.
      */
     public void addCourseToWaitList(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
         waitListIndexNumbers.put(courseCodeToBeAdded, indexNumberToBeAdded);
@@ -345,9 +359,9 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * Method that drops the selected waitlist course for the student
-     * @param courseCodeToBeDropped User selected Course Code to drop
-     * @param indexNumberToBeDropped User selected Index number to drop for that particular course
+     * Drop a course from the wait list for the student.
+     * @param courseCodeToBeDropped The course code of the course for which it will be dropped from the wait list.
+     * @param indexNumberToBeDropped The {@code IndexNumber} object for which it will be dropped from the wait list.
      */
     public void dropCourseFromWaitList(String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
         waitListIndexNumbers.remove(courseCodeToBeDropped);
@@ -360,15 +374,12 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * A method that drops the Student's current course and register the next Student that is in the waitlist
-     * @param course course object
-     * @param indexNumberToBeDropped index number to be dropped by the current student
-     * @throws CourseInWaitListException throws exception when user have already added this course to the waitlist
-     * @throws ClashingRegisteredIndexNumberException throws exception when the index number User have selected clashes with the timetable of the courses that they are currently registered for
-     * @throws CourseRegisteredException throws exception when student already registed for the current course
-     * @throws NoVacancyException throws exception when student tries to add an index number that already has no vacancy
-     * @throws ClashingWaitListedIndexNumberException throws exception when the index number that student have selected classes with the timetable of courses that they have been waitlisted for
-     * @throws MaxAuExceededException throws exception when maxAu is reached
+     * Contains the logic to drop a course and the index number and register the next student in the wait list for that
+     * index number.
+     * @param course The {@code Course} object that is to be dropped.
+     * @param indexNumberToBeDropped The {@code IndexNumber} object of the index number which the student wants to drop.
+     * @throws Exception can be ignored since the exceptions should have been taken care of when the index number is
+     * added into the next student in line's wait list.
      */
     public void dropCourseAndRegisterNextStudentInWaitList(Course course, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
@@ -386,8 +397,9 @@ public class TimeTable implements Serializable {
 
     /**
      * Method that returns the wait listed index numbers that are clashing with the index number that the student wants to add
-     * @param indexNumberToBeAdded index number to be added by the current student
-     * @return wait listed index number that is clashing
+     * @param indexNumberToBeAdded {@code IndexNumber} object to be added by the current student
+     * @return An ArrayList of {@code IndexNumber} containing all the wait listed index numbers that clashes with the index number
+     * that is to be added.
      */
     public ArrayList<IndexNumber> getClashingWaitListedIndexNumbers(IndexNumber indexNumberToBeAdded) {
         ArrayList<IndexNumber> clashingIndexNumbers = new ArrayList<>();
@@ -402,10 +414,10 @@ public class TimeTable implements Serializable {
 
     /**
      * Method that returns the registered index numbers that are clashing with the index number that the student wants to add
-     * @param indexNumberToBeAdded index number to be added by the current student
-     * @return registered index numbers that are clashing
+     * @param indexNumberToBeAdded {@code IndexNumber} object to be added by the current student
+     * @return An ArrayList of {@code IndexNumber} containing all the registered index numbers that clashes with the index number
+     * that is to be added.
      */
-
     public ArrayList<IndexNumber> getClashingRegisteredIndexNumbers(IndexNumber indexNumberToBeAdded) {
         ArrayList<IndexNumber> clashingIndexNumbers = new ArrayList<>();
         for (IndexNumber indexNumber: getAllIndexNumbersRegistered()) {
@@ -418,12 +430,11 @@ public class TimeTable implements Serializable {
     }
 
     /**
-     * Method that checks if the index number that the student wants to add clashes the the current timetable
-     * @param indexNumberToBeAdded index number to be added by the current student
-     * @param indexNumberToCheck index number for the different courses that have been registered by the student
-     * @return a boolean true if there are clashes and false if there are no clashes with the timetable
+     * Method that checks if the index number that the student wants to add clashes with another index number.
+     * @param indexNumberToBeAdded {@code IndexNumber} object to be added by the student
+     * @param indexNumberToCheck {@code IndexNumber} object that is to be checked if there are clashes with.
+     * @return a boolean true if there are clashes and false if there are no clashes.
      */
-
     private boolean checkIndexNumberClash(IndexNumber indexNumberToBeAdded, IndexNumber indexNumberToCheck) {
         for (Lesson lesson: indexNumberToCheck.getLessons()) {
             for (Lesson lessonToBeAdded: indexNumberToBeAdded.getLessons()) {
