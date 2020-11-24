@@ -15,11 +15,26 @@ import exception.NoVacancySwapException;
 import exception.SameIndexNumberSwapException;
 import exception.PeerClashingWaitListedIndexNumberException;
 import exception.PeerClashingRegisteredIndexNumberException;
+import view.LoginUi;
 
+/**
+ * This class is responsible for modelling TimeTable which details the attributes and methods of each TimeTable object
+ * from a particular user logging into the STARS Planner.
+ */
 
 public class TimeTable implements Serializable {
+    /**
+     * A Student object represents each student user.
+     * @see Student
+     */
     private Student student;
+    /**
+     * A  hashmap that contains registered IndexNumbers for the different Courses available
+     */
     private HashMap<String, IndexNumber> registeredIndexNumbers;
+    /**
+     * 
+     */
     private HashMap<String, IndexNumber> waitListIndexNumbers;
 
     public TimeTable(Student student) {
