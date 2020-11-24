@@ -109,7 +109,7 @@ public class Student implements Serializable {
     }
 
     /**
-     * @return The String representing the password of the {@code Student} object
+     * @return The String representing the matric number of the {@code Student} object
      */
     public String getMatricNumber() {
         return matricNumber;
@@ -184,7 +184,7 @@ public class Student implements Serializable {
      * running indices of the registered IndexNumbers while the {@code IndexNumber} represents the respective
      * registered IndexNumbers of the student's timetable
      * @see IndexNumber
-     * @see Timetable
+     * @see TimeTable
      */
     public HashMap<String, IndexNumber> getRegisteredIndexNumbers() {
         return timeTable.getRegisteredIndexNumbers();
@@ -195,7 +195,7 @@ public class Student implements Serializable {
      * running indices of the IndexNumbers on wait list while the {@code IndexNumber} represents the respective
      * IndexNumbers on wait list of the student's timetable
      * @see IndexNumber
-     * @see Timetable
+     * @see TimeTable
      */
     public HashMap<String, IndexNumber> getWaitListIndexNumbers() {
         return timeTable.getWaitListIndexNumbers();
@@ -228,7 +228,7 @@ public class Student implements Serializable {
      * @param courseCodeToBeAdded The String representing the course code of the course to be added
      * @param indexNumberToBeAdded The {@code IndexNumber} of the course to be added
      * @see IndexNumber
-     * @see Timetable
+     * @see TimeTable
      */
     public void registerForCourse(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded)
             throws CourseRegisteredException, ClashingRegisteredIndexNumberException,
@@ -242,7 +242,7 @@ public class Student implements Serializable {
      * @param courseCodeToBeSwapped The String representing the course code of the IndexNumber to be swapped with peer
      * @param peer The {@code Student} in which this instance of {@code Student} is swapping the IndexNumber with
      * @see Student
-     * @see Timetable
+     * @see TimeTable
      */
     public void swapIndexNumberWithPeer(String courseCodeToBeSwapped, Student peer)
             throws ClashingRegisteredIndexNumberException, SameIndexNumberSwapException,
@@ -257,7 +257,7 @@ public class Student implements Serializable {
      * to be swapped with
      * @param newIndexNumber The new {@code IndexNumber} to be swapped with the original
      * @see IndexNumber
-     * @see Timetable
+     * @see TimeTable
      */
     public void swapIndexNumber(String courseCodeToBeSwapped, IndexNumber newIndexNumber)
             throws ClashingRegisteredIndexNumberException, NoVacancySwapException, SameIndexNumberSwapException {
@@ -269,7 +269,7 @@ public class Student implements Serializable {
      * @param courseCodeToBeAdded The String representing the course code of the course to be added
      * @param indexNumberToBeAdded The {@code IndexNumber} of the course to be added
      * @see IndexNumber
-     * @see Timetable
+     * @see TimeTable
      */
     public void addCourseToWaitList(String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
         timeTable.addCourseToWaitList(courseCodeToBeAdded, indexNumberToBeAdded);
@@ -280,7 +280,7 @@ public class Student implements Serializable {
      * @param courseCodeToBeDropped The String representing the course code of the course to be dropped
      * @param indexNumberToBeDropped The {@code IndexNumber} of the course to be dropped
      * @see IndexNumber
-     * @see Timetable
+     * @see TimeTable
      */
     public void dropCourseFromWaitList(String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped) {
         timeTable.dropCourseFromWaitList(courseCodeToBeDropped, indexNumberToBeDropped);
@@ -293,7 +293,7 @@ public class Student implements Serializable {
      * @param indexNumberToBeDropped The {@code IndexNumber} of the course to be dropped
      * @see IndexNumber
      * @see Course
-     * @see Timetable
+     * @see TimeTable
      */
     public void dropCourseAndRegisterNextStudentInWaitList(Course course, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
