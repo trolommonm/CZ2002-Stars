@@ -227,6 +227,14 @@ public class Student implements Serializable {
      * Registers a course for the {@code Student} and updating the {@code TimeTable}
      * @param courseCodeToBeAdded The String representing the course code of the course to be added
      * @param indexNumberToBeAdded The {@code IndexNumber} of the course to be added
+     * @throws CourseRegisteredException if course is already registered
+     * @throws CourseInWaitListException if course is already in wait list
+     * @throws NoVacancyException if there are no more vacancies in the course
+     * @throws ClashingRegisteredIndexNumberException if the indexnumber to be registered clashes with any of
+     * the already registered indexnumbers
+     * @throws ClashingWaitListedIndexNumberException if the indexnumber to be wait listed clashes with any of
+     * the already registered indexnumbers
+     * @throws MaxAuExceededException if Student has reached the maximum amount of AUs
      * @see IndexNumber
      * @see TimeTable
      */
@@ -241,6 +249,15 @@ public class Student implements Serializable {
      * Swaps IndexNumber for a course with another {@code Student} and updating the {@code TimeTable}
      * @param courseCodeToBeSwapped The String representing the course code of the IndexNumber to be swapped with peer
      * @param peer The {@code Student} in which this instance of {@code Student} is swapping the IndexNumber with
+     * @throws ClashingRegisteredIndexNumberException if the indexnumber to be registered clashes with any of
+     * the already registered indexnumbers
+     * @throws ClashingWaitListedIndexNumberException if the indexnumber to be wait listed clashes with any of
+     * the already registered indexnumbers
+     * @throws SameIndexNumberSwapException if the pair of indexnumbers are the same
+     * @throws PeerClashingRegisteredIndexNumberException if the indexnumber to be swapped with peer clashes with the
+     * registered courses on the peer's timetable
+     * @throws PeerClashingWaitListedIndexNumberException if the indexnumber to be swapped with peer clashes with the
+     * courses on waitlist of peer's timetable
      * @see Student
      * @see TimeTable
      */
@@ -256,6 +273,10 @@ public class Student implements Serializable {
      * @param courseCodeToBeSwapped The String representing the original course code of the IndexNumber
      * to be swapped with
      * @param newIndexNumber The new {@code IndexNumber} to be swapped with the original
+     * @throws ClashingRegisteredIndexNumberException if the indexnumber to be registered clashes with any of
+     * the already registered indexnumbers
+     * @throws NoVacancyException if there are no more vacancies in the course
+     * @throws SameIndexNumberSwapException if the pair of indexnumbers are the same
      * @see IndexNumber
      * @see TimeTable
      */
@@ -291,6 +312,14 @@ public class Student implements Serializable {
      * waitlist for that particular {@code Course} IndexNumber and updating the {@code TimeTable}
      * @param course The {@code Course} to be dropped
      * @param indexNumberToBeDropped The {@code IndexNumber} of the course to be dropped
+     * @throws CourseRegisteredException if course is already registered
+     * @throws CourseInWaitListException if course is already in wait list
+     * @throws NoVacancyException if there are no more vacancies in the course
+     * @throws ClashingRegisteredIndexNumberException if the indexnumber to be registered clashes with any of
+     * the already registered indexnumbers
+     * @throws ClashingWaitListedIndexNumberException if the indexnumber to be wait listed clashes with any of
+     * the already registered indexnumbers
+     * @throws MaxAuExceededException if Student has reached the maximum amount of AUs
      * @see IndexNumber
      * @see Course
      * @see TimeTable
