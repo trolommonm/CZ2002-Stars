@@ -124,6 +124,8 @@ public class IndexNumber implements Serializable {
     /**
      * Sets the maximum vacancy of the IndexNumber
      * @param maxVacancy The maximum number of students that can be enrolled in this IndexNumber
+     * @throws InvalidNewMaxException if the maximum vacancy to be set is less than the number of students
+     * already registered for the particular indexnumber
      */
     public void setMaxVacancy(int maxVacancy) throws InvalidNewMaxException {
         if (maxVacancy < getNumberOfRegisteredStudents()) {
@@ -174,6 +176,14 @@ public class IndexNumber implements Serializable {
     /**
      * Removes the front most {@code Student} in the waitListStudents LinkedList of the IndexNumber and adds that
      * {@code Student} into the registeredStudents ArrayList of the IndexNumber
+     * @throws CourseRegisteredException if course is already registered
+     * @throws CourseInWaitListException if course is already in wait list
+     * @throws NoVacancyException if there are no more vacancies in the course
+     * @throws ClashingRegisteredIndexNumberException if the indexnumber to be registered clashes with any of
+     * the already registered indexnumbers
+     * @throws ClashingWaitListedIndexNumberException if the indexnumber to be wait listed clashes with any of
+     * the already registered indexnumbers
+     * @throws MaxAuExceededException if Student has reached the maximum amount of AUs
      * @see Student
      */
     public void registerNextStudentInWaitList()
