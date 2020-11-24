@@ -20,11 +20,10 @@ public enum LessonType {
     }
 
     /**
-     * A method which converts the data type of lessontype from String to {@code LessonType}
+     * A method which converts the data type from String to {@code LessonType}
      * @param lessonTypeString The String representing the name of the type of lesson
      * @return {@code LessonType} representing the lessonTypeString converted to data type {@code LessonType}
-     * @throws IllegalArgumentException if the argument of the method is not what is
-     * expected, in this case, it is not a String
+     * @throws InvalidLessonTypeException if lessonTypeString does not correspond to a valid LessonType
      */
     public static LessonType getLessonType(String lessonTypeString) throws InvalidLessonTypeException {
         try {

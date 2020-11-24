@@ -14,7 +14,7 @@ import java.util.LinkedList;
 
 /**
  * This class is responsible for modelling IndexNumber which details the attributes and methods of each IndexNumber
- * object from a particular Course object.
+ * object for a particular Course object.
  */
 public class IndexNumber implements Serializable {
 
@@ -135,14 +135,15 @@ public class IndexNumber implements Serializable {
     }
 
     /**
-     * @return The available remainding vacancy of the IndexNumber
+     * @return The available remaining vacancy of the IndexNumber
      */
     public int getAvailableVacancy() {
         return maxVacancy - getNumberOfRegisteredStudents();
     }
 
     /**
-     * Adds a {@code Student} to the registeredStudents ArrayList of the IndexNumber
+     * Adds a {@code Student} to the registeredStudents ArrayList
+     * @param student The {@code Student} object to be added into the registeredStudents ArrayList
      * @see Student
      */
     public void registerStudent(Student student) {
@@ -150,7 +151,8 @@ public class IndexNumber implements Serializable {
     }
 
     /**
-     * Removes a {@code Student} from the registeredStudents ArrayList of the IndexNumber
+     * Removes a {@code Student} from the registeredStudents ArrayList
+     * @param student The {@code Student} object to be removed from the registeredStudents ArrayList
      * @see Student
      */
     public void deregisterStudent(Student student) {
@@ -158,7 +160,8 @@ public class IndexNumber implements Serializable {
     }
 
     /**
-     * Adds a {@code Student} to the waitListStudents LinkedList of the IndexNumber
+     * Adds a {@code Student} to the waitListStudents LinkedList
+     * @param student The {@code Student} object to be added to the waitListStudents LinkedList
      * @see Student
      */
     public void addStudentToWaitList(Student student) {
@@ -166,7 +169,8 @@ public class IndexNumber implements Serializable {
     }
 
     /**
-     * Removes a {@code Student} from the waitListStudents LinkedList of the IndexNumber
+     * Removes a {@code Student} from the waitListStudents LinkedList
+     * @param student The {@code Student} object to be removed from the waitListStudents LinkedList
      * @see Student
      */
     public void removeStudentFromWaitList(Student student) {
@@ -220,7 +224,7 @@ public class IndexNumber implements Serializable {
     }
 
     /**
-     * @return The String which details the ID, current vacancy, and maximum vacancy of the IndexNumber
+     * @return The String representation of the IndexNumber, which includes the id, current vacancy, and maximum vacancy
      */
     @Override
     public String toString() {

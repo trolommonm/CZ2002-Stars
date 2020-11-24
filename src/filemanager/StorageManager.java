@@ -138,12 +138,11 @@ public class StorageManager implements IStorageManager {
 
     /**
      * Contains the logic to drop a course and the index number and register the next student in the wait list for that
-     * index number.
+     * index number. The exceptions can be ignored since the exceptions should have been taken care of when the index number is
+     * added into the student's wait list.
      * @param userId The user id of the student for which the course and index number will be dropped.
      * @param courseCodeToBeDropped The course code of the course which the student wants to drop.
      * @param indexNumberToBeDropped The {@code IndexNumber} object of the index number which the student wants to drop.
-     * @throws Exception can be ignored since the exceptions should have been taken care of when the index number is
-     * added into the student's wait list.
      */
     @Override
     public void dropCourseAndRegisterNextStudentInWaitList(String userId, String courseCodeToBeDropped, IndexNumber indexNumberToBeDropped)
@@ -216,6 +215,7 @@ public class StorageManager implements IStorageManager {
      *                            student.
      * @param indexNumberToBeAdded The {@code IndexNumber} object for which it will be added to the wait list for the
      *                             student.
+     * @see IndexNumber
      */
     @Override
     public void addCourseToWaitList(String userId, String courseCodeToBeAdded, IndexNumber indexNumberToBeAdded) {
@@ -288,11 +288,7 @@ public class StorageManager implements IStorageManager {
         save();
     }
 
-    /**
-     * Retrieves all courses in storage.
-     * @return An ArrayList of {@code Course} containing all all courses in storage.
-     * @see Course
-     */
+
     @Override
     public ArrayList<Course> getAllCourses() {
         return storage.getAllCourses();

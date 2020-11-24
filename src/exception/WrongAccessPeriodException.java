@@ -10,6 +10,7 @@ import model.AccessTime;
 public class WrongAccessPeriodException extends Exception {
     /**
      * Constructs a new WrongAccessPeriodException with the corresponding error message.
+     * @param accessTime The {@code AccessTime} object containing the correct access time for the student.
      * @see ErrorMessage
      */
     public WrongAccessPeriodException(AccessTime accessTime) {

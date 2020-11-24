@@ -375,11 +375,10 @@ public class TimeTable implements Serializable {
 
     /**
      * Contains the logic to drop a course and the index number and register the next student in the wait list for that
-     * index number.
+     * index number. The exceptions can be ignored since the exceptions should have been taken care of when the index number is
+     *      * added into the next student in line's wait list.
      * @param course The {@code Course} object that is to be dropped.
      * @param indexNumberToBeDropped The {@code IndexNumber} object of the index number which the student wants to drop.
-     * @throws Exception can be ignored since the exceptions should have been taken care of when the index number is
-     * added into the next student in line's wait list.
      */
     public void dropCourseAndRegisterNextStudentInWaitList(Course course, IndexNumber indexNumberToBeDropped)
             throws CourseInWaitListException, ClashingRegisteredIndexNumberException,
