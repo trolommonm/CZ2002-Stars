@@ -13,6 +13,7 @@ public enum LessonType {
     TUTORIAL;
 
     /**
+     * Returns a String representation of all the different lesson types available
      * @return The String detailing all of the different categories of LessonType
      */
     public static String getAllLessonType() {

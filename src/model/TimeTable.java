@@ -18,8 +18,8 @@ import exception.PeerClashingRegisteredIndexNumberException;
 import view.LoginUi;
 
 /**
- * This class is responsible for modelling TimeTable which details the attributes and methods of each TimeTable object
- * for a particular student.
+ * This class is responsible for managing all the index numbers that a particular {@code Student} object is registered or
+ * in the wait list for.
  */
 public class TimeTable implements Serializable {
 

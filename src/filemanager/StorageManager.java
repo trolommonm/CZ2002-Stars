@@ -17,7 +17,6 @@ import model.Gender;
 import model.IndexNumber;
 import model.Lesson;
 import model.LessonType;
-import model.LoginInfo;
 import model.School;
 import model.Storage;
 import model.Student;
@@ -288,7 +287,11 @@ public class StorageManager implements IStorageManager {
         save();
     }
 
-
+    /**
+     *  Retrieves all courses in the Storage object maintained by this class.
+     *  @return An ArrayList of {@code Course} containing all the courses in the Storage object.
+     *  @see Course
+     */
     @Override
     public ArrayList<Course> getAllCourses() {
         return storage.getAllCourses();
@@ -329,7 +332,7 @@ public class StorageManager implements IStorageManager {
     }
 
     /**
-     * Retrieves all students in Storage object maintained.
+     * Retrieves all students in the Storage object maintained by this class.
      * @return An ArrayList of {@code Student} containing all the students in the Storage object.
      * @see Student
      */
@@ -432,7 +435,7 @@ public class StorageManager implements IStorageManager {
      * Contains the logic to parse the first line of text from the files inside "data/preload/Courses" and return a
      * {@code Course} object containing the information specified in the line.
      * @param line The first line of text from the files inside "data/preload/Courses".
-     * @return A {@code Course} object containing all the information specified inline.
+     * @return A {@code Course} object containing all the information specified in line.
      * @see Course
      */
     private Course parseCourseFromTxt(String line) {

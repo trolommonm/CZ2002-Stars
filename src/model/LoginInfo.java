@@ -39,6 +39,7 @@ public class LoginInfo {
     }
 
     /**
+     * Returns the password that the {@code LoginInfo} object holds.
      * @return The String representing the password of the {@code LoginInfo} object
      */
     public String getPassword() {
@@ -46,6 +47,7 @@ public class LoginInfo {
     }
 
     /**
+     * Returns the user id that the {@code LoginInfo} object holds.
      * @return The String representing the userId of the {@code LoginInfo} object
      */
     public String getUserId() {
@@ -53,6 +55,7 @@ public class LoginInfo {
     }
 
     /**
+     * Returns the {@code AccountType} that the {@code LoginInfo} object holds.
      * @return The {@code AccountType} representing the type of account of the {@code LoginInfo} object
      * @see AccountType
      */
@@ -61,10 +64,11 @@ public class LoginInfo {
     }
 
     /**
-     * @return The boolean value representing whether or not the parameter is a {@code LoginInfo} object and if it is,
-     * where or not the UserId, password and {@code AccountType} of the {@code LoginInfo} which is calling this method
-     * matches the {@code LoginInfo} object within the method's parameters.
-     * @param obj The Object which will be evaluated
+     * Logic to check if two {@code LoginInfo} objects are the same. First checks if the argument passed in is of
+     * {@code LoginInfo} type and if it is, check whether the userId, password and {@code AccountType} of both
+     * the {@code LoginInfo} objects are the same. Returns true if they are the same, false otherwise.
+     * @return A boolean value with true representing that the two {@code LoginInfo} objects are the same; false otherwise.
+     * @param obj The Object which will be evaluated.
      * @see AccountType
      */
     @Override

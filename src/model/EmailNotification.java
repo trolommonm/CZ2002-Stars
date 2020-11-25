@@ -14,7 +14,6 @@ import javax.mail.internet.MimeMessage;
 /**
  * This is a Singleton class that is responsible for handling the logic of sending notification via E-mail implementing INotification.
  */
-
 public class EmailNotification implements INotification, Serializable {
     /**
      * String representing the username of the email to be used to send the notification to the particular students.

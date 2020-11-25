@@ -110,6 +110,7 @@ public class Student implements Serializable {
     }
 
     /**
+     * Returns the matric number of the {@code Student} object
      * @return The String representing the matric number of the {@code Student} object
      */
     public String getMatricNumber() {
@@ -117,6 +118,7 @@ public class Student implements Serializable {
     }
 
     /**
+     * Returns the user id of the {@code Student} object
      * @return The String representing the userId of the {@code Student} object
      */
     public String getUserId() {
@@ -124,6 +126,7 @@ public class Student implements Serializable {
     }
 
     /**
+     * Returns an ArrayList of all the registered course codes taken by the {@code Student} object
      * @return The ArrayList of String representing the list of courses registered by the {@code Student} object
      * in terms of the respective course codes of the {@code Student} object
      */
@@ -132,6 +135,7 @@ public class Student implements Serializable {
     }
 
     /**
+     * Returns an ArrayList of all the course codes in the wait list by the {@code Student} object
      * @return The ArrayList of String representing the list of courses on the waitlist from the {@code Student} object
      * in terms of the respective course codes of the {@code Student} object
      */
@@ -140,6 +144,7 @@ public class Student implements Serializable {
     }
 
     /**
+     * Returns a {@code TimeTable} object belonging to the {@code Student} object
      * @return The {@code TimeTable} representing the timetable of the {@code Student} object
      * @see TimeTable
      */
@@ -148,6 +153,7 @@ public class Student implements Serializable {
     }
 
     /**
+     * Returns the name of the {@code Student} object
      * @return The String representing the name of the {@code Student} object
      */
     public String getName() {
@@ -155,6 +161,7 @@ public class Student implements Serializable {
     }
 
     /**
+     * Returns a {@code AccessTime} object representing the access time of the {@code Student} object
      * @return The {@code AccessTime} representing the access time of the {@code Student} object
      */
     public AccessTime getAccessTime() {
@@ -162,7 +169,7 @@ public class Student implements Serializable {
     }
 
     /**
-     *  Sets the {@code AccessTime} of of the {@code Student} object
+     *  Sets the {@code AccessTime} of the {@code Student} object
      *  @param accessTime The {@code AccessTime} of the {@code Student} object to be set to.
      *  @see AccessTime
      */
@@ -181,9 +188,10 @@ public class Student implements Serializable {
     }
 
     /**
-     * @return HashMap representing the {@code TimeTable} in key-value pair, where the String represents the
-     * running indices of the registered IndexNumbers while the {@code IndexNumber} represents the respective
-     * registered IndexNumbers of the student's timetable
+     * Returns the HashMap with the key being a String corresponding to a course code and the value is a {@code IndexNumber}
+     * object in which the student is registered for that {@code IndexNumber} object for that course code
+     * @return A HashMap, with the key being a String corresponding to a course code and the value is a {@code IndexNumber}
+     * object in which the student is registered in that {@code IndexNumber} object for that course code
      * @see IndexNumber
      * @see TimeTable
      */
@@ -192,8 +200,10 @@ public class Student implements Serializable {
     }
 
     /**
-     * @return HashMap representing the {@code TimeTable} in key-value pair, where the String represents the
-     * running indices of the IndexNumbers on wait list while the {@code IndexNumber} represents the respective
+     * Returns the HashMap with the key being a String corresponding to a course code and the value is a {@code IndexNumber}
+     * object in which the student is in the wait list for that {@code IndexNumber} object for that course code
+     * @return A HashMap, with the key being a String corresponding to a course code and the value is a {@code IndexNumber}
+     * object in which the student is in the wait list for that {@code IndexNumber} object for that course code
      * IndexNumbers on wait list of the student's timetable
      * @see IndexNumber
      * @see TimeTable
@@ -203,6 +213,7 @@ public class Student implements Serializable {
     }
 
     /**
+     * Returns the number of AUs in which the student is registered for
      * @return The integer representing the total amount of AUs from the registered courses of the {@code Student}
      */
     public int getRegisteredAu() {
@@ -210,6 +221,7 @@ public class Student implements Serializable {
     }
 
     /**
+     * Returns the number of AUs in which the student is in the wait list for
      * @return The integer representing the total amount of AUs from the courses on wait list of the {@code Student}
      */
     public int getWaitListAu() {
@@ -217,7 +229,8 @@ public class Student implements Serializable {
     }
 
     /**
-     * @return The integer representing the total amount of AUs from the courses on wait list
+     * Returns the total number of AUs in which the student is in the wait list and registered for
+     * @return The integer representing the total number of AUs from the courses on wait list
      * and the registered courses of the {@code Student}
      */
     public int getTotalAuInRegisteredAndWaitList() {

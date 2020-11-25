@@ -5,8 +5,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 /**
- * This class is responsible for modelling Lesson which details the attributes and methods of each Lesson object
- * from a particular Course object.
+ * This class is responsible for modelling a lesson which details the attributes and methods of each {@code Lesson} object.
  */
 public class Lesson implements Serializable {
 
@@ -18,26 +17,31 @@ public class Lesson implements Serializable {
 
     /**
      * A DayOfWeek variable declared as dayOfWeek representing the day of week in which Lesson Object is held.
+     * @see DayOfWeek
      */
     private DayOfWeek dayOfWeek;
 
     /**
      * A LocalTime variable declared as startTime representing the start time of the Lesson Object.
+     * @see LocalTime
      */
     private LocalTime startTime;
 
     /**
      * A LocalTime variable declared as endTime representing the end time of the Lesson Object.
+     * @see LocalTime
      */
     private LocalTime endTime;
 
     /**
      * A constructor which constructs the Lesson object using the following parameters.
      * @param lessonType The {@code LessonType} of the Lesson.
-     * @param dayOfWeek The day of the week of the Lesson.
-     * @param startTime The start time of the Lesson.
-     * @param endTime The end time of the Lesson.
+     * @param dayOfWeek A {@code DayOfWeek} object representing the day of the week of the Lesson.
+     * @param startTime A {@code LocalTime} object representing the start time of the Lesson.
+     * @param endTime A {@code LocalTime } object representing the end time of the Lesson.
      * @see LessonType
+     * @see DayOfWeek
+     * @see LocalTime
      */
     public Lesson(LessonType lessonType, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime) {
         this.lessonType = lessonType;
@@ -47,29 +51,35 @@ public class Lesson implements Serializable {
     }
 
     /**
-     * @return The LocalTime variable representing the start time of the Lesson from a particular course.
+     * Returns the start time of the {@code Lesson} object.
+     * @return The {@code LocalTime} object representing the start time of the {@code Lesson} object.
+     * @see LocalTime
      */
     public LocalTime getStartTime() {
         return startTime;
     }
 
     /**
-     * @return The LocalTime variable representing the end time of the Lesson from a particular course.
+     * Returns the end time of the {@code Lesson} object.
+     * @return The {@code LocalTime} object representing the end time of the {@code Lesson} object.
+     * @see LocalTime
      */
     public LocalTime getEndTime() {
         return endTime;
     }
 
     /**
-     * @return The DayOfWeek variable representing the day of the week in which the Lesson from a
-     * particular course is held.
+     * Returns the day of the week that the {@code Lesson} object is scheduled to be on.
+     * @return The {@code DayOfWeek} object representing the day of the week in which the {@code Lesson} is held.
+     * @see DayOfWeek
      */
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
     }
 
     /**
-     * @return The {@code LessonType} variable representing the type of Lesson from a particular course.
+     * Returns the type of lesson in which the {@code Lesson} object represents.
+     * @return The {@code LessonType} representing the type of lesson of the {@code Lesson} object.
      * @see LessonType
      */
     public LessonType getLessonType() {
