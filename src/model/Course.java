@@ -49,8 +49,8 @@ public class Course implements Serializable {
     }
 
     /**
-     * Gets the ArrayList of @{Code IndexNumber} objects that is held by this particular {@code Course} object.
-     * @return the ArrayList of @{Code IndexNumber} objects that is held by this particular {@code Course} object.
+     * Gets the ArrayList of {@code IndexNumber} objects that is held by this particular {@code Course} object.
+     * @return the ArrayList of {@code IndexNumber} objects that is held by this particular {@code Course} object.
      */
     public ArrayList<IndexNumber> getIndexNumbers() {
         return indexNumbers;
@@ -66,8 +66,8 @@ public class Course implements Serializable {
     }
 
     /**
-     * Adds a new {@code IndexNumber} object to the current ArrayList of @{code IndexNumber} objects held by the particular {@code Course} object.
-     * @param indexNumber @{code IndexNumber} object to be added to the current ArrayList of @{code IndexNumber} objects.
+     * Adds a new {@code IndexNumber} object to the current ArrayList of {@code IndexNumber} objects held by the particular {@code Course} object.
+     * @param indexNumber {@code IndexNumber} object to be added to the current ArrayList of {@code IndexNumber} objects.
      */
     public void addIndexNumber(IndexNumber indexNumber) {
         indexNumbers.add(indexNumber);
@@ -123,7 +123,7 @@ public class Course implements Serializable {
 
     /**
      * Gets the registered {@code Student} objects for the particular {@code Course} object in an ArrayList.
-     * @return ArrayList of registered @{code Student} objects.
+     * @return ArrayList of registered {@code Student} objects.
      */
     public ArrayList<Student> getRegisteredStudents() {
         ArrayList<Student> registeredStudents = new ArrayList<>();

@@ -25,7 +25,7 @@ public class AccessTime implements Serializable {
      * @param start {@code LocalDateTime} object representing start date and time of access period.
      * @param end {@code LocalDateTime} object representing end date and time of access period.
      * @throws InvalidAccessTimeException if the start {@code LocalDateTime} object is equal to or after the end
-     * @{code LocalDateTime} object.
+     * {@code LocalDateTime} object.
      */
     public AccessTime(LocalDateTime start, LocalDateTime end) throws InvalidAccessTimeException {
         if (start.isAfter(end) || start.isEqual(end)) {

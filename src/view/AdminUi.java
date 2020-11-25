@@ -459,7 +459,7 @@ public class AdminUi extends Ui {
     }
 
     /**
-     * Get user to input the number of AU of a course. The method will always return an integer > 0.
+     * Get user to input the number of AU of a course. The method will always return an integer more than 0.
      * @return An integer representing the number of AU of a course.
      */
     private int getAuOfCourse() {
@@ -545,7 +545,7 @@ public class AdminUi extends Ui {
     }
 
     /**
-     * Get the maximum vacancy for a course. This method will always return a valid integer > 0.
+     * Get the maximum vacancy for a course. This method will always return a valid integer more than 0.
      * @param message The message to be displayed before asking the user for input.
      * @return The integer representing the maximum vacancy for an index number.
      */
